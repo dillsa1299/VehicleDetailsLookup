@@ -2,6 +2,7 @@
 {
     public class VehicleModel
     {
+        public DateTime DetailsLastUpdated { get; set; }
         public string RegistrationNumber { get; set; } = string.Empty;
 
         public int YearOfManufacture { get; set; }

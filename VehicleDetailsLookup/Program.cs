@@ -1,5 +1,8 @@
 using MudBlazor.Services;
 using VehicleDetailsLookup.Components;
+using VehicleDetailsLookup.Services.VehicleDataService;
+using VehicleDetailsLookup.Services.VehicleDetailsService;
+using VehicleDetailsLookup.Services.VehicleMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,13 @@ builder.Services.AddControllers();
 // Add Swagger services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Register application services
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<IVehicleDataService, VehicleDataService>();
+builder.Services.AddSingleton<IVehicleDetailsService, VehicleDetailsService>();
+builder.Services.AddSingleton<IVehicleMapperService, VehicleMapperService>();
+
 
 var app = builder.Build();
 
