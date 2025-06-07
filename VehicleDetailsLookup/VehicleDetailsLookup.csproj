@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VehicleDetailsLookup.Client\VehicleDetailsLookup.Client.csproj" />
+    <ProjectReference Include="..\VehicleDetailsLookup.Shared\VehicleDetailsLookup.Shared.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.*" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.4" />
   </ItemGroup>
