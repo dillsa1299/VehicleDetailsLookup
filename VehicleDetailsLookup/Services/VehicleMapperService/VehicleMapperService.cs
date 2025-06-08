@@ -13,7 +13,6 @@ namespace VehicleDetailsLookup.Services.VehicleMapper
         public VehicleModel MapDetails(VehicleModel vehicle, VesSearchResponse vesSearchResponse, MotSearchResponse motSearchResponse)
         {
             // VES response
-            vehicle.DetailsLastUpdated = DateTime.UtcNow;
             vehicle.RegistrationNumber = vesSearchResponse.RegistrationNumber ?? string.Empty;
             vehicle.YearOfManufacture = vesSearchResponse.YearOfManufacture;
             vehicle.Make = FormatName(vesSearchResponse.Make, 3);
@@ -46,6 +45,8 @@ namespace VehicleDetailsLookup.Services.VehicleMapper
                         }).ToList() ?? []
                     })];
             }
+
+            vehicle.DetailsLastUpdated = DateTime.UtcNow;
 
             return vehicle;
         }
@@ -96,19 +97,21 @@ namespace VehicleDetailsLookup.Services.VehicleMapper
 
             foreach (var item in imageSearchResponse.Items)
             {
-                if (item != null && !string.IsNullOrWhiteSpace(item.Url))
+                if (item != null && !string.IsNullOrWhiteSpace(item.Link))
                 {
                     imagesModel = imagesModel.Append(new ImageModel
                     {
                         Index = i++,
                         Title = item.Title,
-                        Url = item.Url
+                        Url = item.Link
                     });
                 }
             }
 
             vehicle.Images = imagesModel;
-            
+
+            vehicle.ImagesLastUpdated = DateTime.UtcNow;
+
             return vehicle;
         }
         public VehicleModel MapAI(VehicleModel vehicle, string aiResponse, AiSearchType searchType)

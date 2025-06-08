@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Text.RegularExpressions;
 using VehicleDetailsLookup.Models.SearchResponses;
 using VehicleDetailsLookup.Models.SearchResponses.MotSearch;
 using VehicleDetailsLookup.Services.VehicleDataService;
@@ -43,27 +42,22 @@ namespace VehicleDetailsLookup.Services.VehicleDetailsService
 
         public async Task<VehicleModel> GetVehicleDetailsAsync(string registrationNumber)
         {
-            if (string.IsNullOrWhiteSpace(registrationNumber) || !Regex.IsMatch(registrationNumber, @"^[a-zA-Z0-9]{0,7}$"))
-            {
-                throw new ArgumentException("Registration number cannot be null or empty.", nameof(registrationNumber));
-            }
-
-            // Capitalize input
-            registrationNumber = registrationNumber.ToUpperInvariant();
-
             // Check if the vehicle details are already cached
             var vehicle = _data.GetVehicle(registrationNumber);
 
             if (vehicle.DetailsLastUpdated > DateTime.UtcNow.AddMinutes(-15))
             {
-                return vehicle; // Return stored vehicle details
+                // Return cached vehicle details if they are recent enough
+                return vehicle;
             }
 
             var vesSearchResponse = await SearchVesAsync(registrationNumber);
-            if (vesSearchResponse == null || String.IsNullOrEmpty(vesSearchResponse.RegistrationNumber)) return new VehicleModel();
+            if (vesSearchResponse == null || String.IsNullOrEmpty(vesSearchResponse.RegistrationNumber))
+                return new VehicleModel();
 
             var motSearchResponse = await SearchMotAsync(registrationNumber);
-            if (motSearchResponse == null || String.IsNullOrEmpty(motSearchResponse.Registration)) return new VehicleModel();
+            if (motSearchResponse == null || String.IsNullOrEmpty(motSearchResponse.Registration))
+                return new VehicleModel();
 
             vehicle = _mapper.MapDetails(vehicle, vesSearchResponse, motSearchResponse);
 
@@ -125,7 +119,8 @@ namespace VehicleDetailsLookup.Services.VehicleDetailsService
         private async Task<bool> GetMotTokenAsync()
         {
             // Check if current token is still valid
-            if (_motAuthToken.ExpireTime > DateTime.UtcNow) return true;
+            if (_motAuthToken.ExpireTime > DateTime.UtcNow)
+                return true;
 
             // Build request to get a new token
             var tokenRequest = new HttpRequestMessage(HttpMethod.Post, _motTokenUrl)
