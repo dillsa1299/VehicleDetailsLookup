@@ -24,13 +24,6 @@
         public DateTime ImagesLastUpdated { get; set; }
         public IEnumerable<ImageModel> Images { get; set; } = [];
 
-        public DateTime OverviewLastUpdated { get; set; }
-        public string AiOverview { get; set; } = string.Empty;
-
-        public DateTime CommonIssuesLastUpdated { get; set; }
-        public string AiCommonIssues { get; set; } = string.Empty;
-
-        // Shares details last updated as depends on MOT history
-        public string AiMotHistorySummary { get; set; } = string.Empty;
+        public IEnumerable<VehicleAiDataModel> AiData { get; set; } = [];
     }
 }

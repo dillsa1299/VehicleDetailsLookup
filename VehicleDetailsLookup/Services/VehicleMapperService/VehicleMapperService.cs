@@ -114,22 +114,19 @@ namespace VehicleDetailsLookup.Services.VehicleMapper
 
             return vehicle;
         }
-        public VehicleModel MapAI(VehicleModel vehicle, string aiResponse, AiSearchType searchType)
+        public VehicleModel MapAI(VehicleModel vehicle, AiSearchResponse aiResponse, VehicleAiType searchType)
         {
-            switch (searchType)
+            var aiDataList = vehicle.AiData.Where(ai => ai.Type != searchType).ToList();
+
+            aiDataList.Add(new VehicleAiDataModel
             {
-                case AiSearchType.Overview:
-                    vehicle.AiOverview = aiResponse ?? string.Empty;
-                    break;
-                case AiSearchType.CommonIssues:
-                    vehicle.AiCommonIssues = aiResponse ?? string.Empty;
-                    break;
-                case AiSearchType.MotHistorySummary:
-                    vehicle.AiMotHistorySummary = aiResponse ?? string.Empty;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(searchType), searchType, null);
-            }
+                LastUpdated = DateTime.UtcNow,
+                Type = searchType,
+                Content = aiResponse.Response
+            });
+
+            vehicle.AiData = aiDataList;
+
             return vehicle;
         }
     }

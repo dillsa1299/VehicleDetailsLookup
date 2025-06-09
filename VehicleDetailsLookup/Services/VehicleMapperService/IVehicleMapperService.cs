@@ -33,14 +33,14 @@ namespace VehicleDetailsLookup.Services.VehicleMapper
         VehicleModel MapImages(VehicleModel vehicle, ImageSearchResponse imageSearchResponse);
 
         /// <summary>
-        /// Maps an AI-generated response to a <see cref="VehicleModel"/> property based on the specified <see cref="AiSearchType"/>.
+        /// Maps an AI-generated response to a property of <see cref="VehicleModel"/> based on the specified <see cref="VehicleAiType"/>.
         /// </summary>
-        /// <param name="vehicle">The <see cref="VehicleModel"/> instance to populate with AI-generated data.</param>
-        /// <param name="aiResponse">The AI-generated response as a string, typically containing summary, issues, or MOT history information.</param>
-        /// <param name="searchType">The <see cref="AiSearchType"/> indicating which property of <see cref="VehicleModel"/> to populate (e.g., overview, common issues, MOT summary).</param>
+        /// <param name="vehicle">The <see cref="VehicleModel"/> instance to update with AI-generated data.</param>
+        /// <param name="aiResponse">The <see cref="AiSearchResponse"/> containing the AI-generated content, such as summary, issues, or MOT history.</param>
+        /// <param name="searchType">The <see cref="VehicleAiType"/> indicating which property or section of <see cref="VehicleModel"/> to populate (e.g., overview, common issues, MOT summary).</param>
         /// <returns>
         /// The updated <see cref="VehicleModel"/> with the relevant AI-generated information set according to the specified <paramref name="searchType"/>.
         /// </returns>
-        VehicleModel MapAI(VehicleModel vehicle, string aiResponse, AiSearchType searchType);
+        VehicleModel MapAI(VehicleModel vehicle, AiSearchResponse aiResponse, VehicleAiType searchType);
     }
 }
