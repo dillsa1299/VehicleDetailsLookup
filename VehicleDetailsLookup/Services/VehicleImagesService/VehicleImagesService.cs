@@ -1,8 +1,4 @@
-﻿using System.Text.Json;
-using VehicleDetailsLookup.Models.SearchResponses;
-using VehicleDetailsLookup.Models.SearchResponses.ImageSearch;
-using VehicleDetailsLookup.Models.SearchResponses.MotSearch;
-using VehicleDetailsLookup.Services.ImageSearchService;
+﻿using VehicleDetailsLookup.Services.ImageSearchService;
 using VehicleDetailsLookup.Services.VehicleDataService;
 using VehicleDetailsLookup.Services.VehicleDetailsService;
 using VehicleDetailsLookup.Services.VehicleMapper;
