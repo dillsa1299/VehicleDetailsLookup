@@ -1,5 +1,5 @@
-﻿using VehicleDetailsLookup.Models.Enums;
-using VehicleDetailsLookup.Shared.Models;
+﻿using VehicleDetailsLookup.Shared.Models;
+using VehicleDetailsLookup.Shared.Models.Enums;
 
 namespace VehicleDetailsLookup.Services.VehicleAiService
 {

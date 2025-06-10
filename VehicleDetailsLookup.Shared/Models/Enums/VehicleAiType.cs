@@ -1,4 +1,4 @@
-﻿namespace VehicleDetailsLookup.Models.Enums
+﻿namespace VehicleDetailsLookup.Shared.Models.Enums
 {
     public enum VehicleAiType
     {

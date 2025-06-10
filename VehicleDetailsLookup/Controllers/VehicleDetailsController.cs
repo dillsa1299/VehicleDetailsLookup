@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.RegularExpressions;
 using VehicleDetailsLookup.Services.VehicleDetailsService;
+using VehicleDetailsLookup.Shared.Helpers;
 
 namespace VehicleDetailsLookup.Controllers
 {
@@ -26,7 +26,7 @@ namespace VehicleDetailsLookup.Controllers
             // Remove whitespace and capitalize input
             registrationNumber = registrationNumber.Replace(" ", string.Empty).ToUpperInvariant();
 
-            if (string.IsNullOrWhiteSpace(registrationNumber) || !Regex.IsMatch(registrationNumber, @"^[a-zA-Z0-9]{0,7}$"))
+            if (string.IsNullOrWhiteSpace(registrationNumber) || !RegexHelper.RegistrationNumber.IsMatch(registrationNumber))
                 return BadRequest("Invalid registration number.");
 
             var vehicle = await _vehicleDetailsService.GetVehicleDetailsAsync(registrationNumber);

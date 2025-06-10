@@ -1,4 +1,4 @@
-﻿using VehicleDetailsLookup.Models.Enums;
+﻿using VehicleDetailsLookup.Shared.Models.Enums;
 
 namespace VehicleDetailsLookup.Shared.Models
 {
@@ -6,6 +6,6 @@ namespace VehicleDetailsLookup.Shared.Models
     {
         public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
         public VehicleAiType Type { get; set; }
-        public string? Content { get; set; } = String.Empty;
+        public string? Content { get; set; } = string.Empty;
     }
 }

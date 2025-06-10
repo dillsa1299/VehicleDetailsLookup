@@ -52,11 +52,11 @@ namespace VehicleDetailsLookup.Services.VehicleDetailsService
             }
 
             var vesSearchResponse = await SearchVesAsync(registrationNumber);
-            if (vesSearchResponse == null || String.IsNullOrEmpty(vesSearchResponse.RegistrationNumber))
+            if (vesSearchResponse == null || string.IsNullOrEmpty(vesSearchResponse.RegistrationNumber))
                 return new VehicleModel();
 
             var motSearchResponse = await SearchMotAsync(registrationNumber);
-            if (motSearchResponse == null || String.IsNullOrEmpty(motSearchResponse.Registration))
+            if (motSearchResponse == null || string.IsNullOrEmpty(motSearchResponse.Registration))
                 return new VehicleModel();
 
             vehicle = _mapper.MapDetails(vehicle, vesSearchResponse, motSearchResponse);

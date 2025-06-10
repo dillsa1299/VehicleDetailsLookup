@@ -1,10 +1,13 @@
 using MudBlazor.Services;
 using VehicleDetailsLookup.Components;
+using VehicleDetailsLookup.Services.AiSearchService;
 using VehicleDetailsLookup.Services.ImageSearchService;
+using VehicleDetailsLookup.Services.VehicleAiService;
 using VehicleDetailsLookup.Services.VehicleDataService;
 using VehicleDetailsLookup.Services.VehicleDetailsService;
 using VehicleDetailsLookup.Services.VehicleImagesService;
 using VehicleDetailsLookup.Services.VehicleMapper;
+using VehicleDetailsLookup.Services.VehicleMapperService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,10 +29,12 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddSingleton<IVehicleDataService, VehicleDataService>();
 builder.Services.AddSingleton<IImageSearchService, ImageSearchService>();
+builder.Services.AddSingleton<IAiSearchService, AiSearchService>();
 
 builder.Services.AddSingleton<IVehicleMapperService, VehicleMapperService>();
 builder.Services.AddSingleton<IVehicleDetailsService, VehicleDetailsService>();
 builder.Services.AddSingleton<IVehicleImagesService, VehicleImagesService>();
+builder.Services.AddSingleton<IVehicleAiService, VehicleAiService>();
 
 var app = builder.Build();
 
