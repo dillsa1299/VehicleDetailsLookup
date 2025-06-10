@@ -2,7 +2,6 @@
 using VehicleDetailsLookup.Models.SearchResponses;
 using VehicleDetailsLookup.Models.SearchResponses.ImageSearch;
 using VehicleDetailsLookup.Models.SearchResponses.MotSearch;
-using VehicleDetailsLookup.Services.VehicleMapper;
 using VehicleDetailsLookup.Shared.Models;
 using VehicleDetailsLookup.Shared.Models.Enums;
 

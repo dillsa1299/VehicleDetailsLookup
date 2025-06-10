@@ -6,7 +6,6 @@ using VehicleDetailsLookup.Services.VehicleAiService;
 using VehicleDetailsLookup.Services.VehicleDataService;
 using VehicleDetailsLookup.Services.VehicleDetailsService;
 using VehicleDetailsLookup.Services.VehicleImagesService;
-using VehicleDetailsLookup.Services.VehicleMapper;
 using VehicleDetailsLookup.Services.VehicleMapperService;
 
 var builder = WebApplication.CreateBuilder(args);

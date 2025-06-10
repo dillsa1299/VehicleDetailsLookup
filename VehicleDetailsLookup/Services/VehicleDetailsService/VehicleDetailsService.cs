@@ -2,7 +2,7 @@
 using VehicleDetailsLookup.Models.SearchResponses;
 using VehicleDetailsLookup.Models.SearchResponses.MotSearch;
 using VehicleDetailsLookup.Services.VehicleDataService;
-using VehicleDetailsLookup.Services.VehicleMapper;
+using VehicleDetailsLookup.Services.VehicleMapperService;
 using VehicleDetailsLookup.Shared.Models;
 
 namespace VehicleDetailsLookup.Services.VehicleDetailsService

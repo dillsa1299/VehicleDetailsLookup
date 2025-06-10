@@ -4,7 +4,7 @@ using VehicleDetailsLookup.Models.SearchResponses.MotSearch;
 using VehicleDetailsLookup.Shared.Models;
 using VehicleDetailsLookup.Shared.Models.Enums;
 
-namespace VehicleDetailsLookup.Services.VehicleMapper
+namespace VehicleDetailsLookup.Services.VehicleMapperService
 {
     /// <summary>
     /// Defines mapping operations for converting various vehicle search responses into a <see cref="VehicleModel"/>.

@@ -2,7 +2,7 @@
 using VehicleDetailsLookup.Services.AiSearchService;
 using VehicleDetailsLookup.Services.VehicleDataService;
 using VehicleDetailsLookup.Services.VehicleDetailsService;
-using VehicleDetailsLookup.Services.VehicleMapper;
+using VehicleDetailsLookup.Services.VehicleMapperService;
 using VehicleDetailsLookup.Shared.Models;
 using VehicleDetailsLookup.Shared.Models.Enums;
 
