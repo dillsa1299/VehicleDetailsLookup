@@ -1,6 +1,6 @@
 ﻿using MudBlazor;
 
-namespace VehicleDetailsLookup.Client.Layout
+namespace VehicleDetailsLookup.Client.Components.Layout
 {
     public partial class MainLayout
     {

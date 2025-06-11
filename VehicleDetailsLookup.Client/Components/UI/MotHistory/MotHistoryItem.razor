@@ -1,0 +1,90 @@
+﻿@if (Mot != null)
+{
+    <MudExpansionPanel HideIcon="true" Disabled="@(!Mot.Defects.Any())">
+        <TitleContent>
+            <div class="d-flex align-center">
+                <MudIcon Icon="@(Mot.Passed? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Cancel)"
+                         Color="@(Mot.Passed? Color.Success: Color.Error)" Size="@_iconSize" Class="mr-2" />
+                <MudText Class="mt-2">
+                    @Mot.CompletedDate.ToString("d MMMM yyyy") | @(Mot.OdometerValue == -1 ? "N/A" : $"{Mot.OdometerValue:N0} {Mot.OdometerUnit}")
+                </MudText>
+
+                <div class="d-flex align-items-center ml-auto">
+                    @if (_dangerousDefects.Any())
+                    {
+                        <MudBadge Content="@_dangerousDefects.Count()" Overlap="true" Class="ml-2" Color="Color.Tertiary" Bordered="true">
+                            <MudIcon Icon="@Icons.Material.Outlined.Dangerous" Color="Color.Error" Size="@_iconSize" Title="Dangerous Defects" />
+                        </MudBadge>
+                    }
+
+                    @if (_majorDefects.Any())
+                    {
+                        <MudBadge Content="@_majorDefects.Count()" Overlap="true" Class="ml-2" Color="Color.Tertiary" Bordered="true">
+                            <MudIcon Icon="@Icons.Material.Outlined.WarningAmber" Color="Color.Warning" Size="@_iconSize" Title="Major Defects" />
+                        </MudBadge>
+                    }
+
+                    @if (_otherDefects.Any())
+                    {
+                        <MudBadge Content="@_otherDefects.Count()" Overlap="true" Class="ml-2" Color="Color.Tertiary" Bordered="true">
+                            <MudIcon Icon="@Icons.Material.Outlined.Info" Color="Color.Primary" Size="@_iconSize" Title="Advisories" />
+                        </MudBadge>
+                    }
+                </div>
+            </div>
+        </TitleContent>
+        <ChildContent>
+            @if (_dangerousDefects.Any())
+            {
+                <div class="d-flex align-center">
+                    <MudIcon Icon="@Icons.Material.Outlined.Dangerous" Color="Color.Error" />
+                    <MudText Class="ml-2" Typo="Typo.h6">Dangerous Defects</MudText>
+                </div>
+
+                <ul>
+                    @foreach (var defect in _dangerousDefects)
+                    {
+                        <li class="ml-4">
+                            <MudText Class="ml-4">@defect.Description</MudText>
+                        </li>
+                    }
+                </ul>
+                <br />
+            }
+            @if (_majorDefects.Any())
+            {
+                <div class="d-flex align-center">
+                    <MudIcon Icon="@Icons.Material.Outlined.WarningAmber" Color="Color.Warning" />
+                    <MudText Class="ml-2" Typo="Typo.h6">Major Defects</MudText>
+                </div>
+
+                <ul>
+                    @foreach (var defect in _majorDefects)
+                    {
+                        <li class="ml-4">
+                            <MudText Class="ml-4">@defect.Description</MudText>
+                        </li>
+                    }
+                </ul>
+                <br />
+            }
+
+            @if (_otherDefects.Any())
+            {
+                <div class="d-flex align-center">
+                    <MudIcon Icon="@Icons.Material.Outlined.Info" Color="Color.Primary" />
+                    <MudText Class="ml-2" Typo="Typo.h6">Advisories</MudText>
+                </div>
+                
+                <ul>
+                    @foreach (var defect in _otherDefects)
+                    {
+                        <li class="ml-4">
+                            <MudText Class="ml-4">@defect.Description</MudText>
+                        </li>
+                    }
+                </ul>
+            }
+        </ChildContent>
+        </MudExpansionPanel>
+}

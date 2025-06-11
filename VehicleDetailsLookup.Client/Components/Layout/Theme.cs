@@ -1,6 +1,6 @@
 ﻿using MudBlazor;
 
-namespace VehicleInformationChecker.Components.Layout
+namespace VehicleDetailsLookup.Client.Components.Layout
 {
     public class Theme
     {
