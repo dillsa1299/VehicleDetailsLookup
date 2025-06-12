@@ -1,0 +1,177 @@
+﻿@using VehicleDetailsLookup.Client.Components.Enums
+@using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.ImageViewer
+@using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotHistory
+@using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotStatus
+@using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.TaxStatus
+
+@if (Vehicle != null && !String.IsNullOrEmpty(Vehicle.RegistrationNumber))
+{
+    <ImageViewer Images="@Vehicle?.Images" PlaceholderImage="@_placeholderImage" IsSearching="@(_isSearchingImages || _isSearchingDetails)"></ImageViewer>
+
+    @if (_isSearchingDetails)
+    {
+        <MudGrid Class="mt-4">
+            <MudItem xs="12" md="8">
+                <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="400px" Width="100%"></MudSkeleton>
+            </MudItem>
+
+            <MudItem xs="12" md="4">
+                <MudStack Style="height:100%;">
+                    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="100%" Width="100%"></MudSkeleton>
+                    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="100%" Width="100%"></MudSkeleton>
+                </MudStack>
+            </MudItem>
+            <MudItem xs="12">
+                <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="100px" Width="100%"></MudSkeleton>
+            </MudItem>
+        </MudGrid>
+    }
+    else
+    {
+        <MudGrid Class="mt-4">
+            <MudItem xs="12" md="8">
+                <MudPaper Class="pa-4" Elevation="1">
+                    <MudText Typo="Typo.h3" Align="Align.Center">@Vehicle?.YearOfManufacture @Vehicle?.Make @Vehicle?.Model</MudText>
+
+                    <MudText Typo="Typo.h4">Details</MudText>
+
+                    <MudTable Dense="true" Bordered="false" Striped="false" Elevation="0" Class="my-2" Breakpoint="Breakpoint.None" Items="@(new[] { Vehicle })">
+                        <RowTemplate>
+                            <MudTr>
+                                <MudTd>Colour</MudTd>
+                                <MudTd>@context?.Colour</MudTd>
+                            </MudTr>
+                            <MudTr>
+                                <MudTd>Engine capacity</MudTd>
+                                <MudTd>@context?.EngineCapacity</MudTd>
+                            </MudTr>
+                            <MudTr>
+                                <MudTd>Fuel</MudTd>
+                                <MudTd>@context?.FuelType</MudTd>
+                            </MudTr>
+                            <MudTr>
+                                <MudTd>First registered</MudTd>
+                                <MudTd>@context?.MonthOfFirstRegistration.ToString("MMMM yyyy")</MudTd>
+                            </MudTr>
+                            <MudTr>
+                                <MudTd>Last V5C issued</MudTd>
+                                <MudTd>@context?.DateOfLastV5CIssued</MudTd>
+                            </MudTr>
+                        </RowTemplate>
+                    </MudTable>
+
+                    <MudText Class="mt-4" Typo="Typo.h4">AI Overview</MudText>
+                    @if (_isSearchingAiOverview)
+                    {
+                        <MudSkeleton />
+                        <MudSkeleton />
+                        <MudSkeleton />
+                        <MudSkeleton />
+                        <MudSkeleton />
+                        <MudSkeleton />
+                    }
+                    else
+                    {
+                        @if (AiOverviewHtml != null)
+                        {
+                            <div class="ai-html">
+                                @(AiOverviewHtml)
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-flex align-center">
+                                <MudText>@_aiFailedMessage</MudText>
+                                <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="@(() => StartLookup(VehicleLookupType.AiOverview))" Class="ml-2" />
+                            </div>
+                        }
+                    }
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="12" md="4">
+                <MudStack Style="height:100%;">
+                    <MotStatus Vehicle="@Vehicle"></MotStatus>
+                    <TaxStatus Vehicle="@Vehicle"></TaxStatus>
+                </MudStack>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudExpansionPanels MultiExpansion="true">
+                    <MudExpansionPanel ExpandedChanged="@OnCommonIssuesExpandedAsync">
+                        <TitleContent>
+                            <MudText Typo="Typo.h4">Common Issues</MudText>
+                        </TitleContent>
+                        <ChildContent>
+                            @if (_isSearchingAiCommonIssues)
+                            {
+                                <MudSkeleton />
+                                <MudSkeleton />
+                                <MudSkeleton />
+                                <MudSkeleton />
+                                <MudSkeleton />
+                                <MudSkeleton />
+                            }
+                            else
+                            {
+                                @if (AiCommonIssuesHtml != null)
+                                {
+                                    <div class="ai-html">
+                                        @(AiCommonIssuesHtml)
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="d-flex align-center">
+                                        <MudText>@_aiFailedMessage</MudText>
+                                        <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="@(() => StartLookup(VehicleLookupType.AiCommonIssues))" Class="ml-2" />
+                                    </div>
+                                }
+                            }
+                        </ChildContent>
+                    </MudExpansionPanel>
+
+                    @if (Vehicle != null && Vehicle.MotTests.Any())
+                    {
+                        <MudExpansionPanel ExpandedChanged="@OnMotHistoryExpandedAsync">
+                            <TitleContent>
+                                <MudText Typo="Typo.h4">MOT History</MudText>
+                            </TitleContent>
+                            <ChildContent>
+                                <MudText Typo="Typo.h5">AI Summary</MudText>
+
+                                @if (_isSearchingAiMotHistorySummary)
+                                {
+                                    <MudSkeleton />
+                                    <MudSkeleton />
+                                    <MudSkeleton />
+                                    <MudSkeleton />
+                                    <MudSkeleton />
+                                    <MudSkeleton />
+                                }
+                                else
+                                {
+                                    @if (AiMotHistorySummaryHtml != null)
+                                    {
+                                        <div class="ai-html">
+                                            @(AiMotHistorySummaryHtml)
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex align-center">
+                                            <MudText>@_aiFailedMessage</MudText>
+                                            <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="@(() => StartLookup(VehicleLookupType.AiMotHistorySummary))" Class="ml-2" />
+                                        </div>
+                                    }
+                                }
+
+                                <MotHistory Vehicle="@Vehicle"></MotHistory>
+                            </ChildContent>
+                        </MudExpansionPanel>
+                    }
+                </MudExpansionPanels>
+            </MudItem>
+        </MudGrid>
+    }
+}

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using VehicleDetailsLookup.Services.VehicleAiService;
+using VehicleDetailsLookup.Services.VehicleAi;
 using VehicleDetailsLookup.Shared.Helpers;
 using VehicleDetailsLookup.Shared.Models.Enums;
 

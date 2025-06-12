@@ -1,13 +1,13 @@
-﻿<EditForm Model="@_registrationInput" OnValidSubmit="SearchRegistrationInput">
+﻿<EditForm Model="@_registrationInput" OnValidSubmit="LookupRegistration">
     <MudTextField @bind-Value="_registrationInput.Input"
         For="@(() => _registrationInput.Input)"
-        Error="@_searchFailed"
+        Error="@_lookupFailed"
         Placeholder="NE14 ABJ"
         Adornment="Adornment.End"
         AdornmentIcon="@Icons.Material.Filled.Search"
         AdornmentColor="@Color.Primary"
         IconSize="Size.Large"
-        OnAdornmentClick="SearchRegistrationInput"
+        OnAdornmentClick="LookupRegistration"
         Variant="Variant.Outlined"
         Margin="Margin.Dense"
         Typo="Typo.h2"

@@ -1,12 +1,14 @@
 using MudBlazor.Services;
+using VehicleDetailsLookup.Client.Services.VehicleLookup;
+using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
 using VehicleDetailsLookup.Components;
-using VehicleDetailsLookup.Services.AiSearchService;
-using VehicleDetailsLookup.Services.ImageSearchService;
-using VehicleDetailsLookup.Services.VehicleAiService;
-using VehicleDetailsLookup.Services.VehicleDataService;
-using VehicleDetailsLookup.Services.VehicleDetailsService;
-using VehicleDetailsLookup.Services.VehicleImagesService;
-using VehicleDetailsLookup.Services.VehicleMapperService;
+using VehicleDetailsLookup.Services.AiSearch;
+using VehicleDetailsLookup.Services.ImageSearch;
+using VehicleDetailsLookup.Services.VehicleAi;
+using VehicleDetailsLookup.Services.VehicleData;
+using VehicleDetailsLookup.Services.VehicleDetails;
+using VehicleDetailsLookup.Services.VehicleImages;
+using VehicleDetailsLookup.Services.VehicleMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +36,9 @@ builder.Services.AddSingleton<IVehicleMapperService, VehicleMapperService>();
 builder.Services.AddSingleton<IVehicleDetailsService, VehicleDetailsService>();
 builder.Services.AddSingleton<IVehicleImagesService, VehicleImagesService>();
 builder.Services.AddSingleton<IVehicleAiService, VehicleAiService>();
+
+builder.Services.AddScoped<IVehicleLookupService, VehicleLookupService>();
+builder.Services.AddScoped<IVehicleLookupEventsService, VehicleLookupEventsService>();
 
 var app = builder.Build();
 
