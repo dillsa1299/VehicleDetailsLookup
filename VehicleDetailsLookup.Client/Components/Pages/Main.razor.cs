@@ -31,10 +31,9 @@ namespace VehicleDetailsLookup.Client.Components.Pages
                     // Dont waste further API calls on failed lookup
                     if (string.IsNullOrEmpty(_vehicle.RegistrationNumber)) return;
 
-                    // Perform parallel lookups for images and AI overview
-                    var imagesLookupTask = VehicleLookupEventsService.NotifyStartVehicleLookup(registrationNumber, VehicleLookupType.Images);
-                    var aiOverviewLookupTask = VehicleLookupEventsService.NotifyStartVehicleLookup(registrationNumber, VehicleLookupType.AiOverview);
-                    await Task.WhenAll(imagesLookupTask, aiOverviewLookupTask);
+                    // Perform parallel lookups for images and AI overview, but do not await them
+                    _ = VehicleLookupEventsService.NotifyStartVehicleLookup(registrationNumber, VehicleLookupType.Images);
+                    _ = VehicleLookupEventsService.NotifyStartVehicleLookup(registrationNumber, VehicleLookupType.AiOverview);
                     break;
 
                 case VehicleLookupType.Images:
