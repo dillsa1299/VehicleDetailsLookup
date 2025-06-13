@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System;
 using VehicleDetailsLookup.Client.Components.Enums;
+using VehicleDetailsLookup.Client.Components.UI.RegistrationInput;
 using VehicleDetailsLookup.Client.Services.VehicleLookup;
 using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
 using VehicleDetailsLookup.Shared.Models;
@@ -9,11 +11,17 @@ namespace VehicleDetailsLookup.Client.Components.Pages
 {
     public partial class Main : IDisposable
     {
+        [Parameter]
+        public string? RegistrationNumber { get; set; }
+
         [Inject]
         private IVehicleLookupService VehicleLookupService { get; set; } = default!;
 
         [Inject]
         private IVehicleLookupEventsService VehicleLookupEventsService { get; set; } = default!;
+
+        [Inject]
+        private NavigationManager NavigationManager { get; set; } = default!;
 
         private VehicleModel _vehicle = new();
 
@@ -27,6 +35,10 @@ namespace VehicleDetailsLookup.Client.Components.Pages
                     StateHasChanged();
 
                     _vehicle = await VehicleLookupService.GetVehicleDetailsAsync(registrationNumber);
+
+                    // Update URL
+                    var url = string.IsNullOrWhiteSpace(_vehicle.RegistrationNumber) ? "/" : $"/{_vehicle.RegistrationNumber}";
+                    NavigationManager.NavigateTo(url, forceLoad: false);
 
                     // Dont waste further API calls on failed lookup
                     if (string.IsNullOrEmpty(_vehicle.RegistrationNumber)) return;
@@ -55,10 +67,20 @@ namespace VehicleDetailsLookup.Client.Components.Pages
             StateHasChanged();
         }
 
-        protected override Task OnInitializedAsync()
+        protected override async Task OnParametersSetAsync()
+        {
+            if (!String.IsNullOrEmpty(RegistrationNumber)
+                && OperatingSystem.IsBrowser()
+                && !RegistrationNumber.Replace(" ", "").Equals(_vehicle.RegistrationNumber, StringComparison.InvariantCultureIgnoreCase))
+                await VehicleLookupEventsService.NotifyStartVehicleLookup(RegistrationNumber, VehicleLookupType.Details);
+
+            await base.OnParametersSetAsync();
+        }
+
+        protected override void OnInitialized()
         {
             VehicleLookupEventsService.OnStartVehicleLookup += StartLookup;
-            return base.OnInitializedAsync();
+            base.OnInitialized();
         }
 
         public void Dispose()

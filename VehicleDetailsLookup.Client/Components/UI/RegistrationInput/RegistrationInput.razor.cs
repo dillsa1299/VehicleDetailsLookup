@@ -30,8 +30,20 @@ namespace VehicleDetailsLookup.Client.Components.UI.RegistrationInput
         {
             if (!lookupStarted)
             {
-                _lookupFailed = string.IsNullOrEmpty(Vehicle.RegistrationNumber);
+                // Lookup completed
+                if (string.IsNullOrEmpty(Vehicle.RegistrationNumber))
+                {
+                    // Failed lookup - Don't replace input - allows user to correct mistakes
+                    _lookupFailed = true;
+                }
+                else
+                {
+                    // Replace input - Allows input to match registrations passed via URL
+                    _registrationInput.Input = Vehicle.RegistrationNumber;
+                    _lookupFailed = false;
+                }
             }
+
             StateHasChanged();
         }
 
