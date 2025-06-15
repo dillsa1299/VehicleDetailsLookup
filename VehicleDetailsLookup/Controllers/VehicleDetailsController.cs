@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using VehicleDetailsLookup.Services.VehicleData;
 using VehicleDetailsLookup.Services.VehicleDetails;
 using VehicleDetailsLookup.Shared.Helpers;
 
@@ -6,10 +7,13 @@ namespace VehicleDetailsLookup.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class VehicleDetailsController(IVehicleDetailsService vehicleDetailsService) : ControllerBase
+    public class VehicleDetailsController(IVehicleDetailsService vehicleDetailsService, IVehicleDataService vehicleDataService) : ControllerBase
     {
         private readonly IVehicleDetailsService _vehicleDetailsService = vehicleDetailsService
             ?? throw new ArgumentNullException(nameof(vehicleDetailsService));
+
+        private readonly IVehicleDataService _vehicleDataService = vehicleDataService
+            ?? throw new ArgumentNullException(nameof(vehicleDataService));
 
         /// <summary>
         /// Retrieves detailed information about a vehicle using its registration number.
@@ -33,6 +37,8 @@ namespace VehicleDetailsLookup.Controllers
 
             if (vehicle == null || string.IsNullOrEmpty(vehicle.RegistrationNumber))
                 return NotFound("Vehicle not found.");
+
+            _vehicleDataService.LogLookup(registrationNumber);
 
             return Ok(vehicle);
         }

@@ -1,4 +1,5 @@
-﻿using VehicleDetailsLookup.Shared.Models;
+﻿using System.Net.Http;
+using VehicleDetailsLookup.Shared.Models;
 using VehicleDetailsLookup.Shared.Models.Enums;
 
 namespace VehicleDetailsLookup.Client.Services.VehicleLookup
@@ -37,5 +38,23 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
         /// A <see cref="VehicleModel"/> containing the requested AI-generated data.
         /// </returns>
         Task<VehicleModel> GetVehicleAIAsync(string registrationNumber, VehicleAiType type);
+
+        /// <summary>
+        /// Retrieves the number of times a vehicle has been looked up by its registration number.
+        /// </summary>
+        /// <param name="registrationNumber">The vehicle's registration number.</param>
+        /// <returns>
+        /// An <see cref="int"/> representing the total lookup count for the specified vehicle.
+        /// </returns>
+        Task<int> GetVehicleLookupCountAsync(string registrationNumber);
+
+
+        /// <summary>
+        /// Retrieves a list of recent vehicle lookups.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="List{VehicleLookupModel}"/> containing details of recently looked up vehicles.
+        /// </returns>
+        Task<List<VehicleLookupModel>> GetRecentVehicleLookupsAsync();
     }
 }

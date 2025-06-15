@@ -10,6 +10,9 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
     public partial class VehicleDetails
     {
         [Inject]
+        private IVehicleLookupService VehicleLookupService { get; set; } = default!;
+
+        [Inject]
         private IVehicleLookupEventsService VehicleLookupEventsService { get; set; } = default!;
 
         [Parameter]
@@ -22,6 +25,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
         private bool _isSearchingAiOverview;
         private bool _isSearchingAiCommonIssues;
         private bool _isSearchingAiMotHistorySummary;
+        private int _vehicleLookupCount;
 
         private string? AiOverviewText =>
             Vehicle?.AiData.FirstOrDefault(x => x.Type == VehicleAiType.Overview)?.Content ?? string.Empty;
@@ -92,6 +96,20 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
             {
                 await StartLookup(VehicleLookupType.AiMotHistorySummary);
             }
+        }
+
+        protected override async Task OnParametersSetAsync()
+        {
+            if (!String.IsNullOrEmpty(Vehicle?.RegistrationNumber))
+            {
+                _vehicleLookupCount = await VehicleLookupService.GetVehicleLookupCountAsync(Vehicle.RegistrationNumber);
+            }
+            else
+            {
+                _vehicleLookupCount = 0;
+            }
+
+            await base.OnParametersSetAsync();
         }
 
         protected override Task OnInitializedAsync()

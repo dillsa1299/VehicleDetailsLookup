@@ -49,5 +49,33 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
 
             return vehicle is null ? throw new InvalidOperationException("Failed to deserialize vehicle data.") : vehicle;
         }
+
+        public async Task<int> GetVehicleLookupCountAsync(string registrationNumber)
+        {
+            // Call the backend API to retrieve the vehicle lookup count.
+            var response = await _httpClient.GetAsync($"/api/VehicleLookupHistory/count/{registrationNumber}");
+
+            // Return 0 if the request fails or vehicle not found.
+            if (!response.IsSuccessStatusCode)
+                return 0;
+
+            var count = await response.Content.ReadFromJsonAsync<int>();
+
+            return count;
+        }
+
+        public async Task<List<VehicleLookupModel>> GetRecentVehicleLookupsAsync()
+        {
+            // Call the backend API to retrieve recent vehicle lookups.
+            var response = await _httpClient.GetAsync($"/api/VehicleLookupHistory/recent");
+
+            // Return an empty list if the request fails or no recent vehicles found.
+            if (!response.IsSuccessStatusCode)
+                return new List<VehicleLookupModel>();
+
+            var vehicles = await response.Content.ReadFromJsonAsync<List<VehicleLookupModel>>();
+
+            return vehicles ?? throw new InvalidOperationException("Failed to deserialize recent vehicles data.");
+        }
     }
 }

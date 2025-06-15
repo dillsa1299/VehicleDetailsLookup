@@ -1,9 +1,13 @@
-﻿using MudBlazor;
+﻿using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace VehicleDetailsLookup.Client.Components.Layout
 {
     public partial class MainLayout
     {
+        [Inject]
+        private NavigationManager NavigationManager { get; set; } = default!;
+
         private bool _isDarkMode = true;
 
         protected override void OnInitialized()
@@ -14,6 +18,11 @@ namespace VehicleDetailsLookup.Client.Components.Layout
         private void DarkModeToggle()
         {
             _isDarkMode = !_isDarkMode;
+        }
+
+        private void OnCarIconClick()
+        {
+            NavigationManager.NavigateTo("/", forceLoad: true);
         }
 
         public string DarkLightModeButtonIcon => _isDarkMode switch
