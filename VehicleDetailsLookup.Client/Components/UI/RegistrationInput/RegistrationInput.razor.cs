@@ -26,20 +26,20 @@ namespace VehicleDetailsLookup.Client.Components.UI.RegistrationInput
             await VehicleLookupEventsService.NotifyStartVehicleLookup(_registrationInput.Input, VehicleLookupType.Details);
         }
 
-        private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted)
+        private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber)
         {
+            // Replace input - Allows input to match registrations passed via URL
+            _registrationInput.Input = registrationNumber;
+
             if (!lookupStarted)
             {
                 // Lookup completed
                 if (string.IsNullOrEmpty(Vehicle.RegistrationNumber))
                 {
-                    // Failed lookup - Don't replace input - allows user to correct mistakes
                     _lookupFailed = true;
                 }
                 else
                 {
-                    // Replace input - Allows input to match registrations passed via URL
-                    _registrationInput.Input = Vehicle.RegistrationNumber;
                     _lookupFailed = false;
                 }
             }

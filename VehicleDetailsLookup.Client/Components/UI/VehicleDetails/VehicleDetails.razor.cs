@@ -10,9 +10,6 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
     public partial class VehicleDetails
     {
         [Inject]
-        private IVehicleLookupService VehicleLookupService { get; set; } = default!;
-
-        [Inject]
         private IVehicleLookupEventsService VehicleLookupEventsService { get; set; } = default!;
 
         [Parameter]
@@ -50,7 +47,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
                 ? null
                 : (MarkupString)Markdig.Markdown.ToHtml(AiMotHistorySummaryText);
 
-        private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted)
+        private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber)
         {
             switch (lookupType)
             {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
+using Microsoft.JSInterop;
 using VehicleDetailsLookup.Client.Components.Enums;
-using VehicleDetailsLookup.Client.Components.UI.RegistrationInput;
 using VehicleDetailsLookup.Client.Services.VehicleLookup;
 using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
 using VehicleDetailsLookup.Shared.Models;
@@ -12,7 +11,7 @@ namespace VehicleDetailsLookup.Client.Components.Pages
     public partial class Main : IDisposable
     {
         [Parameter]
-        public string? RegistrationNumber { get; set; }
+        public string? RegistrationNumberUrlInput { get; set; }
 
         [Inject]
         private IVehicleLookupService VehicleLookupService { get; set; } = default!;
@@ -23,20 +22,21 @@ namespace VehicleDetailsLookup.Client.Components.Pages
         [Inject]
         private NavigationManager NavigationManager { get; set; } = default!;
 
+        [Inject]
+        private IJSRuntime JS { get; set; } = default!;
+
         private VehicleModel _vehicle = new();
+        private string PageTitle => string.IsNullOrEmpty(_vehicle?.RegistrationNumber) ? "Vehicle Details Lookup"
+            : $"{_vehicle?.YearOfManufacture} {_vehicle?.Make} {_vehicle?.Model} | VDL";
 
         private async Task StartLookup(string registrationNumber, VehicleLookupType lookupType)
         {
             switch (lookupType)
             {
                 case VehicleLookupType.Details:
-                    // Set the vehicle registration number immediately to provide instant feedback
-                    _vehicle = new VehicleModel { RegistrationNumber = registrationNumber };
-                    StateHasChanged();
-
                     _vehicle = await VehicleLookupService.GetVehicleDetailsAsync(registrationNumber);
 
-                    // Update URL
+                    // Update URL if vehicle found
                     var url = string.IsNullOrWhiteSpace(_vehicle.RegistrationNumber) ? "/" : $"/{_vehicle.RegistrationNumber}";
                     NavigationManager.NavigateTo(url, forceLoad: false);
 
@@ -69,12 +69,20 @@ namespace VehicleDetailsLookup.Client.Components.Pages
 
         protected override async Task OnParametersSetAsync()
         {
-            if (!String.IsNullOrEmpty(RegistrationNumber)
+            if (!String.IsNullOrEmpty(RegistrationNumberUrlInput)
                 && OperatingSystem.IsBrowser()
-                && !RegistrationNumber.Replace(" ", "").Equals(_vehicle.RegistrationNumber, StringComparison.InvariantCultureIgnoreCase))
-                await VehicleLookupEventsService.NotifyStartVehicleLookup(RegistrationNumber, VehicleLookupType.Details);
+                && !RegistrationNumberUrlInput.Replace(" ", "").Equals(_vehicle.RegistrationNumber, StringComparison.InvariantCultureIgnoreCase))
+                await VehicleLookupEventsService.NotifyStartVehicleLookup(RegistrationNumberUrlInput, VehicleLookupType.Details);
 
             await base.OnParametersSetAsync();
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                await JS.InvokeVoidAsync("hideLoader");
+            }
         }
 
         protected override void OnInitialized()

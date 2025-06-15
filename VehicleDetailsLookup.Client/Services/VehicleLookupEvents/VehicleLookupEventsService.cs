@@ -18,14 +18,14 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookupEvents
             remove => OnStartVehicleLookup -= value;
         }
 
-        public void NotifyLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted)
+        public void NotifyLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber)
         {
-            OnLookupStatusChanged?.Invoke(lookupType, lookupStarted);
+            OnLookupStatusChanged?.Invoke(lookupType, lookupStarted, registrationNumber);
         }
 
         public async Task NotifyStartVehicleLookup(string registrationNumber, VehicleLookupType lookupType)
         {
-            OnLookupStatusChanged?.Invoke(lookupType, true);
+            OnLookupStatusChanged?.Invoke(lookupType, true, registrationNumber);
 
             // Await lookup response before invoking the next event
             if (OnStartVehicleLookup != null)
@@ -36,7 +36,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookupEvents
                 }
             }
 
-            OnLookupStatusChanged?.Invoke(lookupType, false);
+            OnLookupStatusChanged?.Invoke(lookupType, false, registrationNumber);
         }
 
         public void Dispose()

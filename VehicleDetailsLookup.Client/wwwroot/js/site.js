@@ -12,3 +12,8 @@ window.checkImagesLoad = function (imageUrls) {
         });
     }));
 };
+
+window.hideLoader = () => {
+    const loader = document.getElementById('initialLoader');
+    if (loader) loader.style.display = 'none';
+};

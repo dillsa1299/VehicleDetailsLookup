@@ -4,7 +4,7 @@
 @using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotStatus
 @using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.TaxStatus
 
-@if (Vehicle != null && !String.IsNullOrEmpty(Vehicle.RegistrationNumber))
+@if ((Vehicle != null && !String.IsNullOrEmpty(Vehicle.RegistrationNumber)) || _isSearchingDetails)
 {
     <ImageViewer Images="@Vehicle?.Images" PlaceholderImage="@_placeholderImage" IsSearching="@(_isSearchingImages || _isSearchingDetails)"></ImageViewer>
 
