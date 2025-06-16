@@ -25,9 +25,14 @@ namespace VehicleDetailsLookup.Client.Components.Pages
         [Inject]
         private IJSRuntime JS { get; set; } = default!;
 
-        private VehicleModel _vehicle = new();
         private string PageTitle => string.IsNullOrEmpty(_vehicle?.RegistrationNumber) ? "Vehicle Details Lookup"
             : $"{_vehicle?.YearOfManufacture} {_vehicle?.Make} {_vehicle?.Model} | VDL";
+
+        private bool IsRecentLookupsHidden
+            => _lookupInProgress || !string.IsNullOrEmpty(_vehicle.RegistrationNumber);
+
+        private VehicleModel _vehicle = new();
+        private bool _lookupInProgress;
 
         private async Task StartLookup(string registrationNumber, VehicleLookupType lookupType)
         {
@@ -67,6 +72,12 @@ namespace VehicleDetailsLookup.Client.Components.Pages
             StateHasChanged();
         }
 
+        private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber)
+        {
+            _lookupInProgress = lookupStarted;
+            StateHasChanged();
+        }
+
         protected override async Task OnParametersSetAsync()
         {
             if (!String.IsNullOrEmpty(RegistrationNumberUrlInput)
@@ -88,12 +99,14 @@ namespace VehicleDetailsLookup.Client.Components.Pages
         protected override void OnInitialized()
         {
             VehicleLookupEventsService.OnStartVehicleLookup += StartLookup;
+            VehicleLookupEventsService.OnLookupStatusChanged += OnLookupStatusChanged;
             base.OnInitialized();
         }
 
         public void Dispose()
         {
             VehicleLookupEventsService.OnStartVehicleLookup -= StartLookup;
+            VehicleLookupEventsService.OnLookupStatusChanged -= OnLookupStatusChanged;
             GC.SuppressFinalize(this);
         }
     }

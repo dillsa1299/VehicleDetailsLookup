@@ -38,7 +38,7 @@ namespace VehicleDetailsLookup.Controllers
             if (vehicle == null || string.IsNullOrEmpty(vehicle.RegistrationNumber))
                 return NotFound("Vehicle not found.");
 
-            _vehicleDataService.LogLookup(registrationNumber);
+            _vehicleDataService.LogLookup(vehicle);
 
             return Ok(vehicle);
         }

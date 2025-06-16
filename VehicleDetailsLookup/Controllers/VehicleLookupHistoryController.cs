@@ -52,14 +52,8 @@ namespace VehicleDetailsLookup.Controllers
         /// <param name="registrationNumber">The registration number to validate (not used for filtering).</param>
         /// <returns>A list of recent vehicle lookups.</returns>
         [HttpGet("recent")]
-        public async Task<IActionResult> GetRecentVehiclesAsync(string registrationNumber)
+        public async Task<IActionResult> GetRecentVehiclesAsync()
         {
-            // Remove whitespace and capitalize input
-            registrationNumber = registrationNumber.Replace(" ", string.Empty).ToUpperInvariant();
-
-            if (string.IsNullOrWhiteSpace(registrationNumber) || !RegexHelper.RegistrationNumber.IsMatch(registrationNumber))
-                return BadRequest("Invalid registration number.");
-
             // Temporary delay to simulate async operation when using DB
             await Task.Delay(1);
 

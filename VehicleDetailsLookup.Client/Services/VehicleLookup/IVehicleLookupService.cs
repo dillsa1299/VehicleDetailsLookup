@@ -53,8 +53,8 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
         /// Retrieves a list of recent vehicle lookups.
         /// </summary>
         /// <returns>
-        /// A <see cref="List{VehicleLookupModel}"/> containing details of recently looked up vehicles.
+        /// A <see cref="List{VehicleModel}"/> containing details of recently looked up vehicles.
         /// </returns>
-        Task<List<VehicleLookupModel>> GetRecentVehicleLookupsAsync();
+        Task<IEnumerable<VehicleLookupModel>> GetRecentVehicleLookupsAsync();
     }
 }

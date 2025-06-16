@@ -39,16 +39,18 @@ namespace VehicleDetailsLookup.Services.VehicleData
         }
 
         /// <summary>
-        /// Logs a vehicle lookup by registration number, recording the current UTC time.
+        /// Logs a vehicle lookup by recording the current UTC time for the provided vehicle.
         /// </summary>
-        /// <param name="registrationNumber">The registration number of the vehicle being looked up.</param>
-        public void LogLookup(string registrationNumber)
+        /// <param name="vehicle">The <see cref="VehicleModel"/> representing the vehicle being logged.</param>
+        public void LogLookup(VehicleModel vehicle)
         {
             var vehicleLookupModel = new VehicleLookupModel
             {
                 DateTime = DateTime.UtcNow,
-                RegistrationNumber = registrationNumber
+                RegistrationNumber = vehicle.RegistrationNumber,
+                Details = $"{vehicle.YearOfManufacture} {vehicle.Make} {vehicle.Model}"
             };
+
             // Update the last lookup time for the vehicle
             _vehicleLookupCache[vehicleLookupModel.DateTime] = vehicleLookupModel;
         }
@@ -62,33 +64,22 @@ namespace VehicleDetailsLookup.Services.VehicleData
         {
             return _vehicleLookupCache.Count(lookup => lookup.Value.RegistrationNumber == registrationNumber);
         }
-
         /// <summary>
         /// Retrieves a collection of recent vehicle lookups.
         /// </summary>
         /// <param name="count">The maximum number of recent lookups to retrieve.</param>
         /// <returns>
-        /// An <see cref="IEnumerable{VehicleModel}"/> containing the most recent vehicles
-        /// that have been looked up, ordered by lookup date descending.
+        /// An <see cref="IEnumerable{VehicleLookupModel}"/> containing the most recent vehicle lookups,
+        /// ordered by lookup date descending.
         /// </returns>
-        public IEnumerable<VehicleModel> GetRecentLookups(int count)
+        public IEnumerable<VehicleLookupModel> GetRecentLookups(int count)
         {
-            // Get lookup values
+            // Get lookups
             var lookups = _vehicleLookupCache.Values
                 .OrderByDescending(lookup => lookup.DateTime)
                 .Take(count);
 
-            // Load corresponding vehicle data
-            var vehicles = new List<VehicleModel>();
-            foreach (var lookup in lookups)
-            {
-                if (_vehicleCache.TryGetValue(lookup.RegistrationNumber, out var vehicle))
-                {
-                    vehicles.Add(vehicle);
-                }
-            }
-
-            return vehicles;
+            return lookups;
         }
     }
 }

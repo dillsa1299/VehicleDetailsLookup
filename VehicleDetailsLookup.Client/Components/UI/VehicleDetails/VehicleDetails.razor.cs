@@ -112,11 +112,10 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
             await base.OnParametersSetAsync();
         }
 
-        protected override Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
             VehicleLookupEventsService.OnLookupStatusChanged += OnLookupStatusChanged;
-
-            return base.OnInitializedAsync();
+            base.OnInitialized();
         }
 
         public void Dispose()

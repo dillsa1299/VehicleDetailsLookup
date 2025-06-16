@@ -1,0 +1,36 @@
+﻿@if (!IsHidden)
+{
+    <MudGrid>
+        <MudItem md="3" />
+        <MudItem xs="12" md="6" Class="mx-auto">
+            <MudPaper Class="pa-4 d-flex flex-column align-center justify-center" Elevation="1">
+                <MudText Typo="Typo.h4" Class="pb-4">Recent Lookups</MudText>
+                Still a WIP
+
+                @if (_loading)
+                {
+                    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="200px" Width="100%"></MudSkeleton>
+                }
+                else
+                {
+                    <MudDataGrid Items="@_recentLookups" Filterable="false" SortMode="@SortMode.None" Groupable="false" Style="width:100%;">
+                        <Columns>
+                            <PropertyColumn Property="x => x.RegistrationNumber" Title="Registration" />
+                            <PropertyColumn Property="x => x.Details" Title="Details" />
+                            <TemplateColumn CellClass="d-flex justify-end">
+                                <CellTemplate>
+                                    <MudIconButton Size="@Size.Large"
+                                                   Icon="@Icons.Material.Filled.Search"
+                                                   Color="@Color.Primary"
+                                                   OnClick="@(e => HandleLookupClick(context.Item.RegistrationNumber))"
+                                                   Title="View"/>
+                                </CellTemplate>
+                            </TemplateColumn>
+                        </Columns>
+                    </MudDataGrid>
+                }
+            </MudPaper>
+        </MudItem>
+        <MudItem md="3" />
+    </MudGrid>
+}

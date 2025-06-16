@@ -64,16 +64,16 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             return count;
         }
 
-        public async Task<List<VehicleLookupModel>> GetRecentVehicleLookupsAsync()
+        public async Task<IEnumerable<VehicleLookupModel>> GetRecentVehicleLookupsAsync()
         {
             // Call the backend API to retrieve recent vehicle lookups.
-            var response = await _httpClient.GetAsync($"/api/VehicleLookupHistory/recent");
+            var response = await _httpClient.GetAsync("/api/VehicleLookupHistory/recent");
 
             // Return an empty list if the request fails or no recent vehicles found.
             if (!response.IsSuccessStatusCode)
                 return new List<VehicleLookupModel>();
 
-            var vehicles = await response.Content.ReadFromJsonAsync<List<VehicleLookupModel>>();
+            var vehicles = await response.Content.ReadFromJsonAsync<IEnumerable<VehicleLookupModel>>();
 
             return vehicles ?? throw new InvalidOperationException("Failed to deserialize recent vehicles data.");
         }
