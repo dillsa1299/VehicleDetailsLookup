@@ -4,7 +4,9 @@
         <TitleContent>
             <div class="d-flex align-center">
                 <MudIcon Icon="@(Mot.Passed? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Cancel)"
-                         Color="@(Mot.Passed? Color.Success: Color.Error)" Size="@_iconSize" Class="mr-2" />
+                         Color="@(Mot.Passed? Color.Success: Color.Error)"
+                         Title="@(Mot.Passed? "Passed": "Failed")"
+                         Size="@_iconSize" Class="mr-2" />
                 <MudText Class="mt-2">
                     @Mot.CompletedDate.ToString("d MMMM yyyy") | @(Mot.OdometerValue == -1 ? "N/A" : $"{Mot.OdometerValue:N0} {Mot.OdometerUnit}")
                 </MudText>

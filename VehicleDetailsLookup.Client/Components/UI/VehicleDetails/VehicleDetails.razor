@@ -31,10 +31,15 @@
         <MudGrid Class="mt-4">
             <MudItem xs="12" md="8">
                 <MudPaper Class="pa-4" Elevation="1">
-                    <div style="display: flex; justify-content: center; align-items: center;">
-                        <MudBadge Content="@_vehicleLookupCount" Color="@Color.Primary" Overlap=true>
+                    <div class="d-flex align-items-start" style="width: 100%;">
+                        <div style="flex: 1; text-align: center;">
                             <MudText Typo="Typo.h3">@Vehicle?.YearOfManufacture @Vehicle?.Make @Vehicle?.Model</MudText>
-                        </MudBadge>
+                        </div>
+                        <div>
+                            <MudBadge Content="@_vehicleLookupCount" Overlap="true" Color="@Color.Primary">
+                                <MudIcon Icon="@Icons.Material.Filled.RemoveRedEye" Size="@Size.Large" Title="Lookup count" />
+                            </MudBadge>
+                        </div>
                     </div>
 
                     <MudText Typo="Typo.h4">Details</MudText>
