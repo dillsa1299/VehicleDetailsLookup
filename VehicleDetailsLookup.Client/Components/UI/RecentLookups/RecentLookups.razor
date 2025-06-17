@@ -1,36 +1,35 @@
 ﻿@if (!IsHidden)
 {
     <MudGrid>
-        <MudItem md="3" />
-        <MudItem xs="12" md="6" Class="mx-auto">
-            <MudPaper Class="pa-4 d-flex flex-column align-center justify-center" Elevation="1">
-                <MudText Typo="Typo.h4" Class="pb-4">Recent Lookups</MudText>
-                Still a WIP
-
+        <MudItem md="4" />
+        <MudItem xs="12" md="4" Class="mx-auto">
+            <div class="d-flex flex-column align-center justify-center mt-6">
                 @if (_loading)
                 {
                     <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="200px" Width="100%"></MudSkeleton>
                 }
                 else
                 {
-                    <MudDataGrid Items="@_recentLookups" Filterable="false" SortMode="@SortMode.None" Groupable="false" Style="width:100%;">
-                        <Columns>
-                            <PropertyColumn Property="x => x.RegistrationNumber" Title="Registration" />
-                            <PropertyColumn Property="x => x.Details" Title="Details" />
-                            <TemplateColumn CellClass="d-flex justify-end">
-                                <CellTemplate>
-                                    <MudIconButton Size="@Size.Large"
-                                                   Icon="@Icons.Material.Filled.Search"
-                                                   Color="@Color.Primary"
-                                                   OnClick="@(e => HandleLookupClick(context.Item.RegistrationNumber))"
-                                                   Title="View"/>
-                                </CellTemplate>
-                            </TemplateColumn>
-                        </Columns>
-                    </MudDataGrid>
+                    <MudList T="string">
+                        @foreach (var lookup in _recentLookups)
+                        {
+                            <MudListItem Icon="@Icons.Material.Filled.Search"
+                                         OnClick="@(async () => await HandleLookupClick(lookup.RegistrationNumber))">
+                                <ChildContent>
+                                    <MudText Typo="Typo.body2">
+                                        <b>@lookup.RegistrationNumber</b>
+                                        <MudText Typo="Typo.body2" Color="Color.Primary" Inline=true>
+                                            &nbsp;|&nbsp;
+                                        </MudText>
+                                        @lookup.Details
+                                    </MudText>
+                                </ChildContent>
+                            </MudListItem>
+                        }
+                    </MudList>
                 }
-            </MudPaper>
+            </div>
         </MudItem>
-        <MudItem md="3" />
+        <MudItem md="4" />
     </MudGrid>
 }

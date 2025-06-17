@@ -6,11 +6,13 @@
 
 @if ((Vehicle != null && !String.IsNullOrEmpty(Vehicle.RegistrationNumber)) || _isSearchingDetails)
 {
-    <ImageViewer Images="@Vehicle?.Images" PlaceholderImage="@_placeholderImage" IsSearching="@(_isSearchingImages || _isSearchingDetails)"></ImageViewer>
+    <div class="mt-2">
+        <ImageViewer Images="@Vehicle?.Images" PlaceholderImage="@_placeholderImage" IsSearching="@(_isSearchingImages || _isSearchingDetails)" />
+    </div>
 
     @if (_isSearchingDetails)
     {
-        <MudGrid Class="mt-4">
+        <MudGrid Class="mt-2">
             <MudItem xs="12" md="8">
                 <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="400px" Width="100%"></MudSkeleton>
             </MudItem>
@@ -28,7 +30,7 @@
     }
     else
     {
-        <MudGrid Class="mt-4">
+        <MudGrid Class="mt-2">
             <MudItem xs="12" md="8">
                 <MudPaper Class="pa-4" Elevation="1">
                     <div class="d-flex align-items-start" style="width: 100%;">
@@ -99,7 +101,7 @@
             </MudItem>
 
             <MudItem xs="12" md="4">
-                <MudStack Style="height:100%;">
+                <MudStack Class="pa-4" Style="height:100%;">
                     <MotStatus Vehicle="@Vehicle"></MotStatus>
                     <TaxStatus Vehicle="@Vehicle"></TaxStatus>
                 </MudStack>
