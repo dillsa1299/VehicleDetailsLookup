@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
 
 namespace VehicleDetailsLookup.Client.Components.Layout
 {
     public partial class MainLayout
     {
         [Inject]
-        private NavigationManager NavigationManager { get; set; } = default!;
+        private IVehicleLookupEventsService VehicleLookupEventsService { get; set; } = default!;
 
         private bool _isDarkMode = true;
 
@@ -22,7 +23,7 @@ namespace VehicleDetailsLookup.Client.Components.Layout
 
         private void OnCarIconClick()
         {
-            NavigationManager.NavigateTo("/", forceLoad: true);
+            VehicleLookupEventsService.NotifyLookupClear();
         }
 
         public string DarkLightModeButtonIcon => _isDarkMode switch

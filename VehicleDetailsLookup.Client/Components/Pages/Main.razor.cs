@@ -10,9 +10,6 @@ namespace VehicleDetailsLookup.Client.Components.Pages
 {
     public partial class Main : IDisposable
     {
-        [Parameter]
-        public string? RegistrationNumberUrlInput { get; set; }
-
         [Inject]
         private IVehicleLookupService VehicleLookupService { get; set; } = default!;
 
@@ -24,6 +21,9 @@ namespace VehicleDetailsLookup.Client.Components.Pages
 
         [Inject]
         private IJSRuntime JS { get; set; } = default!;
+
+        [Parameter]
+        public string? RegistrationNumberUrlInput { get; set; }
 
         private string PageTitle => string.IsNullOrEmpty(_vehicle?.RegistrationNumber) ? "Vehicle Details Lookup"
             : $"{_vehicle?.YearOfManufacture} {_vehicle?.Make} {_vehicle?.Model} | VDL";
@@ -78,6 +78,17 @@ namespace VehicleDetailsLookup.Client.Components.Pages
             StateHasChanged();
         }
 
+        private void OnLookupClear()
+        {
+            // Clear lookup
+            _vehicle = new VehicleModel();
+
+            // Reset URL
+            NavigationManager.NavigateTo("/", forceLoad: false);
+
+            StateHasChanged();
+        }
+
         protected override async Task OnParametersSetAsync()
         {
             if (!String.IsNullOrEmpty(RegistrationNumberUrlInput)
@@ -100,6 +111,7 @@ namespace VehicleDetailsLookup.Client.Components.Pages
         {
             VehicleLookupEventsService.OnStartVehicleLookup += StartLookup;
             VehicleLookupEventsService.OnLookupStatusChanged += OnLookupStatusChanged;
+            VehicleLookupEventsService.OnLookupClear += OnLookupClear;
             base.OnInitialized();
         }
 
@@ -107,6 +119,7 @@ namespace VehicleDetailsLookup.Client.Components.Pages
         {
             VehicleLookupEventsService.OnStartVehicleLookup -= StartLookup;
             VehicleLookupEventsService.OnLookupStatusChanged -= OnLookupStatusChanged;
+            VehicleLookupEventsService.OnLookupClear -= OnLookupClear;
             GC.SuppressFinalize(this);
         }
     }

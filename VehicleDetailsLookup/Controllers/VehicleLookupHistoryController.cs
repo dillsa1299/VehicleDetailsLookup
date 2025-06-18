@@ -8,21 +8,16 @@ namespace VehicleDetailsLookup.Controllers
     /// API controller for handling vehicle lookup history operations.
     /// Provides endpoints to retrieve lookup counts and recent vehicle lookups.
     /// </summary>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="VehicleLookupHistoryController"/> class.
+    /// </remarks>
+    /// <param name="vehicleDataService">The service for vehicle data operations.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="vehicleDataService"/> is null.</exception>
     [Route("api/[controller]")]
     [ApiController]
-    public class VehicleLookupHistoryController : ControllerBase
+    public class VehicleLookupHistoryController(IVehicleDataService vehicleDataService) : ControllerBase
     {
-        private readonly IVehicleDataService _vehicleDataService;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="VehicleLookupHistoryController"/> class.
-        /// </summary>
-        /// <param name="vehicleDataService">The service for vehicle data operations.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="vehicleDataService"/> is null.</exception>
-        public VehicleLookupHistoryController(IVehicleDataService vehicleDataService)
-        {
-            _vehicleDataService = vehicleDataService ?? throw new ArgumentNullException(nameof(vehicleDataService));
-        }
+        private readonly IVehicleDataService _vehicleDataService = vehicleDataService ?? throw new ArgumentNullException(nameof(vehicleDataService));
 
         /// <summary>
         /// Gets the number of times a vehicle has been looked up by its registration number.
@@ -35,7 +30,8 @@ namespace VehicleDetailsLookup.Controllers
             // Remove whitespace and capitalize input
             registrationNumber = registrationNumber.Replace(" ", string.Empty).ToUpperInvariant();
 
-            if (string.IsNullOrWhiteSpace(registrationNumber) || !RegexHelper.RegistrationNumber.IsMatch(registrationNumber))
+            var regex = RegexHelper.RegistrationNumber();
+            if (string.IsNullOrWhiteSpace(registrationNumber) || !regex.IsMatch(registrationNumber))
                 return BadRequest("Invalid registration number.");
 
             // Temporary delay to simulate async operation when using DB

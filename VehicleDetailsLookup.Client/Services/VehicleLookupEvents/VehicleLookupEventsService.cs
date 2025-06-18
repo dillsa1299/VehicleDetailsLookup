@@ -18,6 +18,13 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookupEvents
             remove => OnStartVehicleLookup -= value;
         }
 
+        private event Action? OnLookupClear;
+        event Action IVehicleLookupEventsService.OnLookupClear
+        {
+            add => OnLookupClear += value;
+            remove => OnLookupClear -= value;
+        }
+
         public void NotifyLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber)
         {
             OnLookupStatusChanged?.Invoke(lookupType, lookupStarted, registrationNumber);
@@ -39,10 +46,16 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookupEvents
             OnLookupStatusChanged?.Invoke(lookupType, false, registrationNumber);
         }
 
+        public void NotifyLookupClear()
+        {
+            OnLookupClear?.Invoke();
+        }
+
         public void Dispose()
         {
             OnLookupStatusChanged = null;
             OnStartVehicleLookup = null;
+            OnLookupClear = null;
             GC.SuppressFinalize(this);
         }
     }

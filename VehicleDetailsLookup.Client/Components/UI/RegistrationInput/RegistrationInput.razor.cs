@@ -13,7 +13,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.RegistrationInput
         [Parameter]
         public VehicleModel Vehicle { get; set; } = default!;
 
-        RegistrationInputModel _registrationInput = new();
+        private readonly RegistrationInputModel _registrationInput = new();
         private bool _lookupFailed;
 
         private async Task LookupRegistration()
@@ -33,23 +33,21 @@ namespace VehicleDetailsLookup.Client.Components.UI.RegistrationInput
 
             if (!lookupStarted)
             {
-                // Lookup completed
-                if (string.IsNullOrEmpty(Vehicle.RegistrationNumber))
-                {
-                    _lookupFailed = true;
-                }
-                else
-                {
-                    _lookupFailed = false;
-                }
+                _lookupFailed = string.IsNullOrEmpty(Vehicle.RegistrationNumber);
             }
 
             StateHasChanged();
         }
 
+        private void OnLookupClear()
+        {
+            _registrationInput.Input = string.Empty;
+        }
+
         protected override Task OnInitializedAsync()
         {
             VehicleLookupEventsService.OnLookupStatusChanged += OnLookupStatusChanged;
+            VehicleLookupEventsService.OnLookupClear += OnLookupClear;
 
             return base.OnInitializedAsync();
         }
@@ -57,6 +55,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.RegistrationInput
         public void Dispose()
         {
             VehicleLookupEventsService.OnLookupStatusChanged -= OnLookupStatusChanged;
+            VehicleLookupEventsService.OnLookupClear -= OnLookupClear;
         }
 
         private class RegistrationInputModel

@@ -9,9 +9,11 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookupEvents
 
         event VehicleLookupStartEvent OnStartVehicleLookup;
         event VehicleLookupEvent OnLookupStatusChanged;
+        event Action OnLookupClear;
 
         Task NotifyStartVehicleLookup(string registrationNumber, VehicleLookupType lookupType);
         void NotifyLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber);
+        void NotifyLookupClear();
         
     }
 }

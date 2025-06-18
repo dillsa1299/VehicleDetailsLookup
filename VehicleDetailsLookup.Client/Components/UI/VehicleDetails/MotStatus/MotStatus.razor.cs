@@ -15,18 +15,12 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotStatus
             base.OnParametersSet();
 
             // Set _style based on the MOT status
-            switch (Vehicle?.MotStatus?.ToLowerInvariant())
+            _style = (Vehicle?.MotStatus?.ToLowerInvariant()) switch
             {
-                case "valid":
-                    _style = "background-color: var(--mud-palette-success);";
-                    break;
-                case "not valid":
-                    _style = "background-color: var(--mud-palette-error);";
-                    break;
-                default:
-                    _style = "background-color: var(--mud-palette-gray-default);";
-                    break;
-            }
+                "valid" => "background-color: var(--mud-palette-success);",
+                "not valid" => "background-color: var(--mud-palette-error);",
+                _ => "background-color: var(--mud-palette-gray-default);",
+            };
         }
     }
 }

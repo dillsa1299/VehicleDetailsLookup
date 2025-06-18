@@ -30,7 +30,8 @@ namespace VehicleDetailsLookup.Controllers
             // Remove whitespace and capitalize input
             registrationNumber = registrationNumber.Replace(" ", string.Empty).ToUpperInvariant();
 
-            if (string.IsNullOrWhiteSpace(registrationNumber) || !RegexHelper.RegistrationNumber.IsMatch(registrationNumber))
+            var regex = RegexHelper.RegistrationNumber();
+            if (string.IsNullOrWhiteSpace(registrationNumber) || !regex.IsMatch(registrationNumber))
                 return BadRequest("Invalid registration number.");
 
             var vehicle = await _vehicleDetailsService.GetVehicleDetailsAsync(registrationNumber);

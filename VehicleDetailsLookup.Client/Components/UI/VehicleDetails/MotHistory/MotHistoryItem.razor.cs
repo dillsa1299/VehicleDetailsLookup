@@ -13,17 +13,17 @@ public partial class MotHistoryItem
     [Parameter]
     public MotModel? Mot { get; set; }
 
-    private IEnumerable<MotDefectModel> _dangerousDefects =>
+    private IEnumerable<MotDefectModel> DangerousDefects =>
         Mot?.Defects.Where(d => d.Type == MotDefectType.Dangerous || d.Dangerous)
-        ?? Enumerable.Empty<MotDefectModel>();
+        ?? [];
 
-    private IEnumerable<MotDefectModel> _majorDefects =>
+    private IEnumerable<MotDefectModel> MajorDefects =>
         Mot?.Defects.Where(d => d.Type == MotDefectType.Fail || d.Type == MotDefectType.Major)
-        ?? Enumerable.Empty<MotDefectModel>();
+        ?? [];
 
-    private IEnumerable<MotDefectModel> _otherDefects =>
+    private IEnumerable<MotDefectModel> OtherDefects =>
         Mot?.Defects.Where(d => !(d.Type == MotDefectType.Dangerous || d.Dangerous || d.Type == MotDefectType.Fail || d.Type == MotDefectType.Major))
-        ?? Enumerable.Empty<MotDefectModel>();
+        ?? [];
 
     private Size _iconSize = Size.Large;
 
@@ -35,19 +35,12 @@ public partial class MotHistoryItem
         {
             var size = await JsRuntime.InvokeAsync<int>("getWindowWidth");
 
-            switch (size)
+            _iconSize = size switch
             {
-                case < 600:
-                    _iconSize = Size.Small;
-                    break;
-                case < 960:
-                    _iconSize = Size.Medium;
-                    break;
-                default:
-                    _iconSize = Size.Large;
-                    break;
-            }
-
+                < 600 => Size.Small,
+                < 960 => Size.Medium,
+                _ => Size.Large,
+            };
             StateHasChanged();
         }
     }

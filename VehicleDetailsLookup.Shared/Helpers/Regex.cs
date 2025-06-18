@@ -2,9 +2,9 @@
 
 namespace VehicleDetailsLookup.Shared.Helpers
 {
-    public static class RegexHelper
+    public static partial class RegexHelper
     {
-        public static readonly Regex RegistrationNumber =
-            new(@"^[a-zA-Z0-9]{0,7}$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        [GeneratedRegex("^[a-zA-Z0-9]{0,7}$", RegexOptions.CultureInvariant)]
+        public static partial Regex RegistrationNumber();
     }
 }
