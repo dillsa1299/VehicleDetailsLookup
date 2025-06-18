@@ -71,7 +71,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
 
             // Return an empty list if the request fails or no recent vehicles found.
             if (!response.IsSuccessStatusCode)
-                return new List<VehicleLookupModel>();
+                return [];
 
             var vehicles = await response.Content.ReadFromJsonAsync<IEnumerable<VehicleLookupModel>>();
 
