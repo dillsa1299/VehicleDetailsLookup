@@ -15,12 +15,12 @@ namespace VehicleDetailsLookup.Services.VehicleMapper
         /// Maps VES and MOT search responses to a <see cref="VehicleModel"/> containing comprehensive vehicle details.
         /// </summary>
         /// <param name="vehicle">The <see cref="VehicleModel"/> instance to populate with details.</param>
-        /// <param name="vesSearchResponse">The <see cref="VesSearchResponse"/> containing vehicle and tax details.</param>
+        /// <param name="vesSearchResponse">The <see cref="VesResponse"/> containing vehicle and tax details.</param>
         /// <param name="motSearchResponse">The <see cref="MotSearchResponse"/> containing MOT history and details.</param>
         /// <returns>
         /// The updated <see cref="VehicleModel"/> populated with details from the provided VES and MOT responses.
         /// </returns>
-        VehicleModel MapDetails(VehicleModel vehicle, VesSearchResponse vesSearchResponse, MotSearchResponse motSearchResponse);
+        VehicleModel MapDetails(VehicleModel vehicle, VesResponse vesSearchResponse, MotSearchResponse motSearchResponse);
 
         /// <summary>
         /// Maps an image search response to a <see cref="VehicleModel"/> containing image information.

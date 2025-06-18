@@ -66,7 +66,7 @@ namespace VehicleDetailsLookup.Services.VehicleDetails
             return vehicle;
         }
 
-        private async Task<VesSearchResponse> SearchVesAsync(string registrationNumber)
+        private async Task<VesResponse> SearchVesAsync(string registrationNumber)
         {
             // Build the request for the VES API
             using var request = new HttpRequestMessage(HttpMethod.Post, _vesURL)
@@ -83,13 +83,13 @@ namespace VehicleDetailsLookup.Services.VehicleDetails
 
             // Check if the response is successful
             if (!response.IsSuccessStatusCode)
-                return new VesSearchResponse();
+                return new VesResponse();
 
             // Parse response
             var responseContent = await response.Content.ReadAsStringAsync();
-            var parsedResponse = JsonSerializer.Deserialize<VesSearchResponse>(responseContent, _jsonSerializerOptions);
+            var parsedResponse = JsonSerializer.Deserialize<VesResponse>(responseContent, _jsonSerializerOptions);
 
-            return parsedResponse ?? new VesSearchResponse();
+            return parsedResponse ?? new VesResponse();
         }
 
         private async Task<MotSearchResponse> SearchMotAsync(string registrationNumber)
