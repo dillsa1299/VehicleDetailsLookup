@@ -361,5 +361,15 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Ignore SQLite database files
+db/*.db
+*.db
+*.sqlite
+
+# Standard .NET ignores
+bin/
+obj/
+
 /VehicleDetailsLookup/appsettings.Development.json
 /VehicleDetailsLookup/appsettings.Development.json

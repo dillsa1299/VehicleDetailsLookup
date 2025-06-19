@@ -8,5 +8,8 @@ namespace VehicleDetailsLookup.Models.Database.Mot
         public string? Description { get; set; }
         public MotDefectType Type { get; set; }
         public bool Dangerous { get; set; }
+
+        // Optional: navigation property back to MotTest
+        public MotTestDbModel? MotTest { get; set; }
     }
 }
