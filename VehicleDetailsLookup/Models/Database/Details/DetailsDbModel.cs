@@ -1,4 +1,6 @@
-﻿namespace VehicleDetailsLookup.Models.Database.Details
+﻿using VehicleDetailsLookup.Models.Database.Lookup;
+
+namespace VehicleDetailsLookup.Models.Database.Details
 {
     public class DetailsDbModel : IDetailsDbModel
     {
@@ -16,5 +18,6 @@
         public DateOnly DateOfLastV5CIssued { get; set; }
         public DateOnly MonthOfFirstRegistration { get; set; }
         public DateTime Updated { get; set; }
+        public ICollection<LookupDbModel> Lookups { get; set; } = [];
     }
 }

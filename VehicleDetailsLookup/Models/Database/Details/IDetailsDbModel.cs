@@ -1,4 +1,6 @@
-﻿namespace VehicleDetailsLookup.Models.Database.Details
+﻿using VehicleDetailsLookup.Models.Database.Lookup;
+
+namespace VehicleDetailsLookup.Models.Database.Details
 {
     /// <summary>
     /// Defines the structure for storing vehicle details in the database.
@@ -61,5 +63,9 @@
         /// The year the vehicle was manufactured.
         /// </summary>
         int YearOfManufacture { get; set; }
+        /// <summary>
+        /// Reverse navigation property for many lookups.
+        /// </summary>
+        ICollection<LookupDbModel> Lookups { get; set; }
     }
 }
