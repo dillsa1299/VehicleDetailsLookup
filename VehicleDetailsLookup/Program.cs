@@ -1,7 +1,9 @@
+using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using VehicleDetailsLookup.Client.Services.VehicleLookup;
 using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
 using VehicleDetailsLookup.Components;
+using VehicleDetailsLookup.Models.Database;
 using VehicleDetailsLookup.Services.AiSearch;
 using VehicleDetailsLookup.Services.ImageSearch;
 using VehicleDetailsLookup.Services.VehicleAi;
@@ -39,6 +41,10 @@ builder.Services.AddSingleton<IVehicleAiService, VehicleAiService>();
 
 builder.Services.AddScoped<IVehicleLookupService, VehicleLookupService>();
 builder.Services.AddScoped<IVehicleLookupEventsService, VehicleLookupEventsService>();
+
+// Register DbContext with SQLite
+builder.Services.AddDbContext<VehicleDbContext>(options =>
+    options.UseSqlite("Data Source=vehicledata.db"));
 
 var app = builder.Build();
 
