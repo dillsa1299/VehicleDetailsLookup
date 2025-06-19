@@ -1,6 +1,6 @@
-﻿namespace VehicleDetailsLookup.Models.Database
+﻿namespace VehicleDetailsLookup.Models.Database.Mot
 {
-    public class MotTestDbModel
+    public class MotTestDbModel : IMotTestDbModel
     {
         public string? RegistrationNumber { get; set; }
         public string? TestNumber { get; set; }

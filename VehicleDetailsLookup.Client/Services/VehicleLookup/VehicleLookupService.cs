@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Json;
-using VehicleDetailsLookup.Shared.Models;
 using VehicleDetailsLookup.Shared.Models.Enums;
+using VehicleDetailsLookup.Shared.Models.Vehicle;
+using VehicleDetailsLookup.Shared.Models.VehicleLookup;
 
 namespace VehicleDetailsLookup.Client.Services.VehicleLookup
 {

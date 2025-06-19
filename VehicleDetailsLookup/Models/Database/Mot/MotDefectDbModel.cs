@@ -1,8 +1,8 @@
 ﻿using VehicleDetailsLookup.Shared.Models.Enums;
 
-namespace VehicleDetailsLookup.Models.Database
+namespace VehicleDetailsLookup.Models.Database.Mot
 {
-    public class MotDefectDbModel
+    public class MotDefectDbModel : IMotDefectDbModel
     {
         public string? TestNumber { get; set; }
         public string? Description { get; set; }

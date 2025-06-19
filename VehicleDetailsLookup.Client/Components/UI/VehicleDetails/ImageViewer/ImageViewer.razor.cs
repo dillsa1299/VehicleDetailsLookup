@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Components;
-using VehicleDetailsLookup.Shared.Models;
+using VehicleDetailsLookup.Shared.Models.Image;
 
 namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.ImageViewer;
 public partial class ImageViewer

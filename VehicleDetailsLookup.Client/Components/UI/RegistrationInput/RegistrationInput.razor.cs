@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using VehicleDetailsLookup.Client.Components.Enums;
 using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
-using VehicleDetailsLookup.Shared.Models;
+using VehicleDetailsLookup.Shared.Models.Vehicle;
 
 namespace VehicleDetailsLookup.Client.Components.UI.RegistrationInput
 {

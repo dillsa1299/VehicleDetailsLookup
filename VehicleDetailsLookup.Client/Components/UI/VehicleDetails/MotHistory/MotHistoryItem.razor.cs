@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
-using VehicleDetailsLookup.Shared.Models;
 using VehicleDetailsLookup.Shared.Models.Enums;
+using VehicleDetailsLookup.Shared.Models.Mot;
 
 namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotHistory;
 public partial class MotHistoryItem

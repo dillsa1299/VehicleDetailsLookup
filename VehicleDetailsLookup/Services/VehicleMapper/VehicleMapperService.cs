@@ -2,8 +2,11 @@
 using VehicleDetailsLookup.Models.SearchResponses;
 using VehicleDetailsLookup.Models.SearchResponses.ImageSearch;
 using VehicleDetailsLookup.Models.SearchResponses.MotSearch;
-using VehicleDetailsLookup.Shared.Models;
+using VehicleDetailsLookup.Shared.Models.VehicleAiData;
 using VehicleDetailsLookup.Shared.Models.Enums;
+using VehicleDetailsLookup.Shared.Models.Mot;
+using VehicleDetailsLookup.Shared.Models.Image;
+using VehicleDetailsLookup.Shared.Models.Vehicle;
 
 namespace VehicleDetailsLookup.Services.VehicleMapper
 {
