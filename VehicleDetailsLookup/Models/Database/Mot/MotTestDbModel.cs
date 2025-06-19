@@ -9,8 +9,6 @@
         public DateOnly ExpiryDate { get; set; }
         public long OdometerValue { get; set; }
         public string? OdometerUnit { get; set; }
-
-        // Navigation property for related defects
-        public IEnumerable<MotDefectDbModel> MotDefects { get; set; } = [];
+        public ICollection<MotDefectDbModel> MotDefects { get; set; } = [];
     }
 }

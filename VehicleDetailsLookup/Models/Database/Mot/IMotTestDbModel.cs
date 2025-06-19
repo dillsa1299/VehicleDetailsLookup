@@ -33,5 +33,9 @@
         /// The unique identifier for the MOT test.
         /// </summary>
         string? TestNumber { get; set; }
+        /// <summary>
+        /// Navigation property for related defects identified during the MOT test.
+        /// </summary>
+        ICollection<MotDefectDbModel> MotDefects { get; set; }
     }
 }

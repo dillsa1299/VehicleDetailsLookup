@@ -3,6 +3,7 @@ using VehicleDetailsLookup.Models.Database.Ai;
 using VehicleDetailsLookup.Models.Database.Image;
 using VehicleDetailsLookup.Models.Database.Details;
 using VehicleDetailsLookup.Models.Database.Mot;
+using VehicleDetailsLookup.Models.Database.Lookup;
 
 namespace VehicleDetailsLookup.Models.Database
 {
@@ -17,6 +18,7 @@ namespace VehicleDetailsLookup.Models.Database
         public DbSet<ImageDbModel> Images { get; set; }
         public DbSet<MotTestDbModel> MotTests { get; set; }
         public DbSet<MotDefectDbModel> MotDefects { get; set; }
+        public DbSet<LookupDbModel> Lookups { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,6 +48,17 @@ namespace VehicleDetailsLookup.Models.Database
                 .WithOne(d => d.MotTest)
                 .HasForeignKey(d => d.TestNumber)
                 .HasPrincipalKey(t => t.TestNumber);
+
+            // Composite key for LookupDbModel
+            modelBuilder.Entity<LookupDbModel>()
+                .HasKey(l => new { l.DateTime, l.RegistrationNumber });
+
+            // One-to-many: DetailsDbModel <-> LookupDbModel via RegistrationNumber
+            modelBuilder.Entity<DetailsDbModel>()
+                .HasMany(d => d.Lookups)
+                .WithOne(l => l.Details)
+                .HasForeignKey(l => l.RegistrationNumber)
+                .HasPrincipalKey(d => d.RegistrationNumber);
         }
     }
 }
