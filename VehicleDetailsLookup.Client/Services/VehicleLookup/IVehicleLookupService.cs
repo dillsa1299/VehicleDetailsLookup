@@ -1,12 +1,12 @@
 ﻿using System.Net.Http;
-using VehicleDetailsLookup.Shared.Models;
 using VehicleDetailsLookup.Shared.Models.Enums;
+using VehicleDetailsLookup.Shared.Models.Vehicle;
+using VehicleDetailsLookup.Shared.Models.VehicleLookup;
 
 namespace VehicleDetailsLookup.Client.Services.VehicleLookup
 {
     /// <summary>
-    /// Defines methods for retrieving vehicle data, images, and AI-generated information
-    /// from the backend.
+    /// Provides methods for retrieving vehicle details, images, AI-generated information, and lookup statistics from the backend.
     /// </summary>
     public interface IVehicleLookupService
     {
@@ -20,17 +20,16 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
         Task<VehicleModel> GetVehicleDetailsAsync(string registrationNumber);
 
         /// <summary>
-        /// Retrieves images associated with a vehicle by its registration number.
+        /// Retrieves image data associated with a vehicle by its registration number.
         /// </summary>
         /// <param name="registrationNumber">The vehicle's registration number.</param>
         /// <returns>
-        /// A <see cref="VehicleModel"/> containing the vehicle's images.
+        /// A <see cref="VehicleModel"/> containing the vehicle's image data.
         /// </returns>
         Task<VehicleModel> GetVehicleImagesAsync(string registrationNumber);
 
         /// <summary>
-        /// Retrieves AI-generated data for a vehicle, such as overviews or common issues,
-        /// based on the specified AI data type.
+        /// Retrieves AI-generated data for a vehicle, such as overviews or common issues, based on the specified AI data type.
         /// </summary>
         /// <param name="registrationNumber">The vehicle's registration number.</param>
         /// <param name="type">The type of AI data to retrieve (e.g., overview, common issues).</param>
@@ -48,12 +47,11 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
         /// </returns>
         Task<int> GetVehicleLookupCountAsync(string registrationNumber);
 
-
         /// <summary>
-        /// Retrieves a list of recent vehicle lookups.
+        /// Retrieves a collection of recent vehicle lookups.
         /// </summary>
         /// <returns>
-        /// A <see cref="List{VehicleModel}"/> containing details of recently looked up vehicles.
+        /// An <see cref="IEnumerable{VehicleLookupModel}"/> containing details of recently looked up vehicles.
         /// </returns>
         Task<IEnumerable<VehicleLookupModel>> GetRecentVehicleLookupsAsync();
     }

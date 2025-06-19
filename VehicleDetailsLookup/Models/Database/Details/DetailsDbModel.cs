@@ -1,6 +1,6 @@
-﻿namespace VehicleDetailsLookup.Models.Database
+﻿namespace VehicleDetailsLookup.Models.Database.Details
 {
-    public class DetailsDbModel
+    public class DetailsDbModel : IDetailsDbModel
     {
         public string? RegistrationNumber { get; set; }
         public int YearOfManufacture { get; set; }

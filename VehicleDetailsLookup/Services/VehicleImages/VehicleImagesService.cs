@@ -2,7 +2,7 @@
 using VehicleDetailsLookup.Services.VehicleData;
 using VehicleDetailsLookup.Services.VehicleDetails;
 using VehicleDetailsLookup.Services.VehicleMapper;
-using VehicleDetailsLookup.Shared.Models;
+using VehicleDetailsLookup.Shared.Models.Vehicle;
 
 namespace VehicleDetailsLookup.Services.VehicleImages
 {

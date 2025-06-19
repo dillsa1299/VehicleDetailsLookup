@@ -1,6 +1,9 @@
-﻿namespace VehicleDetailsLookup.Shared.Models
+﻿namespace VehicleDetailsLookup.Shared.Models.Mot
 {
-    public class MotModel
+    /// <summary>
+    /// Represents MOT test data for a vehicle.
+    /// </summary>
+    public class MotModel : IMotModel
     {
         public DateOnly CompletedDate { get; set; }
         public bool Passed { get; set; }

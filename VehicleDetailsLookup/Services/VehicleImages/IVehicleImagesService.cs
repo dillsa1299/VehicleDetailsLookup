@@ -1,4 +1,4 @@
-﻿using VehicleDetailsLookup.Shared.Models;
+﻿using VehicleDetailsLookup.Shared.Models.Vehicle;
 
 namespace VehicleDetailsLookup.Services.VehicleImages
 {

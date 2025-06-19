@@ -1,8 +1,8 @@
 ﻿using VehicleDetailsLookup.Shared.Models.Enums;
 
-namespace VehicleDetailsLookup.Models.Database
+namespace VehicleDetailsLookup.Models.Database.Ai
 {
-    public class AiDataModel
+    public class AiDbModel : IAiDbModel
     {
         public string? RegistrationNumber { get; set; }
         public VehicleAiType Type { get; set; }

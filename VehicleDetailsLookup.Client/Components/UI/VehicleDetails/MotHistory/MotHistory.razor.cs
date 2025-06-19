@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using VehicleDetailsLookup.Shared.Models;
+using VehicleDetailsLookup.Shared.Models.Vehicle;
 
 namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotHistory
 {

@@ -1,4 +1,5 @@
-﻿using VehicleDetailsLookup.Shared.Models;
+﻿using VehicleDetailsLookup.Shared.Models.Vehicle;
+using VehicleDetailsLookup.Shared.Models.VehicleLookup;
 
 namespace VehicleDetailsLookup.Services.VehicleData
 {
