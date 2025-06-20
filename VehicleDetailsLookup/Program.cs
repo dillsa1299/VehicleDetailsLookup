@@ -11,6 +11,7 @@ using VehicleDetailsLookup.Services.VehicleData;
 using VehicleDetailsLookup.Services.VehicleDetails;
 using VehicleDetailsLookup.Services.VehicleImages;
 using VehicleDetailsLookup.Services.VehicleMapper;
+using VehicleDetailsLookup.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,9 @@ builder.Services.AddSingleton<IVehicleAiService, VehicleAiService>();
 
 builder.Services.AddScoped<IVehicleLookupService, VehicleLookupService>();
 builder.Services.AddScoped<IVehicleLookupEventsService, VehicleLookupEventsService>();
+
+// Register repositories
+builder.Services.AddScoped<IAiRepository, AiRepository>();
 
 // Register DbContext with SQLite
 builder.Services.AddDbContext<VehicleDbContext>(options =>
