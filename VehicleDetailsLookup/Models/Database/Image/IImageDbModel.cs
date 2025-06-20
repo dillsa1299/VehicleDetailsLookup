@@ -17,5 +17,9 @@
         /// The URL where the image is stored or can be accessed.
         /// </summary>
         string? Url { get; set; }
+        /// <summary>
+        /// Date and time when the image was created or added to the database.
+        /// </summary>
+        DateTime Updated { get; set; }
     }
 }
