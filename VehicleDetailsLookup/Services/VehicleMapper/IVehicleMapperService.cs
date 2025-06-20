@@ -26,11 +26,11 @@ namespace VehicleDetailsLookup.Services.VehicleMapper
         /// Maps an image search response to a <see cref="VehicleModel"/> containing image information.
         /// </summary>
         /// <param name="vehicle">The <see cref="VehicleModel"/> instance to populate with image data.</param>
-        /// <param name="imageSearchResponse">The <see cref="ImageSearchResponse"/> containing image items.</param>
+        /// <param name="imageSearchResponse">The <see cref="GoogleImageResponse"/> containing image items.</param>
         /// <returns>
         /// The updated <see cref="VehicleModel"/> with image data populated from the image search response.
         /// </returns>
-        VehicleModel MapImages(VehicleModel vehicle, ImageSearchResponse imageSearchResponse);
+        VehicleModel MapImages(VehicleModel vehicle, GoogleImageResponse imageSearchResponse);
 
         /// <summary>
         /// Maps an AI-generated response to a property of <see cref="VehicleModel"/> based on the specified <see cref="VehicleAiType"/>.

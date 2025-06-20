@@ -1,11 +1,7 @@
-﻿namespace VehicleDetailsLookup.Shared.Models.VehicleDetails
+﻿namespace VehicleDetailsLookup.Shared.Models.Details
 {
-    /// <summary>
-    /// Represents vehicle details.
-    /// </summary>
-    public class VehicleDetailsModel : IVehicleDetailsModel
+    public class DetailsModel : IDetailsModel
     {
-        public DateTime LastUpdated { get; set; }
         public string RegistrationNumber { get; set; } = string.Empty;
         public int YearOfManufacture { get; set; }
         public string Make { get; set; } = string.Empty;

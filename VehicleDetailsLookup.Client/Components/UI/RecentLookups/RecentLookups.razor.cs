@@ -2,7 +2,7 @@
 using VehicleDetailsLookup.Client.Components.Enums;
 using VehicleDetailsLookup.Client.Services.VehicleLookup;
 using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
-using VehicleDetailsLookup.Shared.Models.VehicleLookup;
+using VehicleDetailsLookup.Shared.Models.Lookup;
 
 namespace VehicleDetailsLookup.Client.Components.UI.RecentLookups
 {
@@ -17,7 +17,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.RecentLookups
         [Parameter]
         public bool IsHidden { get; set; }
 
-        private IEnumerable<VehicleLookupModel> _recentLookups = [];
+        private IEnumerable<LookupModel> _recentLookups = [];
         private bool _loading = true;
 
         private async Task HandleLookupClick(string registrationNumber)

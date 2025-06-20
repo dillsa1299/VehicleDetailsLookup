@@ -1,6 +1,6 @@
 ﻿namespace VehicleDetailsLookup.Models.SearchResponses.MotSearch
 {
-    public class MotDefectResponse
+    public class MotDefectResponse : IMotDefectResponse
     {
         public string Text { get; set; } = string.Empty;
         public string Type { get; set; } = string.Empty;

@@ -3,20 +3,20 @@ using VehicleDetailsLookup.Shared.Models.Enums;
 namespace VehicleDetailsLookup.Shared.Models.Mot
 {
     /// <summary>
-    /// Defines the structure for a defect found during an MOT test.
+    /// Defect identified during an MOT test, including its description, type, and danger status.
     /// </summary>
     public interface IMotDefectModel
     {
         /// <summary>
-        /// A description of the defect.
+        /// Description of the defect.
         /// </summary>
         string Description { get; set; }
         /// <summary>
-        /// The type of defect (e.g., advisory, major, dangerous).
+        /// Type of defect (e.g., advisory, major, dangerous).
         /// </summary>
         MotDefectType Type { get; set; }
         /// <summary>
-        /// Indicates if the defect is classified as dangerous.
+        /// Indicates whether the defect is classified as dangerous.
         /// </summary>
         bool Dangerous { get; set; }
     }

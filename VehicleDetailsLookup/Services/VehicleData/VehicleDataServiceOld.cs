@@ -1,12 +1,12 @@
-﻿using VehicleDetailsLookup.Shared.Models.Vehicle;
-using VehicleDetailsLookup.Shared.Models.VehicleLookup;
+﻿using VehicleDetailsLookup.Shared.Models.Lookup;
+using VehicleDetailsLookup.Shared.Models.Vehicle;
 
 namespace VehicleDetailsLookup.Services.VehicleData
 {
     public class VehicleDataServiceOld : IVehicleDataService
     {
         private static readonly Dictionary<string, VehicleModel> _vehicleCache = [];
-        private static readonly Dictionary<DateTime, VehicleLookupModel> _vehicleLookupCache = [];
+        private static readonly Dictionary<DateTime, LookupModel> _vehicleLookupCache = [];
 
         public VehicleModel GetVehicle(string registration)
         {
@@ -22,7 +22,7 @@ namespace VehicleDetailsLookup.Services.VehicleData
 
         public void LogLookup(VehicleModel vehicle)
         {
-            var vehicleLookupModel = new VehicleLookupModel
+            var vehicleLookupModel = new LookupModel
             {
                 DateTime = DateTime.UtcNow,
                 RegistrationNumber = vehicle.RegistrationNumber,
@@ -38,7 +38,7 @@ namespace VehicleDetailsLookup.Services.VehicleData
             return _vehicleLookupCache.Count(lookup => lookup.Value.RegistrationNumber == registrationNumber);
         }
 
-        public IEnumerable<VehicleLookupModel> GetRecentLookups(int count)
+        public IEnumerable<LookupModel> GetRecentLookups(int count)
         {
             // Get lookups
             var lookups = _vehicleLookupCache.Values
