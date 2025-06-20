@@ -1,5 +1,5 @@
-﻿using VehicleDetailsLookup.Shared.Models.Vehicle;
-using VehicleDetailsLookup.Shared.Models.VehicleLookup;
+﻿using VehicleDetailsLookup.Shared.Models.Lookup;
+using VehicleDetailsLookup.Shared.Models.Vehicle;
 
 namespace VehicleDetailsLookup.Services.VehicleData
 {
@@ -42,6 +42,6 @@ namespace VehicleDetailsLookup.Services.VehicleData
         /// An <see cref="IEnumerable{VehicleLookupModel}"/> containing the most recent vehicle lookups,
         /// ordered by lookup date descending.
         /// </returns>
-        IEnumerable<VehicleLookupModel> GetRecentLookups(int count);
+        IEnumerable<LookupModel> GetRecentLookups(int count);
     }
 }

@@ -1,12 +1,12 @@
 namespace VehicleDetailsLookup.Shared.Models.Mot
 {
     /// <summary>
-    /// Defines the structure for MOT test data.
+    /// Results and details of a vehicle's MOT test, including outcome, odometer, and defects.
     /// </summary>
     public interface IMotModel
     {
         /// <summary>
-        /// The date the MOT test was completed.
+        /// Date the MOT test was completed.
         /// </summary>
         DateOnly CompletedDate { get; set; }
         /// <summary>
@@ -14,20 +14,20 @@ namespace VehicleDetailsLookup.Shared.Models.Mot
         /// </summary>
         bool Passed { get; set; }
         /// <summary>
-        /// The expiry date of the MOT certificate.
+        /// Expiry date of the MOT certificate.
         /// </summary>
         DateOnly ExpiryDate { get; set; }
         /// <summary>
-        /// The recorded odometer value at the time of the MOT test.
+        /// Recorded odometer value at the time of the MOT test.
         /// </summary>
         long OdometerValue { get; set; }
         /// <summary>
-        /// The unit of measurement for the odometer (e.g., miles, kilometers).
+        /// Unit of measurement for the odometer (e.g., miles, kilometers).
         /// </summary>
         string OdometerUnit { get; set; }
         /// <summary>
-        /// The collection of defects found during the MOT test.
+        /// Collection of defects found during the MOT test.
         /// </summary>
-        IEnumerable<MotDefectModel> Defects { get; set; }
+        IEnumerable<IMotDefectModel> Defects { get; set; }
     }
 }

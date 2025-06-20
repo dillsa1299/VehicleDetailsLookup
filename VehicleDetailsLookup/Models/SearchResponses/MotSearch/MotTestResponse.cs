@@ -1,6 +1,6 @@
 ﻿namespace VehicleDetailsLookup.Models.SearchResponses.MotSearch
 {
-    public class MotTestResponse
+    public class MotTestResponse : IMotTestResponse
     {
         public string CompletedDate { get; set; } = string.Empty;
         public string TestResult { get; set; } = string.Empty;
@@ -10,6 +10,6 @@
         public string OdometerResultType { get; set; } = string.Empty;
         public string MotTestNumber { get; set; } = string.Empty;
         public string DataSource { get; set; } = string.Empty;
-        public IEnumerable<MotDefectResponse> Defects { get; set; } = [];
+        public IEnumerable<IMotDefectResponse> Defects { get; set; } = [];
     }
 }

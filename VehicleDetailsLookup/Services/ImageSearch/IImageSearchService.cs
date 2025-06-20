@@ -15,8 +15,8 @@ namespace VehicleDetailsLookup.Services.ImageSearch
         /// <param name="query">The search query string used to find relevant images.</param>
         /// <returns>
         /// A <see cref="Task{TResult}"/> representing the asynchronous operation,
-        /// with a result of <see cref="ImageSearchResponse"/> containing the image search results.
+        /// with a result of <see cref="GoogleImageResponse"/> containing the image search results.
         /// </returns>
-        Task<ImageSearchResponse> SearchImagesAsync(string query);
+        Task<GoogleImageResponse> SearchImagesAsync(string query);
     }
 }

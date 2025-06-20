@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using VehicleDetailsLookup.Shared.Models.Enums;
+using VehicleDetailsLookup.Shared.Models.Lookup;
 using VehicleDetailsLookup.Shared.Models.Vehicle;
-using VehicleDetailsLookup.Shared.Models.VehicleLookup;
 
 namespace VehicleDetailsLookup.Client.Services.VehicleLookup
 {
@@ -53,6 +53,6 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
         /// <returns>
         /// An <see cref="IEnumerable{VehicleLookupModel}"/> containing details of recently looked up vehicles.
         /// </returns>
-        Task<IEnumerable<VehicleLookupModel>> GetRecentVehicleLookupsAsync();
+        Task<IEnumerable<LookupModel>> GetRecentVehicleLookupsAsync();
     }
 }

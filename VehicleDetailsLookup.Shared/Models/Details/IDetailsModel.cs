@@ -1,64 +1,60 @@
-namespace VehicleDetailsLookup.Shared.Models.VehicleDetails
+namespace VehicleDetailsLookup.Shared.Models.Details
 {
     /// <summary>
-    /// Defines the structure for vehicle details
+    /// Details about a vehicle, including registration, manufacturer, and status information.
     /// </summary>
-    public interface IVehicleDetailsModel
+    public interface IDetailsModel
     {
         /// <summary>
-        /// The date and time when the details were last updated.
-        /// </summary>
-        DateTime LastUpdated { get; set; }
-        /// <summary>
-        /// The vehicle's registration number.
+        /// Vehicle's registration number.
         /// </summary>
         string RegistrationNumber { get; set; }
         /// <summary>
-        /// The year the vehicle was manufactured.
+        /// Year the vehicle was manufactured.
         /// </summary>
         int YearOfManufacture { get; set; }
         /// <summary>
-        /// The manufacturer of the vehicle.
+        /// Manufacturer of the vehicle.
         /// </summary>
         string Make { get; set; }
         /// <summary>
-        /// The model designation of the vehicle.
+        /// Model designation of the vehicle.
         /// </summary>
         string Model { get; set; }
         /// <summary>
-        /// The exterior color of the vehicle.
+        /// Exterior color of the vehicle.
         /// </summary>
         string Colour { get; set; }
         /// <summary>
-        /// The engine capacity, typically in cubic centimeters (cc).
+        /// Engine capacity, typically in cubic centimeters (cc).
         /// </summary>
         string EngineCapacity { get; set; }
         /// <summary>
-        /// The type of fuel the vehicle uses (e.g., petrol, diesel, electric).
+        /// Type of fuel the vehicle uses (e.g., petrol, diesel, electric).
         /// </summary>
         string FuelType { get; set; }
         /// <summary>
-        /// The current tax status (e.g., taxed, untaxed).
+        /// Current tax status (e.g., taxed, untaxed).
         /// </summary>
         string TaxStatus { get; set; }
         /// <summary>
-        /// The due date for the vehicle's tax, if available.
+        /// Due date for the vehicle's tax, if available.
         /// </summary>
         DateOnly? TaxDueDate { get; set; }
         /// <summary>
-        /// The current MOT status (e.g., valid, expired).
+        /// Current MOT status (e.g., valid, expired).
         /// </summary>
         string MotStatus { get; set; }
         /// <summary>
-        /// The expiry date of the vehicle's MOT, if available.
+        /// Expiry date of the vehicle's MOT, if available.
         /// </summary>
         DateOnly? MotExpiryDate { get; set; }
         /// <summary>
-        /// The date the latest V5C document was issued for the vehicle.
+        /// Date the latest V5C document was issued for the vehicle.
         /// </summary>
         DateOnly DateOfLastV5CIssued { get; set; }
         /// <summary>
-        /// The month and year the vehicle was first registered.
+        /// Month and year the vehicle was first registered.
         /// </summary>
         DateOnly MonthOfFirstRegistration { get; set; }
     }

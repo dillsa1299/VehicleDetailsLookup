@@ -120,11 +120,11 @@ namespace VehicleDetailsLookup.Services.VehicleMapper
         /// Maps an image search response to a <see cref="VehicleModel"/> containing image information.
         /// </summary>
         /// <param name="vehicle">The <see cref="VehicleModel"/> instance to populate with image data.</param>
-        /// <param name="imageSearchResponse">The <see cref="ImageSearchResponse"/> containing image items.</param>
+        /// <param name="imageSearchResponse">The <see cref="GoogleImageResponse"/> containing image items.</param>
         /// <returns>
         /// The updated <see cref="VehicleModel"/> with image data populated from the image search response.
         /// </returns>
-        public VehicleModel MapImages(VehicleModel vehicle, ImageSearchResponse imageSearchResponse)
+        public VehicleModel MapImages(VehicleModel vehicle, GoogleImageResponse imageSearchResponse)
         {
             if (imageSearchResponse == null || imageSearchResponse.Items == null || !imageSearchResponse.Items.Any())
             {
@@ -168,7 +168,7 @@ namespace VehicleDetailsLookup.Services.VehicleMapper
         {
             var aiDataList = vehicle.AiData.Where(ai => ai.Type != searchType).ToList();
 
-            aiDataList.Add(new VehicleAiDataModel
+            aiDataList.Add(new AiDataModel
             {
                 LastUpdated = DateTime.UtcNow,
                 Type = searchType,

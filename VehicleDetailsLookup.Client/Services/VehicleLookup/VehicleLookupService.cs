@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using VehicleDetailsLookup.Shared.Models.Enums;
+using VehicleDetailsLookup.Shared.Models.Lookup;
 using VehicleDetailsLookup.Shared.Models.Vehicle;
-using VehicleDetailsLookup.Shared.Models.VehicleLookup;
 
 namespace VehicleDetailsLookup.Client.Services.VehicleLookup
 {
@@ -65,7 +65,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             return count;
         }
 
-        public async Task<IEnumerable<VehicleLookupModel>> GetRecentVehicleLookupsAsync()
+        public async Task<IEnumerable<LookupModel>> GetRecentVehicleLookupsAsync()
         {
             // Call the backend API to retrieve recent vehicle lookups.
             var response = await _httpClient.GetAsync("/api/VehicleLookupHistory/recent");
@@ -74,7 +74,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             if (!response.IsSuccessStatusCode)
                 return [];
 
-            var vehicles = await response.Content.ReadFromJsonAsync<IEnumerable<VehicleLookupModel>>();
+            var vehicles = await response.Content.ReadFromJsonAsync<IEnumerable<LookupModel>>();
 
             return vehicles ?? throw new InvalidOperationException("Failed to deserialize recent vehicles data.");
         }
