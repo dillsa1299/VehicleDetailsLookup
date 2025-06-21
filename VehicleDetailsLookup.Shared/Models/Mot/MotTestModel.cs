@@ -1,6 +1,6 @@
 ﻿namespace VehicleDetailsLookup.Shared.Models.Mot
 {
-    public class MotModel : IMotModel
+    public class MotTestModel : IMotTestModel
     {
         public DateOnly CompletedDate { get; set; }
         public bool Passed { get; set; }

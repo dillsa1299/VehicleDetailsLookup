@@ -42,7 +42,7 @@ namespace VehicleDetailsLookup.Services.VehicleAi
         /// <returns>
         /// A <see cref="VehicleModel"/> containing the requested AI-generated information for the vehicle.
         /// </returns>
-        public async Task<VehicleModel> SearchAiAsync(string registrationNumber, VehicleAiType searchType)
+        public async Task<VehicleModel> SearchAiAsync(string registrationNumber, AiType searchType)
         {
             // Check if the vehicle is already cached
             var vehicle = _data.GetVehicle(registrationNumber);
@@ -63,9 +63,9 @@ namespace VehicleDetailsLookup.Services.VehicleAi
             // Cache duration: 1 day for overview/common issues, 15 minutes for MOT history summary
             TimeSpan cacheDuration = searchType switch
             {
-                VehicleAiType.Overview => TimeSpan.FromDays(1),
-                VehicleAiType.CommonIssues => TimeSpan.FromDays(1),
-                VehicleAiType.MotHistorySummary => TimeSpan.FromMinutes(15),
+                AiType.Overview => TimeSpan.FromDays(1),
+                AiType.CommonIssues => TimeSpan.FromDays(1),
+                AiType.MotHistorySummary => TimeSpan.FromMinutes(15),
                 _ => TimeSpan.FromMinutes(15)
             };
 
@@ -78,14 +78,14 @@ namespace VehicleDetailsLookup.Services.VehicleAi
 
             switch (searchType)
             {
-                case VehicleAiType.Overview:
+                case AiType.Overview:
                     prompt = $"Provide a brief overview of the following UK specification vehicle searching for additional information such as performance and pricing. " +
                              $"Don't discuss common issues. Give me the information directly without any introductory sentences or titles: " + carDetails;
                     break;
-                case VehicleAiType.CommonIssues:
+                case AiType.CommonIssues:
                     prompt = $"List the common issues with the UK specification of the following vehicle with no introduction/title: " + carDetails;
                     break;
-                case VehicleAiType.MotHistorySummary:
+                case AiType.MotHistorySummary:
                     var motResults = JsonSerializer.Serialize(vehicle.MotTests) ?? string.Empty;
                     prompt = $"Provide an overall summary for the following UK MOT test results. Exclude any introductory sentences: " + motResults;
                     break;

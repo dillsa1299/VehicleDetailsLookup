@@ -3,7 +3,7 @@ namespace VehicleDetailsLookup.Shared.Models.Mot
     /// <summary>
     /// Results and details of a vehicle's MOT test, including outcome, odometer, and defects.
     /// </summary>
-    public interface IMotModel
+    public interface IMotTestModel
     {
         /// <summary>
         /// Date the MOT test was completed.

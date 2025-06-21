@@ -13,7 +13,7 @@ namespace VehicleDetailsLookup.Models.Database
         {
         }
 
-        public DbSet<AiDbModel> AiData { get; set; }
+        public DbSet<AiDataDbModel> AiData { get; set; }
         public DbSet<DetailsDbModel> Details { get; set; }
         public DbSet<ImageDbModel> Images { get; set; }
         public DbSet<MotTestDbModel> MotTests { get; set; }
@@ -23,7 +23,7 @@ namespace VehicleDetailsLookup.Models.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Composite key for AiDbModel
-            modelBuilder.Entity<AiDbModel>()
+            modelBuilder.Entity<AiDataDbModel>()
                 .HasKey(a => new { a.RegistrationNumber, a.Type });
 
             // RegistrationNumber as key for DetailsDbModel

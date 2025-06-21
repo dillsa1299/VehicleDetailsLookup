@@ -37,7 +37,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             return vehicle is null ? throw new InvalidOperationException("Failed to deserialize vehicle data.") : vehicle;
         }
 
-        public async Task<VehicleModel> GetVehicleAIAsync(string registrationNumber, VehicleAiType type)
+        public async Task<VehicleModel> GetVehicleAIAsync(string registrationNumber, AiType type)
         {
             // Call the backend API to retrieve vehicle AI.
             var response = await _httpClient.GetAsync($"/api/VehicleAi/{type}/{registrationNumber}");

@@ -28,13 +28,13 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
         private int _vehicleLookupCount;
 
         private string? AiOverviewText =>
-            Vehicle?.AiData.FirstOrDefault(x => x.Type == VehicleAiType.Overview)?.Content ?? string.Empty;
+            Vehicle?.AiData.FirstOrDefault(x => x.Type == AiType.Overview)?.Content ?? string.Empty;
 
         private string? AiCommonIssuesText =>
-            Vehicle?.AiData.FirstOrDefault(x => x.Type == VehicleAiType.CommonIssues)?.Content ?? string.Empty;
+            Vehicle?.AiData.FirstOrDefault(x => x.Type == AiType.CommonIssues)?.Content ?? string.Empty;
 
         private string? AiMotHistorySummaryText =>
-            Vehicle?.AiData.FirstOrDefault(x => x.Type == VehicleAiType.MotHistorySummary)?.Content ?? string.Empty;
+            Vehicle?.AiData.FirstOrDefault(x => x.Type == AiType.MotHistorySummary)?.Content ?? string.Empty;
 
         private MarkupString? AiOverviewHtml =>
             string.IsNullOrWhiteSpace(AiOverviewText)
@@ -84,7 +84,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
 
         private async Task OnCommonIssuesExpandedAsync(bool expanded)
         {
-            if (!_isSearchingAiCommonIssues && Vehicle != null && !Vehicle.AiData.Any(d => d.Type == VehicleAiType.CommonIssues))
+            if (!_isSearchingAiCommonIssues && Vehicle != null && !Vehicle.AiData.Any(d => d.Type == AiType.CommonIssues))
             {
                 await StartLookup(VehicleLookupType.AiCommonIssues);
             }
@@ -92,7 +92,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
 
         private async Task OnMotHistoryExpandedAsync(bool expanded)
         {
-            if (!_isSearchingAiMotHistorySummary && Vehicle != null && !Vehicle.AiData.Any(d => d.Type == VehicleAiType.MotHistorySummary))
+            if (!_isSearchingAiMotHistorySummary && Vehicle != null && !Vehicle.AiData.Any(d => d.Type == AiType.MotHistorySummary))
             {
                 await StartLookup(VehicleLookupType.AiMotHistorySummary);
             }

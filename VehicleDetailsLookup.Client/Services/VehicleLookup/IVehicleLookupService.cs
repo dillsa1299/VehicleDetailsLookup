@@ -36,7 +36,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
         /// <returns>
         /// A <see cref="VehicleModel"/> containing the requested AI-generated data.
         /// </returns>
-        Task<VehicleModel> GetVehicleAIAsync(string registrationNumber, VehicleAiType type);
+        Task<VehicleModel> GetVehicleAIAsync(string registrationNumber, AiType type);
 
         /// <summary>
         /// Retrieves the number of times a vehicle has been looked up by its registration number.

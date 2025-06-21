@@ -57,13 +57,13 @@ namespace VehicleDetailsLookup.Client.Components.Pages
                     _vehicle = await VehicleLookupService.GetVehicleImagesAsync(_vehicle.RegistrationNumber);
                     break;
                 case VehicleLookupType.AiOverview:
-                    _vehicle = await VehicleLookupService.GetVehicleAIAsync(_vehicle.RegistrationNumber, VehicleAiType.Overview);
+                    _vehicle = await VehicleLookupService.GetVehicleAIAsync(_vehicle.RegistrationNumber, AiType.Overview);
                     break;
                 case VehicleLookupType.AiCommonIssues:
-                    _vehicle = await VehicleLookupService.GetVehicleAIAsync(_vehicle.RegistrationNumber, VehicleAiType.CommonIssues);
+                    _vehicle = await VehicleLookupService.GetVehicleAIAsync(_vehicle.RegistrationNumber, AiType.CommonIssues);
                     break;
                 case VehicleLookupType.AiMotHistorySummary:
-                    _vehicle = await VehicleLookupService.GetVehicleAIAsync(_vehicle.RegistrationNumber, VehicleAiType.MotHistorySummary);
+                    _vehicle = await VehicleLookupService.GetVehicleAIAsync(_vehicle.RegistrationNumber, AiType.MotHistorySummary);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(lookupType), lookupType, null);

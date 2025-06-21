@@ -8,7 +8,7 @@ namespace VehicleDetailsLookup.Shared.Models.Vehicle
     public class VehicleModel : IVehicleModel
     {
         public IDetailsModel? Details { get; set; }
-        public IEnumerable<IMotModel> MotTests { get; set; } = [];
+        public IEnumerable<IMotTestModel> MotTests { get; set; } = [];
         public IEnumerable<IImageModel> Images { get; set; } = [];
         public IEnumerable<IAiDataModel> AiData { get; set; } = [];
     }

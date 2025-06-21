@@ -27,7 +27,7 @@ namespace VehicleDetailsLookup.Controllers
         public async Task<IActionResult> GetVehicleAiAsync(string searchType, string registrationNumber)
         {
             // Validate and parse searchType
-            if (!Enum.TryParse<VehicleAiType>(searchType, true, out var parsedSearchType) ||
+            if (!Enum.TryParse<AiType>(searchType, true, out var parsedSearchType) ||
                 !Enum.IsDefined(parsedSearchType))
             {
                 return BadRequest("Invalid search type.");

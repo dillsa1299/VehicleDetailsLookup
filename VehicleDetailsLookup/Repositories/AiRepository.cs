@@ -8,7 +8,7 @@ namespace VehicleDetailsLookup.Repositories
     {
         private readonly VehicleDbContext _dbContext = dbContext;
 
-        public void UpdateAi(AiDbModel ai)
+        public void UpdateAi(AiDataDbModel ai)
         {
             // Try to find existing AI data for the given registration number and type
             var existing = _dbContext.AiData
@@ -29,7 +29,7 @@ namespace VehicleDetailsLookup.Repositories
             _dbContext.SaveChanges();
         }
 
-        public IAiDbModel? GetAi(string registrationNumber, VehicleAiType type)
+        public IAiDataDbModel? GetAi(string registrationNumber, AiType type)
         {
             return _dbContext.AiData
                 .FirstOrDefault(ai => ai.RegistrationNumber == registrationNumber && ai.Type == type);
