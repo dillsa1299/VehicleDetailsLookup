@@ -18,7 +18,7 @@ namespace VehicleDetailsLookup.Shared.Models.Vehicle
         /// <summary>
         /// Collection of MOT test data for the vehicle.
         /// </summary>
-        IEnumerable<IMotModel> MotTests { get; set; }
+        IEnumerable<IMotTestModel> MotTests { get; set; }
 
         /// <summary>
         /// Collection of images associated with the vehicle.

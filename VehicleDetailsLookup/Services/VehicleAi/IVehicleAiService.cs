@@ -16,6 +16,6 @@ namespace VehicleDetailsLookup.Services.VehicleAi
         /// <returns>
         /// A <see cref="VehicleModel"/> containing the requested AI-generated information for the vehicle.
         /// </returns>
-        Task<VehicleModel> SearchAiAsync(string registrationNumber, VehicleAiType searchType);
+        Task<VehicleModel> SearchAiAsync(string registrationNumber, AiType searchType);
     }
 }

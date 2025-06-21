@@ -15,6 +15,5 @@
         public DateOnly? MotExpiryDate { get; set; }
         public DateOnly DateOfLastV5CIssued { get; set; }
         public DateOnly MonthOfFirstRegistration { get; set; }
-        public DateTime ImagesLastUpdated { get; set; }
     }
 }

@@ -2,10 +2,10 @@
 
 namespace VehicleDetailsLookup.Models.Database.Ai
 {
-    public class AiDbModel : IAiDbModel
+    public class AiDataDbModel : IAiDataDbModel
     {
         public string? RegistrationNumber { get; set; }
-        public VehicleAiType Type { get; set; }
+        public AiType Type { get; set; }
         public string? GeneratedText { get; set; }
         public DateTime Updated { get; set; }
     }

@@ -11,7 +11,7 @@ public partial class MotHistoryItem
     private IJSRuntime? JsRuntime { get; set; }
 
     [Parameter]
-    public MotModel? Mot { get; set; }
+    public MotTestModel? Mot { get; set; }
 
     private IEnumerable<MotDefectModel> DangerousDefects =>
         Mot?.Defects.Where(d => d.Type == MotDefectType.Dangerous || d.Dangerous)

@@ -10,7 +10,7 @@ namespace VehicleDetailsLookup.Shared.Models.AiData
         /// <summary>
         /// Type of AI-generated vehicle information.
         /// </summary>
-        VehicleAiType Type { get; set; }
+        AiType Type { get; set; }
         /// <summary>
         /// AI-generated content or summary.
         /// </summary>

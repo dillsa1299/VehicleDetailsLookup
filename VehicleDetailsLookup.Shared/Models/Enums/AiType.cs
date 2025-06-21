@@ -1,9 +1,9 @@
 ﻿namespace VehicleDetailsLookup.Shared.Models.Enums
 {
     /// <summary>
-    /// Specifies the types of AI-generated vehicle information available.
+    /// Specifies the types of AI-generated information available.
     /// </summary>
-    public enum VehicleAiType
+    public enum AiType
     {
         /// <summary>
         /// AI-generated overview of the vehicle, including general information and highlights.

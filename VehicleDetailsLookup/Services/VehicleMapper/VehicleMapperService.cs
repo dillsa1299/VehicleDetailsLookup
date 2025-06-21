@@ -44,7 +44,7 @@ namespace VehicleDetailsLookup.Services.VehicleMapper
             vehicle.Model = FormatName(motSearchResponse.Model, 3);
             if (motSearchResponse.MotTests.Any())
             {
-                vehicle.MotTests = [.. motSearchResponse.MotTests.Select(test => new MotModel
+                vehicle.MotTests = [.. motSearchResponse.MotTests.Select(test => new MotTestModel
                             {
                                 CompletedDate = DateOnlyTryParseIso(test.CompletedDate) ?? default,
                                 Passed = test.TestResult == "PASSED",
@@ -156,15 +156,15 @@ namespace VehicleDetailsLookup.Services.VehicleMapper
         }
 
         /// <summary>
-        /// Maps an AI-generated response to a property of <see cref="VehicleModel"/> based on the specified <see cref="VehicleAiType"/>.
+        /// Maps an AI-generated response to a property of <see cref="VehicleModel"/> based on the specified <see cref="AiType"/>.
         /// </summary>
         /// <param name="vehicle">The <see cref="VehicleModel"/> instance to update with AI-generated data.</param>
         /// <param name="aiResponse">The <see cref="AiSearchResponse"/> containing the AI-generated content, such as summary, issues, or MOT history.</param>
-        /// <param name="searchType">The <see cref="VehicleAiType"/> indicating which property or section of <see cref="VehicleModel"/> to populate (e.g., overview, common issues, MOT summary).</param>
+        /// <param name="searchType">The <see cref="AiType"/> indicating which property or section of <see cref="VehicleModel"/> to populate (e.g., overview, common issues, MOT summary).</param>
         /// <returns>
         /// The updated <see cref="VehicleModel"/> with the relevant AI-generated information set according to the specified <paramref name="searchType"/>.
         /// </returns>
-        public VehicleModel MapAI(VehicleModel vehicle, AiSearchResponse aiResponse, VehicleAiType searchType)
+        public VehicleModel MapAI(VehicleModel vehicle, AiSearchResponse aiResponse, AiType searchType)
         {
             var aiDataList = vehicle.AiData.Where(ai => ai.Type != searchType).ToList();
 
