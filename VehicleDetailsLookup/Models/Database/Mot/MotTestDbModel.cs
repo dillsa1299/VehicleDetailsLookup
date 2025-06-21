@@ -10,5 +10,6 @@
         public long OdometerValue { get; set; }
         public string? OdometerUnit { get; set; }
         public ICollection<MotDefectDbModel> MotDefects { get; set; } = [];
+        public DateTime Updated { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using VehicleDetailsLookup.Shared.Models.Details;
-using VehicleDetailsLookup.Shared.Models.Vehicle;
 
-namespace VehicleDetailsLookup.Services.Vehicle.VehicleDetails
+namespace VehicleDetailsLookup.Services.Vehicle.Details
 {
     /// <summary>
     /// Provides an abstraction for retrieving detailed information about vehicles.

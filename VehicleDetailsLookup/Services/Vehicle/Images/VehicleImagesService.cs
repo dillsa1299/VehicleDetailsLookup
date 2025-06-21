@@ -1,5 +1,5 @@
 ﻿using VehicleDetailsLookup.Services.Api.GoogleImage;
-using VehicleDetailsLookup.Services.Vehicle.VehicleDetails;
+using VehicleDetailsLookup.Services.Vehicle.Details;
 using VehicleDetailsLookup.Services.VehicleData;
 using VehicleDetailsLookup.Services.VehicleMapper;
 using VehicleDetailsLookup.Shared.Models.Vehicle;

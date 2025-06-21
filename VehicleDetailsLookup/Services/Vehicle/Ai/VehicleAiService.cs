@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using VehicleDetailsLookup.Services.Api.Gemini;
-using VehicleDetailsLookup.Services.Vehicle.VehicleDetails;
+using VehicleDetailsLookup.Services.Vehicle.Details;
 using VehicleDetailsLookup.Services.VehicleData;
 using VehicleDetailsLookup.Services.VehicleMapper;
 using VehicleDetailsLookup.Shared.Models.Enums;

@@ -37,5 +37,9 @@
         /// Navigation property for related defects identified during the MOT test.
         /// </summary>
         ICollection<MotDefectDbModel> MotDefects { get; set; }
+        /// <summary>
+        /// When the database record was created.
+        /// </summary>
+        DateTime Updated { get; set; }
     }
 }
