@@ -1,8 +1,9 @@
-﻿using VehicleDetailsLookup.Models.SearchResponses.ImageSearch;
+﻿using VehicleDetailsLookup.Models.ApiResponses.GoogleImage;
+using VehicleDetailsLookup.Services.Api.GoogleImage;
 
-namespace VehicleDetailsLookup.Services.ImageSearch
+namespace VehicleDetailsLookup.Services.Api.ImageSearch
 {
-    public class ImageSearchService(HttpClient httpClient, IConfiguration configuration) : IImageSearchService
+    public class GoogleImageService(HttpClient httpClient, IConfiguration configuration) : IGoogleImageService
     {
         private readonly HttpClient _httpClient = httpClient
             ?? throw new ArgumentNullException(nameof(httpClient));
@@ -12,7 +13,7 @@ namespace VehicleDetailsLookup.Services.ImageSearch
         private readonly string _googleCx = configuration["APIs:Google:Cx"]
             ?? throw new InvalidOperationException("Google API cx not found in configuration.");
 
-        public async Task<GoogleImageResponse> SearchImagesAsync(string query)
+        public async ValueTask<IGoogleImageResponse?> GetGoogleImageResponseAsync(string query)
         {
             // TODO: Revisit this to allow passing in additional parameters
             var url = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString(query)}&cx={_googleCx}&key={_googleKey}&searchType=image";
@@ -20,11 +21,11 @@ namespace VehicleDetailsLookup.Services.ImageSearch
             var httpResponse = await _httpClient.GetAsync(url);
 
             if (!httpResponse.IsSuccessStatusCode)
-                return new GoogleImageResponse();
+                return null;
 
             var response = await httpResponse.Content.ReadFromJsonAsync<GoogleImageResponse>();
 
-            return response ?? new GoogleImageResponse();
+            return response;
         }
     }
 }

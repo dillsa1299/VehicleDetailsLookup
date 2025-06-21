@@ -1,7 +1,7 @@
 ﻿using VehicleDetailsLookup.Shared.Models.Enums;
 using VehicleDetailsLookup.Shared.Models.Vehicle;
 
-namespace VehicleDetailsLookup.Services.VehicleAi
+namespace VehicleDetailsLookup.Services.Vehicle.VehicleAi
 {
     /// <summary>
     /// Defines an interface for AI-powered vehicle information lookup services.

@@ -1,6 +1,6 @@
 ﻿using VehicleDetailsLookup.Shared.Models.Vehicle;
 
-namespace VehicleDetailsLookup.Services.VehicleImages
+namespace VehicleDetailsLookup.Services.Vehicle.VehicleImages
 {
     /// <summary>
     /// Service interface for retrieving vehicle images.

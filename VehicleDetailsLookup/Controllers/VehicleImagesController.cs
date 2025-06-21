@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using VehicleDetailsLookup.Services.VehicleImages;
+using VehicleDetailsLookup.Services.Vehicle.VehicleImages;
 using VehicleDetailsLookup.Shared.Helpers;
 
 namespace VehicleDetailsLookup.Controllers

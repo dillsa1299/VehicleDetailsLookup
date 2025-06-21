@@ -1,22 +1,23 @@
-﻿using VehicleDetailsLookup.Models.SearchResponses.ImageSearch;
+﻿using VehicleDetailsLookup.Models.ApiResponses.GoogleImage;
 
-namespace VehicleDetailsLookup.Services.ImageSearch
+namespace VehicleDetailsLookup.Services.Api.GoogleImage
 {
     /// <summary>
     /// Provides an abstraction for searching images using a query string.
     /// Implementations of this interface should return relevant image search results
     /// based on the provided query.
     /// </summary>
-    public interface IImageSearchService
+    public interface IGoogleImageService
     {
         /// <summary>
         /// Asynchronously searches for images that match the specified query string.
         /// </summary>
         /// <param name="query">The search query string used to find relevant images.</param>
         /// <returns>
-        /// A <see cref="Task{TResult}"/> representing the asynchronous operation,
-        /// with a result of <see cref="GoogleImageResponse"/> containing the image search results.
+        /// A <see cref="ValueTask{TResult}"/> representing the asynchronous operation,
+        /// with a result of <see cref="IGoogleImageResponse"/> containing the image search results,
+        /// or <c>null</c> if no results are found or an error occurs.
         /// </returns>
-        Task<GoogleImageResponse> SearchImagesAsync(string query);
+        ValueTask<IGoogleImageResponse?> GetGoogleImageResponseAsync(string query);
     }
 }
