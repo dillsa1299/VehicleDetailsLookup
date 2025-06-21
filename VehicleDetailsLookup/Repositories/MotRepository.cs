@@ -8,8 +8,11 @@ namespace VehicleDetailsLookup.Repositories
     {
         private readonly VehicleDbContext _dbContext = dbContext;
 
-        public void UpdateMotHistory(IEnumerable<MotTestDbModel> motTests)
+        public void UpdateMotTests(IEnumerable<MotTestDbModel> motTests)
         {
+            if (motTests == null || !motTests.Any())
+                return;
+
             foreach (var motTest in motTests)
             {
                 if (!_dbContext.MotTests.Any(m => m.TestNumber == motTest.TestNumber))
@@ -17,11 +20,17 @@ namespace VehicleDetailsLookup.Repositories
                     // If the MOT test does not exist, add it
                     _dbContext.MotTests.Add(motTest);
                 }
+                else
+                {
+                    // If the mot test exists update the Updated field
+                    var existingMotTest = _dbContext.MotTests.First(m => m.TestNumber == motTest.TestNumber);
+                    existingMotTest.Updated = motTest.Updated;
+                }
             }
             _dbContext.SaveChanges();
         }
 
-        public IEnumerable<IMotTestDbModel>? GetMotHistory(string registrationNumber)
+        public IEnumerable<IMotTestDbModel>? GetMotTests(string registrationNumber)
         {
             return _dbContext.MotTests
                 .Include(m => m.MotDefects)

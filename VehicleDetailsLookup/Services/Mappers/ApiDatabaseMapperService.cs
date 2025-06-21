@@ -48,7 +48,8 @@ namespace VehicleDetailsLookup.Services.Mappers
                 ExpiryDate = DateOnlyTryParse(test.ExpiryDate, "yyyy-MM-dd") ?? default,
                 OdometerValue = long.TryParse(test.OdometerValue, out var odo) ? odo : -1,
                 OdometerUnit = test.OdometerUnit,
-                MotDefects = [.. MapMotDefects(test.MotTestNumber, test.Defects)]
+                MotDefects = [.. MapMotDefects(test.MotTestNumber, test.Defects)],
+                Updated = DateTime.UtcNow
             });
         }
 

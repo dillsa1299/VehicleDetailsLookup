@@ -13,6 +13,7 @@ using VehicleDetailsLookup.Services.Vehicle.VehicleDetails;
 using VehicleDetailsLookup.Services.Vehicle.VehicleImages;
 using VehicleDetailsLookup.Services.Api.Gemini;
 using VehicleDetailsLookup.Services.Api.GoogleImage;
+using VehicleDetailsLookup.Services.Vehicle.Details;
 
 var builder = WebApplication.CreateBuilder(args);
 
