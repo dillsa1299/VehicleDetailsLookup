@@ -1,10 +1,10 @@
 ﻿using System.Text;
 using System.Text.Json;
-using VehicleDetailsLookup.Models.SearchResponses;
+using VehicleDetailsLookup.Models.ApiResponses.Gemini;
 
-namespace VehicleDetailsLookup.Services.AiSearch
+namespace VehicleDetailsLookup.Services.Api.Gemini
 {
-    public class AiSearchService(HttpClient httpClient, IConfiguration configuration) : IAiSearchService
+    public class GeminiService(HttpClient httpClient, IConfiguration configuration) : IGeminiService
     {
         private readonly HttpClient _httpClient = httpClient
             ?? throw new ArgumentNullException(nameof(httpClient));
@@ -14,7 +14,7 @@ namespace VehicleDetailsLookup.Services.AiSearch
         private readonly string _geminiKey = configuration["APIs:Gemini:Key"]
                          ?? throw new InvalidOperationException("Gemini API key not found in configuration.");
 
-        public async Task<AiSearchResponse> SearchAiAsync(string prompt)
+        public async ValueTask<IGeminiResponse?> GetGeminiResponseAsync(string prompt)
         {
             var geminiRequest = new
             {
@@ -54,9 +54,9 @@ namespace VehicleDetailsLookup.Services.AiSearch
                         .GetString();
 
                     if (string.IsNullOrEmpty(text))
-                        return new AiSearchResponse();
+                        return null;
 
-                    return new AiSearchResponse { Response = text };
+                    return new GeminiResponse { Response = text };
                 }
                 else if ((int)response.StatusCode >= 500 && (int)response.StatusCode < 600 && attempt < maxRetries)
                 {
@@ -68,12 +68,12 @@ namespace VehicleDetailsLookup.Services.AiSearch
                 else
                 {
                     // Bad request or other error, return empty response
-                    return new AiSearchResponse();
+                    return null;
                 }
             }
 
             // All retries failed, return empty response
-            return new AiSearchResponse();
+            return null;
         }
     }
 }

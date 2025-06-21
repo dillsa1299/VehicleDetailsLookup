@@ -1,12 +1,12 @@
 ﻿using System.Text.Json;
-using VehicleDetailsLookup.Services.AiSearch;
+using VehicleDetailsLookup.Services.Api.Gemini;
+using VehicleDetailsLookup.Services.Vehicle.VehicleDetails;
 using VehicleDetailsLookup.Services.VehicleData;
-using VehicleDetailsLookup.Services.VehicleDetails;
 using VehicleDetailsLookup.Services.VehicleMapper;
 using VehicleDetailsLookup.Shared.Models.Enums;
 using VehicleDetailsLookup.Shared.Models.Vehicle;
 
-namespace VehicleDetailsLookup.Services.VehicleAi
+namespace VehicleDetailsLookup.Services.Vehicle.VehicleAi
 {
     /// <summary>
     /// Provides AI-powered vehicle information lookup and caching logic.
@@ -19,12 +19,12 @@ namespace VehicleDetailsLookup.Services.VehicleAi
     /// <param name="mapper">The service for mapping AI responses to vehicle models.</param>
     /// <param name="data">The service for retrieving and updating vehicle data.</param>
     /// <exception cref="ArgumentNullException">Thrown if any dependency is null.</exception>
-    public class VehicleAiService(IAiSearchService aiSearch,
+    public class VehicleAiService(IGeminiService aiSearch,
         IVehicleDetailsService vehicleDetails,
         IVehicleMapperService mapper,
         IVehicleDataService data) : IVehicleAiService
     {
-        private readonly IAiSearchService _aiSearch = aiSearch
+        private readonly IGeminiService _aiSearch = aiSearch
             ?? throw new ArgumentNullException(nameof(aiSearch));
         private readonly IVehicleDetailsService _vehicleDetails = vehicleDetails 
             ?? throw new ArgumentNullException(nameof(vehicleDetails));

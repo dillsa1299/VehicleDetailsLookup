@@ -1,10 +1,10 @@
-﻿using VehicleDetailsLookup.Services.ImageSearch;
+﻿using VehicleDetailsLookup.Services.Api.GoogleImage;
+using VehicleDetailsLookup.Services.Vehicle.VehicleDetails;
 using VehicleDetailsLookup.Services.VehicleData;
-using VehicleDetailsLookup.Services.VehicleDetails;
 using VehicleDetailsLookup.Services.VehicleMapper;
 using VehicleDetailsLookup.Shared.Models.Vehicle;
 
-namespace VehicleDetailsLookup.Services.VehicleImages
+namespace VehicleDetailsLookup.Services.Vehicle.VehicleImages
 {
     /// <summary>
     /// Provides functionality to retrieve and cache vehicle images using vehicle details and an image search service.
@@ -18,12 +18,12 @@ namespace VehicleDetailsLookup.Services.VehicleImages
     /// <param name="data">The service used to retrieve and update vehicle data.</param>
     /// <exception cref="ArgumentNullException">Thrown if any dependency is null.</exception>
     public class VehicleImagesService(
-        IImageSearchService imageSearch,
+        IGoogleImageService imageSearch,
         IVehicleDetailsService vehicleDetails,
         IVehicleMapperService mapper,
         IVehicleDataService data) : IVehicleImagesService
     {
-        private readonly IImageSearchService _imageSearch = imageSearch ?? throw new ArgumentNullException(nameof(imageSearch));
+        private readonly IGoogleImageService _imageSearch = imageSearch ?? throw new ArgumentNullException(nameof(imageSearch));
         private readonly IVehicleDetailsService _vehicleDetails = vehicleDetails ?? throw new ArgumentNullException(nameof(vehicleDetails));
         private readonly IVehicleMapperService _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         private readonly IVehicleDataService _data = data ?? throw new ArgumentNullException(nameof(data));

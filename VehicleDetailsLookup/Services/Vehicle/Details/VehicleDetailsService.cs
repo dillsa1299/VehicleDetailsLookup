@@ -1,20 +1,24 @@
 ﻿using System.Text.Json;
-using VehicleDetailsLookup.Models.SearchResponses;
-using VehicleDetailsLookup.Models.SearchResponses.MotSearch;
-using VehicleDetailsLookup.Services.VehicleData;
-using VehicleDetailsLookup.Services.VehicleMapper;
+using VehicleDetailsLookup.Models.ApiResponses.Mot;
+using VehicleDetailsLookup.Services.Mappers;
+using VehicleDetailsLookup.Shared.Models.Details;
 using VehicleDetailsLookup.Shared.Models.Vehicle;
+using VehicleDetailsLookup.Repositories;
+using VehicleDetailsLookup.Models.ApiResponses.Ves;
 
-namespace VehicleDetailsLookup.Services.VehicleDetails
+namespace VehicleDetailsLookup.Services.Vehicle.VehicleDetails
 {
-    public class VehicleDetailsService(HttpClient httpClient, IConfiguration configuration, IVehicleMapperService mapper, IVehicleDataService data) : IVehicleDetailsService
+    public class VehicleDetailsService(HttpClient httpClient, IConfiguration configuration, IDetailsRepository detailsRepository, IApiDatabaseMapperService apiMapper, IDatabaseFrontendMapperService databaseMapper) : IVehicleDetailsService
     {
         private readonly HttpClient _httpClient = httpClient
             ?? throw new ArgumentNullException(nameof(httpClient));
-        private readonly IVehicleMapperService _mapper = mapper
-            ?? throw new ArgumentNullException(nameof(mapper));
-        private readonly IVehicleDataService _data = data
-            ?? throw new ArgumentNullException(nameof(data));
+        private readonly IDetailsRepository _detailsRepository = detailsRepository
+            ?? throw new ArgumentNullException(nameof(detailsRepository));
+        private readonly IApiDatabaseMapperService _mapper = apiMapper
+            ?? throw new ArgumentNullException(nameof(apiMapper));
+        private readonly IDatabaseFrontendMapperService _databaseMapper = databaseMapper
+            ?? throw new ArgumentNullException(nameof(databaseMapper));
+        
 
         private readonly string _vesKey = configuration["APIs:VES:Key"]
                       ?? throw new InvalidOperationException("VES API key not found in configuration.");
@@ -35,20 +39,15 @@ namespace VehicleDetailsLookup.Services.VehicleDetails
                            ?? throw new InvalidOperationException("MOT API TokenUrl not found in configuration.");
         private MotAuthToken _motAuthToken = new();
 
-        private readonly JsonSerializerOptions _jsonSerializerOptions = new()
+        public async ValueTask<IDetailsModel> GetVehicleDetailsAsync(string registrationNumber)
         {
-            PropertyNameCaseInsensitive = true
-        };
+            // Check if the vehicle details are already stored in the database
+            var dbDetails = _detailsRepository.GetDetails(registrationNumber);
 
-        public async Task<VehicleModel> GetVehicleDetailsAsync(string registrationNumber)
-        {
-            // Check if the vehicle details are already cached
-            var vehicle = _data.GetVehicle(registrationNumber);
-
-            if (vehicle.DetailsLastUpdated > DateTime.UtcNow.AddMinutes(-15))
+            if (dbDetails?.Updated > DateTime.UtcNow.AddMinutes(-15))
             {
-                // Return cached vehicle details if they are recent enough
-                return vehicle;
+                // Return stored vehicle details if they are recent enough
+                return _databaseMapper.MapDetails(dbDetails);
             }
 
             var vesSearchResponse = await SearchVesAsync(registrationNumber);
@@ -66,7 +65,7 @@ namespace VehicleDetailsLookup.Services.VehicleDetails
             return vehicle;
         }
 
-        private async Task<VesResponse> SearchVesAsync(string registrationNumber)
+        private async ValueTask<IVesResponse?> SearchVesAsync(string registrationNumber)
         {
             // Build the request for the VES API
             using var request = new HttpRequestMessage(HttpMethod.Post, _vesURL)
@@ -83,19 +82,19 @@ namespace VehicleDetailsLookup.Services.VehicleDetails
 
             // Check if the response is successful
             if (!response.IsSuccessStatusCode)
-                return new VesResponse();
+                return null;
 
             // Parse response
             var responseContent = await response.Content.ReadAsStringAsync();
             var parsedResponse = JsonSerializer.Deserialize<VesResponse>(responseContent, _jsonSerializerOptions);
 
-            return parsedResponse ?? new VesResponse();
+            return parsedResponse ?? null;
         }
 
-        private async Task<MotSearchResponse> SearchMotAsync(string registrationNumber)
+        private async ValueTask<IMotResponse?> SearchMotAsync(string registrationNumber)
         {
             // Get authentication token
-            if (!await GetMotTokenAsync()) return new MotSearchResponse();
+            if (!await GetMotTokenAsync()) return null;
 
             // Build request for the MOT API
             var motRequest = new HttpRequestMessage(HttpMethod.Get, $"{_motUrl}/{Uri.EscapeDataString(registrationNumber)}");

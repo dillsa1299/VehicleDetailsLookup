@@ -4,14 +4,15 @@ using VehicleDetailsLookup.Client.Services.VehicleLookup;
 using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
 using VehicleDetailsLookup.Components;
 using VehicleDetailsLookup.Models.Database;
-using VehicleDetailsLookup.Services.AiSearch;
-using VehicleDetailsLookup.Services.ImageSearch;
-using VehicleDetailsLookup.Services.VehicleAi;
 using VehicleDetailsLookup.Services.VehicleData;
-using VehicleDetailsLookup.Services.VehicleDetails;
-using VehicleDetailsLookup.Services.VehicleImages;
 using VehicleDetailsLookup.Services.VehicleMapper;
 using VehicleDetailsLookup.Repositories;
+using VehicleDetailsLookup.Services.Api.ImageSearch;
+using VehicleDetailsLookup.Services.Vehicle.VehicleAi;
+using VehicleDetailsLookup.Services.Vehicle.VehicleDetails;
+using VehicleDetailsLookup.Services.Vehicle.VehicleImages;
+using VehicleDetailsLookup.Services.Api.Gemini;
+using VehicleDetailsLookup.Services.Api.GoogleImage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,8 +33,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 
 builder.Services.AddSingleton<IVehicleDataService, VehicleDataService>();
-builder.Services.AddSingleton<IImageSearchService, ImageSearchService>();
-builder.Services.AddSingleton<IAiSearchService, AiSearchService>();
+builder.Services.AddSingleton<IGoogleImageService, GoogleImageService>();
+builder.Services.AddSingleton<IGeminiService, GeminiService>();
 
 builder.Services.AddSingleton<IVehicleMapperService, VehicleMapperService>();
 builder.Services.AddSingleton<IVehicleDetailsService, VehicleDetailsService>();
