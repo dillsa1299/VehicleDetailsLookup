@@ -38,7 +38,7 @@
         /// <summary>
         /// Collection of MOT tests for the vehicle.
         /// </summary>
-        IEnumerable<IMotResponseTest> MotTests { get; set; }
+        IEnumerable<MotResponseTest> MotTests { get; set; }
 
         /// <summary>
         /// Primary colour of the vehicle.

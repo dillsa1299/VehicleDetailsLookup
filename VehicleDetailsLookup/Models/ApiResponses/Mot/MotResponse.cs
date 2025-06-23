@@ -11,6 +11,6 @@
         public string RegistrationDate { get; set; } = string.Empty;
         public string ManufactureDate { get; set; } = string.Empty;
         public string HasOutstandingRecall { get; set; } = string.Empty;
-        public IEnumerable<IMotResponseTest> MotTests { get; set; } = [];
+        public IEnumerable<MotResponseTest> MotTests { get; set; } = [];
     }
 }

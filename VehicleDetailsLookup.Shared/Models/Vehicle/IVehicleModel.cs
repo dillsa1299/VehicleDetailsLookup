@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using VehicleDetailsLookup.Shared.Models.Details;
 using VehicleDetailsLookup.Shared.Models.Image;
 using VehicleDetailsLookup.Shared.Models.Mot;
@@ -30,6 +29,6 @@ namespace VehicleDetailsLookup.Shared.Models.Vehicle
         /// <summary>
         /// Dictionary of AI-generated data related to the vehicle, categorized by type.
         /// </summary>
-        Dictionary<AiType, IAiDataModel> AiData { get; set; }
+        IDictionary<AiType, IAiDataModel> AiData { get; set; }
     }
 }

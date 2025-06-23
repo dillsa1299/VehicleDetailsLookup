@@ -18,7 +18,7 @@
         /// <summary>
         /// List of defects identified during the MOT test.
         /// </summary>
-        IEnumerable<IMotResponseDefect> Defects { get; set; }
+        IEnumerable<MotResponseDefect> Defects { get; set; }
 
         /// <summary>
         /// Expiry date of the MOT certificate.

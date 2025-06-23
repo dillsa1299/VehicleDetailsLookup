@@ -37,7 +37,7 @@ namespace VehicleDetailsLookup.Services.Api.Ves
 
             // Parse response
             var responseContent = await response.Content.ReadAsStringAsync();
-            var parsedResponse = JsonSerializer.Deserialize<IVesResponse>(responseContent, _jsonSerializerOptions);
+            var parsedResponse = JsonSerializer.Deserialize<VesResponse>(responseContent, _jsonSerializerOptions);
 
             return parsedResponse;
         }

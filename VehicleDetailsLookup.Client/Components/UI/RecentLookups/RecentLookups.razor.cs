@@ -32,7 +32,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.RecentLookups
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (OperatingSystem.IsBrowser())
+            if (firstRender && OperatingSystem.IsBrowser())
             {
                 _loading = true;
                 _recentLookups = await VehicleLookupService.GetRecentVehicleLookupsAsync() ?? [];

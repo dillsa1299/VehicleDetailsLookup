@@ -50,6 +50,8 @@ namespace VehicleDetailsLookup.Client.Components.Pages
                     // Dont waste further API calls on failed lookup
                     if (_vehicle.Details == null) return;
 
+                    _vehicle.MotTests = await VehicleLookupService.GetMotTestsAsync(registrationNumber) ?? [];
+
                     // Perform parallel lookups for images and AI overview, but do not await them
                     _ = VehicleLookupEventsService.NotifyStartVehicleLookup(registrationNumber, VehicleLookupType.Images);
                     _ = VehicleLookupEventsService.NotifyStartVehicleLookup(registrationNumber, VehicleLookupType.AiOverview);

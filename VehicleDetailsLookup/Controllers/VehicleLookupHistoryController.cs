@@ -1,6 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using VehicleDetailsLookup.Repositories.Lookup;
 using VehicleDetailsLookup.Shared.Helpers;
+using VehicleDetailsLookup.Models.Database.Lookup;
+using VehicleDetailsLookup.Shared.Models.Details;
+using VehicleDetailsLookup.Shared.Models.Lookup;
+using VehicleDetailsLookup.Services.Mappers.ApiDatabase;
+using VehicleDetailsLookup.Services.Mappers.DatabaseFrontend;
+using VehicleDetailsLookup.Services.Vehicle.LookupHistory;
 
 namespace VehicleDetailsLookup.Controllers
 {
@@ -9,10 +15,10 @@ namespace VehicleDetailsLookup.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class VehicleLookupHistoryController(ILookupRepository lookupRepository) : ControllerBase
+    public class VehicleLookupHistoryController(IVehicleLookupHistoryService vehicleLookupHistoryService) : ControllerBase
     {
-        private readonly ILookupRepository _lookupRepository = lookupRepository
-            ?? throw new ArgumentNullException(nameof(lookupRepository));
+        private readonly IVehicleLookupHistoryService _vehicleLookupHistoryService = vehicleLookupHistoryService
+            ?? throw new ArgumentNullException(nameof(vehicleLookupHistoryService));
 
         /// <summary>
         /// Gets the total number of lookup records for a specific vehicle registration number.
@@ -32,7 +38,8 @@ namespace VehicleDetailsLookup.Controllers
             if (string.IsNullOrWhiteSpace(registrationNumber) || !regex.IsMatch(registrationNumber))
                 return BadRequest("Invalid registration number.");
 
-            return Ok(await _lookupRepository.GetVehicleLookupCountAsync(registrationNumber));
+            int count = await vehicleLookupHistoryService.GetVehicleLookupCountAsync(registrationNumber);
+            return Ok(count);
         }
 
         /// <summary>
@@ -44,7 +51,8 @@ namespace VehicleDetailsLookup.Controllers
         [HttpGet("recent")]
         public async Task<IActionResult> GetRecentVehiclesAsync()
         {
-            return Ok(await _lookupRepository.GetRecentLookupsAsync(10));
+            var recentLookups = await _vehicleLookupHistoryService.GetRecentLookupsAsync(10);
+            return Ok(recentLookups);
         }
     }
 }
