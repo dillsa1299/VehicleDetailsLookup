@@ -8,35 +8,35 @@ namespace VehicleDetailsLookup.Repositories
     {
         private readonly VehicleDbContext _dbContext = dbContext;
 
-        public void UpdateMotTests(IEnumerable<MotTestDbModel> motTests)
+        public async Task UpdateMotTestsAsync(IEnumerable<IMotTestDbModel> motTests)
         {
             if (motTests == null || !motTests.Any())
                 return;
 
             foreach (var motTest in motTests)
             {
-                if (!_dbContext.MotTests.Any(m => m.TestNumber == motTest.TestNumber))
+                if (!await _dbContext.MotTests.AnyAsync(m => m.TestNumber == motTest.TestNumber))
                 {
                     // If the MOT test does not exist, add it
-                    _dbContext.MotTests.Add(motTest);
+                    await _dbContext.MotTests.AddAsync((MotTestDbModel)motTest);
                 }
                 else
                 {
                     // If the mot test exists update the Updated field
-                    var existingMotTest = _dbContext.MotTests.First(m => m.TestNumber == motTest.TestNumber);
+                    var existingMotTest = await _dbContext.MotTests.FirstAsync(m => m.TestNumber == motTest.TestNumber);
                     existingMotTest.Updated = motTest.Updated;
                 }
             }
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
-        public IEnumerable<IMotTestDbModel>? GetMotTests(string registrationNumber)
+        public async ValueTask<IEnumerable<IMotTestDbModel>?> GetMotTestsAsync(string registrationNumber)
         {
-            return _dbContext.MotTests
+            return await _dbContext.MotTests
                 .Include(m => m.MotDefects)
                 .Where(m => m.RegistrationNumber == registrationNumber)
                 .OrderByDescending(m => m.CompletedDate)
-                .ToList();
+                .ToListAsync();
         }
     }
 }

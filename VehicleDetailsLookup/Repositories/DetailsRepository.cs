@@ -8,10 +8,10 @@ namespace VehicleDetailsLookup.Repositories
     {
         private readonly VehicleDbContext _dbContext = dbContext;
 
-        public void UpdateDetails(DetailsDbModel details)
+        public async Task UpdateDetailsAsync(IDetailsDbModel details)
         {
-            var existing = _dbContext.Details
-                .FirstOrDefault(d => d.RegistrationNumber == details.RegistrationNumber);
+            var existing = await _dbContext.Details
+                .FirstOrDefaultAsync(d => d.RegistrationNumber == details.RegistrationNumber);
 
             if (existing != null)
             {
@@ -27,16 +27,16 @@ namespace VehicleDetailsLookup.Repositories
             else
             {
                 // Add new record
-                _dbContext.Details.Add(details);
+                await _dbContext.Details.AddAsync((DetailsDbModel)details);
             }
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
-        public IDetailsDbModel? GetDetails(string registrationNumber)
+        public async ValueTask<IDetailsDbModel?> GetDetailsAsync(string registrationNumber)
         {
-            return _dbContext.Details
+            return await _dbContext.Details
                 .Include(d => d.Lookups)
-                .FirstOrDefault(d => d.RegistrationNumber == registrationNumber);
+                .FirstOrDefaultAsync(d => d.RegistrationNumber == registrationNumber);
         }
     }
 }

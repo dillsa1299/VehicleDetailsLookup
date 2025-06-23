@@ -1,9 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using System.Text.Json;
-using VehicleDetailsLookup.Models.ApiResponses.Mot;
-using VehicleDetailsLookup.Models.ApiResponses.Ves;
-using VehicleDetailsLookup.Models.Database.Details;
-using VehicleDetailsLookup.Repositories;
+﻿using VehicleDetailsLookup.Repositories;
 using VehicleDetailsLookup.Services.Api.Mot;
 using VehicleDetailsLookup.Services.Api.Ves;
 using VehicleDetailsLookup.Services.Mappers;
@@ -12,10 +7,12 @@ using VehicleDetailsLookup.Shared.Models.Details;
 
 namespace VehicleDetailsLookup.Services.Vehicle.VehicleDetails
 {
-    public class VehicleDetailsService(IDetailsRepository detailsRepository, IVesService vesService, IMotService motService, IApiDatabaseMapperService apiMapper, IDatabaseFrontendMapperService databaseMapper) : IVehicleDetailsService
+    public class VehicleDetailsService(IDetailsRepository detailsRepository, ILookupRepository lookupRepository, IVesService vesService, IMotService motService, IApiDatabaseMapperService apiMapper, IDatabaseFrontendMapperService databaseMapper) : IVehicleDetailsService
     {
         private readonly IDetailsRepository _detailsRepository = detailsRepository
             ?? throw new ArgumentNullException(nameof(detailsRepository));
+        private readonly ILookupRepository _lookupRepository = lookupRepository
+            ?? throw new ArgumentNullException(nameof(lookupRepository));
         private readonly IVesService _vesService = vesService
             ?? throw new ArgumentNullException(nameof(vesService));
         private readonly IMotService _motService = motService
@@ -36,6 +33,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.VehicleDetails
                 return _databaseMapper.MapDetails(dbDetails);
             }
 
+            // If not found or too old, fetch from the VES and MOT APIs
             var vesResponse = await _vesService.GetVesResponseAsync(registrationNumber);
             if (vesResponse == null)
                 return null;
@@ -44,8 +42,12 @@ namespace VehicleDetailsLookup.Services.Vehicle.VehicleDetails
             if (motResponse == null)
                 return null;
 
+            // Map the API responses to database models and update the repository
             dbDetails = _apiMapper.MapDetails(vesResponse, motResponse);
-            _detailsRepository.UpdateDetails((DetailsDbModel)dbDetails);
+            _detailsRepository.UpdateDetails(dbDetails);
+
+            // Log the lookup
+            lookupRepository.AddLookup(registrationNumber);
 
             return _databaseMapper.MapDetails(dbDetails);
         }

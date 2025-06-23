@@ -3,21 +3,25 @@
 namespace VehicleDetailsLookup.Repositories
 {
     /// <summary>
-    /// Provides methods for managing and retrieving MOT test records for vehicles from the database.
+    /// Defines a contract for managing and retrieving MOT (Ministry of Transport) test records for vehicles from the database.
     /// </summary>
     public interface IMotRepository
     {
         /// <summary>
-        /// Adds or updates the MOT tests for a vehicle in the database using a collection of MOT test records.
+        /// Adds new MOT test records or updates existing ones for a vehicle in the database.
         /// </summary>
-        /// <param name="motTests">A collection of MOT test records to be stored or updated in the database.</param>
-        void UpdateMotTests(IEnumerable<MotTestDbModel> motTests);
+        /// <param name="motTests">A collection of MOT test records to be added or updated in the database.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
+        Task UpdateMotTestsAsync(IEnumerable<IMotTestDbModel> motTests);
 
         /// <summary>
-        /// Retrieves the MOT tests for a vehicle by its registration number.
+        /// Retrieves all MOT test records associated with a specific vehicle registration number.
         /// </summary>
-        /// <param name="registrationNumber">The vehicle's registration number.</param>
-        /// <returns>A collection of <see cref="IMotTestDbModel"/> instances representing the vehicle's MOT test records, or null if none exist.</returns>
-        IEnumerable<IMotTestDbModel>? GetMotTests(string registrationNumber);
+        /// <param name="registrationNumber">The registration number of the vehicle to look up.</param>
+        /// <returns>
+        /// A value task that, when completed, returns a collection of <see cref="IMotTestDbModel"/> instances representing the vehicle's MOT test records,
+        /// or <c>null</c> if no records exist for the specified registration number.
+        /// </returns>
+        ValueTask<IEnumerable<IMotTestDbModel>?> GetMotTestsAsync(string registrationNumber);
     }
 }

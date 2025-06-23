@@ -1,6 +1,6 @@
 ﻿using VehicleDetailsLookup.Shared.Models.Enums;
 
-namespace VehicleDetailsLookup.Models.Database.Ai
+namespace VehicleDetailsLookup.Models.Database.AiData
 {
     /// <summary>
     /// Defines the structure for storing AI-generated vehicle details in the database.

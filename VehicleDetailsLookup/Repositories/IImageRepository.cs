@@ -3,21 +3,25 @@
 namespace VehicleDetailsLookup.Repositories
 {
     /// <summary>
-    /// Provides methods for managing and retrieving vehicle image records from the database.
+    /// Defines methods for managing and retrieving vehicle image records in the database.
     /// </summary>
     public interface IImageRepository
     {
         /// <summary>
-        /// Adds or updates images for a vehicle in the database.
+        /// Adds new images or updates existing images for a vehicle in the database.
         /// </summary>
-        /// <param name="images">A collection of image models to add or update.</param>
-        void UpdateImages(IEnumerable<ImageDbModel> images);
+        /// <param name="images">A collection of image models to add or update. Each model must implement <see cref="IImageDbModel"/>.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
+        Task UpdateImagesAsync(IEnumerable<IImageDbModel> images);
 
         /// <summary>
         /// Retrieves all images associated with a specific vehicle registration number.
         /// </summary>
-        /// <param name="registrationNumber">The registration number of the vehicle to retrieve images for.</param>
-        /// <returns>A collection of image models for the specified vehicle implementing <see cref="IImageDbModel"/>, or null if none exist.</returns>
-        IEnumerable<IImageDbModel>? GetImages(string registrationNumber);
+        /// <param name="registrationNumber">The registration number of the vehicle whose images are to be retrieved.</param>
+        /// <returns>
+        /// A value task containing a collection of image models implementing <see cref="IImageDbModel"/> for the specified vehicle,
+        /// or <c>null</c> if no images exist for the given registration number.
+        /// </returns>
+        ValueTask<IEnumerable<IImageDbModel>?> GetImagesAsync(string registrationNumber);
     }
 }

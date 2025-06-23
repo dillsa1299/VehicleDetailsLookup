@@ -1,29 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using VehicleDetailsLookup.Services.VehicleData;
+using VehicleDetailsLookup.Repositories;
 using VehicleDetailsLookup.Shared.Helpers;
 
 namespace VehicleDetailsLookup.Controllers
 {
     /// <summary>
-    /// API controller for handling vehicle lookup history operations.
-    /// Provides endpoints to retrieve lookup counts and recent vehicle lookups.
+    /// API controller for managing and retrieving vehicle lookup history.
     /// </summary>
-    /// <remarks>
-    /// Initializes a new instance of the <see cref="VehicleLookupHistoryController"/> class.
-    /// </remarks>
-    /// <param name="vehicleDataService">The service for vehicle data operations.</param>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="vehicleDataService"/> is null.</exception>
     [Route("api/[controller]")]
     [ApiController]
-    public class VehicleLookupHistoryController(IVehicleDataService vehicleDataService) : ControllerBase
+    public class VehicleLookupHistoryController(ILookupRepository lookupRepository) : ControllerBase
     {
-        private readonly IVehicleDataService _vehicleDataService = vehicleDataService ?? throw new ArgumentNullException(nameof(vehicleDataService));
+        private readonly ILookupRepository _lookupRepository = lookupRepository
+            ?? throw new ArgumentNullException(nameof(lookupRepository));
 
         /// <summary>
-        /// Gets the number of times a vehicle has been looked up by its registration number.
+        /// Gets the total number of lookup records for a specific vehicle registration number.
         /// </summary>
         /// <param name="registrationNumber">The registration number of the vehicle.</param>
-        /// <returns>The number of lookups for the specified registration number.</returns>
+        /// <returns>
+        /// An <see cref="OkObjectResult"/> containing the count of lookup records if successful;
+        /// <see cref="BadRequestObjectResult"/> if the registration number is invalid.
+        /// </returns>
         [HttpGet("count/{registrationNumber}")]
         public async Task<IActionResult> GetVehicleLookupCountAsync(string registrationNumber)
         {
@@ -34,28 +32,19 @@ namespace VehicleDetailsLookup.Controllers
             if (string.IsNullOrWhiteSpace(registrationNumber) || !regex.IsMatch(registrationNumber))
                 return BadRequest("Invalid registration number.");
 
-            // Temporary delay to simulate async operation when using DB
-            await Task.Delay(1);
-
-            int count = _vehicleDataService.GetVehicleLookupCount(registrationNumber);
-
-            return Ok(count);
+            return Ok(await _lookupRepository.GetVehicleLookupCountAsync(registrationNumber));
         }
 
         /// <summary>
-        /// Gets a list of the most recent vehicle lookups.
+        /// Retrieves a collection of the most recent vehicle lookup records.
         /// </summary>
-        /// <param name="registrationNumber">The registration number to validate (not used for filtering).</param>
-        /// <returns>A list of recent vehicle lookups.</returns>
+        /// <returns>
+        /// An <see cref="OkObjectResult"/> containing a collection of the most recent lookup records.
+        /// </returns>
         [HttpGet("recent")]
         public async Task<IActionResult> GetRecentVehiclesAsync()
         {
-            // Temporary delay to simulate async operation when using DB
-            await Task.Delay(1);
-
-            var vehicles = _vehicleDataService.GetRecentLookups(10).ToList();
-
-            return Ok(vehicles);
+            return Ok(await _lookupRepository.GetRecentLookupsAsync(10));
         }
     }
 }

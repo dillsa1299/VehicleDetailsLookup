@@ -1,5 +1,4 @@
-﻿using VehicleDetailsLookup.Models.Database.Mot;
-using VehicleDetailsLookup.Repositories;
+﻿using VehicleDetailsLookup.Repositories;
 using VehicleDetailsLookup.Services.Api.Mot;
 using VehicleDetailsLookup.Services.Mappers;
 using VehicleDetailsLookup.Shared.Models.Mot;
@@ -27,12 +26,16 @@ namespace VehicleDetailsLookup.Services.Vehicle.Mot
                 return _databaseMapper.MapMotTests(dbMotTests);
             }
 
+            // If not found or too old, fetch from the MOT API
             var motResponse = await _motService.GetMotResponseAsync(registrationNumber);
-            if (motResponse == null || motResponse.MotTests == null)
+
+            if (motResponse == null || motResponse.MotTests == null || !motResponse.MotTests.Any())
+                // If no MOT tests are found, return null
                 return null;
 
+            // Map the API response to database models and update the repository
             dbMotTests = _apiMapper.MapMotTests(registrationNumber, motResponse.MotTests);
-            _motRepository.UpdateMotTests(dbMotTests.Select(test => (MotTestDbModel)test));
+            _motRepository.UpdateMotTests(dbMotTests);
 
             return _databaseMapper.MapMotTests(dbMotTests);
         }

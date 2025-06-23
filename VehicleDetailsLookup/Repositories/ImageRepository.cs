@@ -8,11 +8,11 @@ namespace VehicleDetailsLookup.Repositories
     {
         private readonly VehicleDbContext _dbContext = dbContext;
 
-        public void UpdateImages(IEnumerable<ImageDbModel> images)
+        public async Task UpdateImagesAsync(IEnumerable<IImageDbModel> images)
         {
-            var existingImages = _dbContext.Images
+            var existingImages = await _dbContext.Images
                 .Where(img => images.Any(i => i.RegistrationNumber == img.RegistrationNumber))
-                .ToList();
+                .ToListAsync();
 
             // Remove all existing images for the registration numbers in the provided images
             // Prevents duplicates and ensures only the latest images are stored
@@ -20,16 +20,18 @@ namespace VehicleDetailsLookup.Repositories
 
             foreach (var image in images)
             {
-                _dbContext.Images.Add(image);
+                await _dbContext.Images.AddAsync((ImageDbModel)image);
             }
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
-        public IEnumerable<IImageDbModel>? GetImages(string registrationNumber)
+        public async ValueTask<IEnumerable<IImageDbModel>?> GetImagesAsync(string registrationNumber)
         {
-            return _dbContext.Images
+            var images = await _dbContext.Images
                 .Where(img => img.RegistrationNumber == registrationNumber)
-                .ToList();
+                .ToListAsync();
+
+            return images.Any() ? images : null;
         }
     }
 }
