@@ -362,10 +362,10 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-# Ignore SQLite database files
-db/*.db
+# Ignore SQLite database and temp files
 *.db
-*.sqlite
+*.db-shm
+*.db-wal
 
 # Standard .NET ignores
 bin/

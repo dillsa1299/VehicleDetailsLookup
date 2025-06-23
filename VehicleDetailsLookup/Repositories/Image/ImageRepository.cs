@@ -10,8 +10,9 @@ namespace VehicleDetailsLookup.Repositories.Image
 
         public async Task UpdateImagesAsync(IEnumerable<IImageDbModel> images)
         {
+            var registrationNumbers = images.Select(i => i.RegistrationNumber).ToList();
             var existingImages = await _dbContext.Images
-                .Where(img => images.Any(i => i.RegistrationNumber == img.RegistrationNumber))
+                .Where(img => registrationNumbers.Contains(img.RegistrationNumber))
                 .ToListAsync();
 
             // Remove all existing images for the registration numbers in the provided images

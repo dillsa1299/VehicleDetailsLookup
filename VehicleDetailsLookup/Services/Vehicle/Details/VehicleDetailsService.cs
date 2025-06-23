@@ -1,5 +1,6 @@
 ﻿using VehicleDetailsLookup.Repositories.Details;
 using VehicleDetailsLookup.Repositories.Lookup;
+using VehicleDetailsLookup.Repositories.Mot;
 using VehicleDetailsLookup.Services.Api.Mot;
 using VehicleDetailsLookup.Services.Api.Ves;
 using VehicleDetailsLookup.Services.Mappers.ApiDatabase;
@@ -8,10 +9,12 @@ using VehicleDetailsLookup.Shared.Models.Details;
 
 namespace VehicleDetailsLookup.Services.Vehicle.Details
 {
-    public class VehicleDetailsService(IDetailsRepository detailsRepository, ILookupRepository lookupRepository, IVesService vesService, IMotService motService, IApiDatabaseMapperService apiMapper, IDatabaseFrontendMapperService databaseMapper) : IVehicleDetailsService
+    public class VehicleDetailsService(IDetailsRepository detailsRepository, IMotRepository motRepository, ILookupRepository lookupRepository, IVesService vesService, IMotService motService, IApiDatabaseMapperService apiMapper, IDatabaseFrontendMapperService databaseMapper) : IVehicleDetailsService
     {
         private readonly IDetailsRepository _detailsRepository = detailsRepository
             ?? throw new ArgumentNullException(nameof(detailsRepository));
+        private readonly IMotRepository _motRepository = motRepository
+            ?? throw new ArgumentNullException(nameof(motRepository));
         private readonly ILookupRepository _lookupRepository = lookupRepository
             ?? throw new ArgumentNullException(nameof(lookupRepository));
         private readonly IVesService _vesService = vesService
@@ -46,6 +49,10 @@ namespace VehicleDetailsLookup.Services.Vehicle.Details
             // Map the API responses to database models and update the repository
             dbDetails = _apiMapper.MapDetails(vesResponse, motResponse);
             await _detailsRepository.UpdateDetailsAsync(dbDetails);
+
+            // Store the MOT tests whilst we've already got the data
+            var dbMotTests = _apiMapper.MapMotTests(registrationNumber, motResponse.MotTests);
+            await _motRepository.UpdateMotTestsAsync(dbMotTests);
 
             // Log the lookup
             await lookupRepository.AddLookupAsync(registrationNumber);

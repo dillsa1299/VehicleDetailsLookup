@@ -21,7 +21,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
                 // Return null if the request fails or vehicle not found.
                 return null;
 
-            var details = await response.Content.ReadFromJsonAsync<IDetailsModel>();
+            var details = await response.Content.ReadFromJsonAsync<DetailsModel>();
 
             return details;
         }
@@ -35,7 +35,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             if (!response.IsSuccessStatusCode)
                 return null;
 
-            var motTests = await response.Content.ReadFromJsonAsync<IEnumerable<IMotTestModel>>();
+            var motTests = await response.Content.ReadFromJsonAsync<IEnumerable<MotTestModel>>();
 
             return motTests;
         }
@@ -49,9 +49,9 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             if (!response.IsSuccessStatusCode)
                 return null;
 
-            var images = await response.Content.ReadFromJsonAsync<IEnumerable<IImageModel>>();
+            var images = await response.Content.ReadFromJsonAsync<IEnumerable<ImageModel>>();
 
-            return images;
+            return images?.Cast<IImageModel>();
         }
 
         public async ValueTask<IAiDataModel?> GetVehicleAiDataAsync(string registrationNumber, AiType type)
@@ -63,7 +63,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             if (!response.IsSuccessStatusCode)
                 return null;
 
-            var aiData = await response.Content.ReadFromJsonAsync<IAiDataModel>();
+            var aiData = await response.Content.ReadFromJsonAsync<AiDataModel>();
 
             return aiData;
         }
@@ -91,7 +91,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             if (!response.IsSuccessStatusCode)
                 return null;
 
-            var lookups = await response.Content.ReadFromJsonAsync<IEnumerable<ILookupModel>>();
+            var lookups = await response.Content.ReadFromJsonAsync<IEnumerable<LookupModel>>();
 
             return lookups;
         }

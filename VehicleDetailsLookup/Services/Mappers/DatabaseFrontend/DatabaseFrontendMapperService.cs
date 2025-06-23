@@ -1,10 +1,12 @@
 ﻿using VehicleDetailsLookup.Models.Database.AiData;
 using VehicleDetailsLookup.Models.Database.Details;
 using VehicleDetailsLookup.Models.Database.Image;
+using VehicleDetailsLookup.Models.Database.Lookup;
 using VehicleDetailsLookup.Models.Database.Mot;
 using VehicleDetailsLookup.Shared.Models.Ai;
 using VehicleDetailsLookup.Shared.Models.Details;
 using VehicleDetailsLookup.Shared.Models.Image;
+using VehicleDetailsLookup.Shared.Models.Lookup;
 using VehicleDetailsLookup.Shared.Models.Mot;
 
 namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
@@ -67,7 +69,7 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
                 return [];
 
             int i = 1;
-            return images.Select(img => (IImageModel)new ImageModel
+            return images.Select(img => new ImageModel
             {
                 Index = i++,
                 Title = img.Title,
@@ -81,6 +83,16 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
             {
                 Type = aiData.Type,
                 Content = aiData.GeneratedText ?? string.Empty
+            };
+        }
+
+        public ILookupModel MapLookup(ILookupDbModel lookup)
+        {
+            return new LookupModel
+            {
+                DateTime = lookup.DateTime,
+                RegistrationNumber = lookup.RegistrationNumber ?? string.Empty,
+                VehicleDetails = lookup.Details == null ? new DetailsModel(): MapDetails(lookup.Details)
             };
         }
     }

@@ -9,6 +9,6 @@ namespace VehicleDetailsLookup.Models.ApiResponses.GoogleImage
         /// <summary>
         /// Collection of image items.
         /// </summary>
-        IEnumerable<IGoogleImageResponseItem>? Items { get; set; }
+        IEnumerable<GoogleImageResponseItem>? Items { get; set; }
     }
 }

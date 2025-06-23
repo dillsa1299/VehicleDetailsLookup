@@ -48,7 +48,7 @@ namespace VehicleDetailsLookup.Services.Api.Mot
 
             // Parse response
             var motContent = await response.Content.ReadAsStringAsync();
-            var parsedResponse = JsonSerializer.Deserialize<IMotResponse>(motContent, _jsonSerializerOptions);
+            var parsedResponse = JsonSerializer.Deserialize<MotResponse>(motContent, _jsonSerializerOptions);
 
             return parsedResponse;
         }

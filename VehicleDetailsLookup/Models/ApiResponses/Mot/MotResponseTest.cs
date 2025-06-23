@@ -10,6 +10,6 @@
         public string OdometerResultType { get; set; } = string.Empty;
         public string MotTestNumber { get; set; } = string.Empty;
         public string DataSource { get; set; } = string.Empty;
-        public IEnumerable<IMotResponseDefect> Defects { get; set; } = [];
+        public IEnumerable<MotResponseDefect> Defects { get; set; } = [];
     }
 }
