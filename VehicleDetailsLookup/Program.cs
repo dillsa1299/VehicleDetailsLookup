@@ -4,16 +4,20 @@ using VehicleDetailsLookup.Client.Services.VehicleLookup;
 using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
 using VehicleDetailsLookup.Components;
 using VehicleDetailsLookup.Models.Database;
-using VehicleDetailsLookup.Services.VehicleData;
-using VehicleDetailsLookup.Services.VehicleMapper;
-using VehicleDetailsLookup.Repositories;
-using VehicleDetailsLookup.Services.Api.ImageSearch;
-using VehicleDetailsLookup.Services.Vehicle.VehicleDetails;
 using VehicleDetailsLookup.Services.Api.Gemini;
 using VehicleDetailsLookup.Services.Api.GoogleImage;
 using VehicleDetailsLookup.Services.Vehicle.Details;
 using VehicleDetailsLookup.Services.Vehicle.AiData;
 using VehicleDetailsLookup.Services.Vehicle.Images;
+using VehicleDetailsLookup.Services.Api.Ves;
+using VehicleDetailsLookup.Services.Api.Mot;
+using VehicleDetailsLookup.Services.Vehicle.Mot;
+using VehicleDetailsLookup.Services.Mappers.ApiDatabase;
+using VehicleDetailsLookup.Services.Mappers.DatabaseFrontend;
+using VehicleDetailsLookup.Repositories.AiData;
+using VehicleDetailsLookup.Repositories.Details;
+using VehicleDetailsLookup.Repositories.Image;
+using VehicleDetailsLookup.Repositories.Mot;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,12 +37,16 @@ builder.Services.AddSwaggerGen();
 // Register application services
 builder.Services.AddHttpClient();
 
-builder.Services.AddSingleton<IVehicleDataService, VehicleDataService>();
+builder.Services.AddSingleton<IVesService, VesService>();
+builder.Services.AddSingleton<IMotService, MotService>();
 builder.Services.AddSingleton<IGoogleImageService, GoogleImageService>();
 builder.Services.AddSingleton<IGeminiService, GeminiService>();
 
-builder.Services.AddSingleton<IVehicleMapperService, VehicleMapperService>();
+builder.Services.AddSingleton<IApiDatabaseMapperService, ApiDatabaseMapperService>();
+builder.Services.AddSingleton<IDatabaseFrontendMapperService, DatabaseFrontendMapperService>();
+
 builder.Services.AddSingleton<IVehicleDetailsService, VehicleDetailsService>();
+builder.Services.AddSingleton<IVehicleMotService, VehicleMotService>();
 builder.Services.AddSingleton<IVehicleImageService, VehicleImageService>();
 builder.Services.AddSingleton<IVehicleAiDataService, VehicleAiDataService>();
 
@@ -46,7 +54,10 @@ builder.Services.AddScoped<IVehicleLookupService, VehicleLookupService>();
 builder.Services.AddScoped<IVehicleLookupEventsService, VehicleLookupEventsService>();
 
 // Register repositories
+builder.Services.AddScoped<IDetailsRepository, DetailsRepository>();
+builder.Services.AddScoped<IMotRepository, MotRepository>();
 builder.Services.AddScoped<IAiDataRepository, AiDataRepository>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
 
 // Register DbContext with SQLite
 builder.Services.AddDbContext<VehicleDbContext>(options =>

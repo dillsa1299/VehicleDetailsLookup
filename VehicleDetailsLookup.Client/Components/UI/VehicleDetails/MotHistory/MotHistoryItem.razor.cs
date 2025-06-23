@@ -11,17 +11,17 @@ public partial class MotHistoryItem
     private IJSRuntime? JsRuntime { get; set; }
 
     [Parameter]
-    public MotTestModel? Mot { get; set; }
+    public IMotTestModel? Mot { get; set; }
 
-    private IEnumerable<MotDefectModel> DangerousDefects =>
+    private IEnumerable<IMotDefectModel> DangerousDefects =>
         Mot?.Defects.Where(d => d.Type == MotDefectType.Dangerous || d.Dangerous)
         ?? [];
 
-    private IEnumerable<MotDefectModel> MajorDefects =>
+    private IEnumerable<IMotDefectModel> MajorDefects =>
         Mot?.Defects.Where(d => d.Type == MotDefectType.Fail || d.Type == MotDefectType.Major)
         ?? [];
 
-    private IEnumerable<MotDefectModel> OtherDefects =>
+    private IEnumerable<IMotDefectModel> OtherDefects =>
         Mot?.Defects.Where(d => !(d.Type == MotDefectType.Dangerous || d.Dangerous || d.Type == MotDefectType.Fail || d.Type == MotDefectType.Major))
         ?? [];
 

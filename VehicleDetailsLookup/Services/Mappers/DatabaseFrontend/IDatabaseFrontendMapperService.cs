@@ -2,12 +2,12 @@
 using VehicleDetailsLookup.Models.Database.Details;
 using VehicleDetailsLookup.Models.Database.Image;
 using VehicleDetailsLookup.Models.Database.Mot;
-using VehicleDetailsLookup.Shared.Models.AiData;
+using VehicleDetailsLookup.Shared.Models.Ai;
 using VehicleDetailsLookup.Shared.Models.Details;
 using VehicleDetailsLookup.Shared.Models.Image;
 using VehicleDetailsLookup.Shared.Models.Mot;
 
-namespace VehicleDetailsLookup.Services.Mappers
+namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
 {
     public interface IDatabaseFrontendMapperService
     {

@@ -1,6 +1,6 @@
 using VehicleDetailsLookup.Shared.Models.Enums;
 
-namespace VehicleDetailsLookup.Shared.Models.AiData
+namespace VehicleDetailsLookup.Shared.Models.Ai
 {
     /// <summary>
     /// AI-generated vehicle data, such as summaries or insights, categorized by type.

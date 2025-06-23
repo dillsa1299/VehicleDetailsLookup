@@ -1,4 +1,4 @@
-﻿using VehicleDetailsLookup.Shared.Models.AiData;
+﻿using VehicleDetailsLookup.Shared.Models.Ai;
 using VehicleDetailsLookup.Shared.Models.Enums;
 
 namespace VehicleDetailsLookup.Services.Vehicle.AiData

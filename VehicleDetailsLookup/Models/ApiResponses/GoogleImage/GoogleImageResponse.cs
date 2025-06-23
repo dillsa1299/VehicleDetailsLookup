@@ -2,6 +2,6 @@
 {
     public class GoogleImageResponse : IGoogleImageResponse
     {
-        public IEnumerable<GoogleImageResponseItem>? Items { get; set; }
+        public IEnumerable<IGoogleImageResponseItem>? Items { get; set; }
     }
 }

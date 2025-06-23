@@ -1,6 +1,6 @@
 ﻿using VehicleDetailsLookup.Shared.Models.Enums;
 
-namespace VehicleDetailsLookup.Shared.Models.AiData
+namespace VehicleDetailsLookup.Shared.Models.Ai
 {
     public class AiDataModel : IAiDataModel
     {

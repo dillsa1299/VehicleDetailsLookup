@@ -11,14 +11,14 @@ namespace VehicleDetailsLookup.Client.Components.UI.RegistrationInput
         private IVehicleLookupEventsService VehicleLookupEventsService { get; set; } = default!;
 
         [Parameter]
-        public VehicleModel Vehicle { get; set; } = default!;
+        public IVehicleModel Vehicle { get; set; } = default!;
 
         private readonly RegistrationInputModel _registrationInput = new();
         private bool _lookupFailed;
 
         private async Task LookupRegistration()
         {
-            if (_registrationInput.Input.Replace(" ", "").Equals(Vehicle.RegistrationNumber, StringComparison.InvariantCultureIgnoreCase))
+            if (_registrationInput.Input.Replace(" ", "").Equals(Vehicle?.Details?.RegistrationNumber, StringComparison.InvariantCultureIgnoreCase))
             {
                 // Vehicle already loaded
                 return;
@@ -33,7 +33,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.RegistrationInput
 
             if (!lookupStarted)
             {
-                _lookupFailed = string.IsNullOrEmpty(Vehicle.RegistrationNumber);
+                _lookupFailed = Vehicle?.Details == null;
             }
 
             StateHasChanged();

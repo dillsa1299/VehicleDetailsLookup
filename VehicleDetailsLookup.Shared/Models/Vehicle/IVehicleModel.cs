@@ -1,7 +1,9 @@
-using VehicleDetailsLookup.Shared.Models.AiData;
+using System.Collections.Generic;
 using VehicleDetailsLookup.Shared.Models.Details;
 using VehicleDetailsLookup.Shared.Models.Image;
 using VehicleDetailsLookup.Shared.Models.Mot;
+using VehicleDetailsLookup.Shared.Models.Enums;
+using VehicleDetailsLookup.Shared.Models.Ai;
 
 namespace VehicleDetailsLookup.Shared.Models.Vehicle
 {
@@ -26,8 +28,8 @@ namespace VehicleDetailsLookup.Shared.Models.Vehicle
         IEnumerable<IImageModel> Images { get; set; }
 
         /// <summary>
-        /// Collection of AI-generated data related to the vehicle.
+        /// Dictionary of AI-generated data related to the vehicle, categorized by type.
         /// </summary>
-        IEnumerable<IAiDataModel> AiData { get; set; }
+        Dictionary<AiType, IAiDataModel> AiData { get; set; }
     }
 }

@@ -7,12 +7,8 @@ using VehicleDetailsLookup.Models.Database.Lookup;
 
 namespace VehicleDetailsLookup.Models.Database
 {
-    public class VehicleDbContext : DbContext
+    public class VehicleDbContext(DbContextOptions<VehicleDbContext> options) : DbContext(options)
     {
-        public VehicleDbContext(DbContextOptions<VehicleDbContext> options) : base(options)
-        {
-        }
-
         public DbSet<AiDataDbModel> AiData { get; set; }
         public DbSet<DetailsDbModel> Details { get; set; }
         public DbSet<ImageDbModel> Images { get; set; }

@@ -2,7 +2,7 @@
 using VehicleDetailsLookup.Models.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace VehicleDetailsLookup.Repositories
+namespace VehicleDetailsLookup.Repositories.Image
 {
     public class ImageRepository(VehicleDbContext dbContext) : IImageRepository
     {
@@ -31,7 +31,7 @@ namespace VehicleDetailsLookup.Repositories
                 .Where(img => img.RegistrationNumber == registrationNumber)
                 .ToListAsync();
 
-            return images.Any() ? images : null;
+            return images.Count == 0 ? null : images;
         }
     }
 }

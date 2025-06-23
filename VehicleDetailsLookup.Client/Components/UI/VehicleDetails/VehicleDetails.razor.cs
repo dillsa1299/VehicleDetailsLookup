@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System.Xml.Linq;
 using VehicleDetailsLookup.Client.Components.Enums;
 using VehicleDetailsLookup.Client.Services.VehicleLookup;
 using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
@@ -16,11 +17,12 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
         private IVehicleLookupEventsService VehicleLookupEventsService { get; set; } = default!;
 
         [Parameter]
-        public VehicleModel? Vehicle { get; set; }
+        public IVehicleModel? Vehicle { get; set; }
 
         private readonly string _placeholderImage = "images/placeholder-car.svg";
         private readonly string _aiFailedMessage = "Unable to generate AI response. Please try again.";
         private bool _isSearchingDetails;
+        private bool _isSearchingMotHistory;
         private bool _isSearchingImages;
         private bool _isSearchingAiOverview;
         private bool _isSearchingAiCommonIssues;
@@ -28,13 +30,19 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
         private int _vehicleLookupCount;
 
         private string? AiOverviewText =>
-            Vehicle?.AiData.FirstOrDefault(x => x.Type == AiType.Overview)?.Content ?? string.Empty;
+            (Vehicle?.AiData.TryGetValue(AiType.Overview, out var aiDataModel) == true)
+                    ? aiDataModel.Content
+                    : string.Empty;
 
         private string? AiCommonIssuesText =>
-            Vehicle?.AiData.FirstOrDefault(x => x.Type == AiType.CommonIssues)?.Content ?? string.Empty;
+            (Vehicle?.AiData.TryGetValue(AiType.CommonIssues, out var aiDataModel) == true)
+                    ? aiDataModel.Content
+                    : string.Empty;
 
         private string? AiMotHistorySummaryText =>
-            Vehicle?.AiData.FirstOrDefault(x => x.Type == AiType.MotHistorySummary)?.Content ?? string.Empty;
+            (Vehicle?.AiData.TryGetValue(AiType.MotHistorySummary, out var aiDataModel) == true)
+                    ? aiDataModel.Content
+                    : string.Empty;
 
         private MarkupString? AiOverviewHtml =>
             string.IsNullOrWhiteSpace(AiOverviewText)
@@ -58,6 +66,9 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
                 case VehicleLookupType.Details:
                     _isSearchingDetails = lookupStarted;
                     break;
+                case VehicleLookupType.MotHistory:
+                    _isSearchingMotHistory = lookupStarted;
+                    break;
                 case VehicleLookupType.Images:
                     _isSearchingImages = lookupStarted;
                     break;
@@ -76,15 +87,15 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
 
         private async Task StartLookup(VehicleLookupType lookupType)
         {
-            if (Vehicle != null)
+            if (Vehicle?.Details?.RegistrationNumber != null)
             {
-                await VehicleLookupEventsService.NotifyStartVehicleLookup(Vehicle.RegistrationNumber, lookupType);
+                await VehicleLookupEventsService.NotifyStartVehicleLookup(Vehicle.Details.RegistrationNumber, lookupType);
             }
         }
 
         private async Task OnCommonIssuesExpandedAsync(bool expanded)
         {
-            if (!_isSearchingAiCommonIssues && Vehicle != null && !Vehicle.AiData.Any(d => d.Type == AiType.CommonIssues))
+            if (!_isSearchingAiCommonIssues && Vehicle != null && !Vehicle.AiData.ContainsKey(AiType.CommonIssues))
             {
                 await StartLookup(VehicleLookupType.AiCommonIssues);
             }
@@ -92,7 +103,12 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
 
         private async Task OnMotHistoryExpandedAsync(bool expanded)
         {
-            if (!_isSearchingAiMotHistorySummary && Vehicle != null && !Vehicle.AiData.Any(d => d.Type == AiType.MotHistorySummary))
+            if (!_isSearchingMotHistory && Vehicle != null && !Vehicle.MotTests.Any())
+            {
+                await StartLookup(VehicleLookupType.MotHistory);
+            }
+
+            if (!_isSearchingAiMotHistorySummary && Vehicle != null && !Vehicle.AiData.ContainsKey(AiType.MotHistorySummary))
             {
                 await StartLookup(VehicleLookupType.AiMotHistorySummary);
             }
@@ -100,14 +116,8 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
 
         protected override async Task OnParametersSetAsync()
         {
-            if (!String.IsNullOrEmpty(Vehicle?.RegistrationNumber))
-            {
-                _vehicleLookupCount = await VehicleLookupService.GetVehicleLookupCountAsync(Vehicle.RegistrationNumber);
-            }
-            else
-            {
-                _vehicleLookupCount = 0;
-            }
+            if (!String.IsNullOrEmpty(Vehicle?.Details?.RegistrationNumber))
+                _vehicleLookupCount = await VehicleLookupService.GetVehicleLookupCountAsync(Vehicle.Details.RegistrationNumber) ?? 0;
 
             await base.OnParametersSetAsync();
         }

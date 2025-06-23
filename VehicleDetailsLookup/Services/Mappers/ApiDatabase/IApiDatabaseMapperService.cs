@@ -8,7 +8,7 @@ using VehicleDetailsLookup.Models.Database.Image;
 using VehicleDetailsLookup.Models.Database.Mot;
 using VehicleDetailsLookup.Shared.Models.Enums;
 
-namespace VehicleDetailsLookup.Services.Mappers
+namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
 {
     public interface IApiDatabaseMapperService
     {

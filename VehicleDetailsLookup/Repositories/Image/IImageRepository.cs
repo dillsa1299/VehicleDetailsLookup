@@ -1,6 +1,6 @@
 ﻿using VehicleDetailsLookup.Models.Database.Image;
 
-namespace VehicleDetailsLookup.Repositories
+namespace VehicleDetailsLookup.Repositories.Image
 {
     /// <summary>
     /// Defines methods for managing and retrieving vehicle image records in the database.

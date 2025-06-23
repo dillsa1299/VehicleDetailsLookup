@@ -1,6 +1,7 @@
-﻿using VehicleDetailsLookup.Repositories;
+﻿using VehicleDetailsLookup.Repositories.Image;
 using VehicleDetailsLookup.Services.Api.GoogleImage;
-using VehicleDetailsLookup.Services.Mappers;
+using VehicleDetailsLookup.Services.Mappers.ApiDatabase;
+using VehicleDetailsLookup.Services.Mappers.DatabaseFrontend;
 using VehicleDetailsLookup.Services.Vehicle.Details;
 using VehicleDetailsLookup.Shared.Models.Image;
 
@@ -22,7 +23,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.Images
         public async ValueTask<IEnumerable<IImageModel>?> GetVehicleImagesAsync(string registrationNumber)
         {
             // Check if the vehicle images are already stored in the database
-            var dbImages = _imageRepository.GetImages(registrationNumber);
+            var dbImages = await _imageRepository.GetImagesAsync(registrationNumber);
 
             if (dbImages != null && dbImages.All(image => image.Updated > DateTime.UtcNow.AddDays(-1)))
             {
@@ -47,7 +48,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.Images
 
             // Map the API response to database model and update the repository
             dbImages = _apiMapper.MapImages(registrationNumber, googleImageResponse.Items);
-            _imageRepository.UpdateImages(dbImages);
+            await _imageRepository.UpdateImagesAsync(dbImages);
 
             return _databaseMapper.MapImages(dbImages);
         }

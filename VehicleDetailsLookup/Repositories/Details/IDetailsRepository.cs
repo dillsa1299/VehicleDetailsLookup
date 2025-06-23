@@ -1,6 +1,6 @@
 ﻿using VehicleDetailsLookup.Models.Database.Details;
 
-namespace VehicleDetailsLookup.Repositories
+namespace VehicleDetailsLookup.Repositories.Details
 {
     /// <summary>
     /// Provides methods for managing and retrieving vehicle details records from the database.
