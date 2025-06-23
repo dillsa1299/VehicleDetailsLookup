@@ -3,7 +3,7 @@ using VehicleDetailsLookup.Models.ApiResponses.Gemini;
 using VehicleDetailsLookup.Models.ApiResponses.GoogleImage;
 using VehicleDetailsLookup.Models.ApiResponses.Mot;
 using VehicleDetailsLookup.Models.ApiResponses.Ves;
-using VehicleDetailsLookup.Models.Database.Ai;
+using VehicleDetailsLookup.Models.Database.AiData;
 using VehicleDetailsLookup.Models.Database.Details;
 using VehicleDetailsLookup.Models.Database.Image;
 using VehicleDetailsLookup.Models.Database.Mot;
@@ -84,7 +84,7 @@ namespace VehicleDetailsLookup.Services.Mappers
                 });
         }
 
-        public IAiDataDbModel MapAi(string registrationNumber, AiType type, IGeminiResponse geminiResponse)
+        public IAiDataDbModel MapAiData(string registrationNumber, AiType type, IGeminiResponse geminiResponse)
         {
             return new AiDataDbModel
             {

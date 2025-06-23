@@ -1,28 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using VehicleDetailsLookup.Repositories;
 using VehicleDetailsLookup.Services.Vehicle.Details;
-using VehicleDetailsLookup.Services.VehicleData;
 using VehicleDetailsLookup.Shared.Helpers;
 
 namespace VehicleDetailsLookup.Controllers
 {
+    /// <summary>
+    /// API controller for retrieving vehicle details and recording lookup history.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class VehicleDetailsController(IVehicleDetailsService vehicleDetailsService, IVehicleDataService vehicleDataService) : ControllerBase
+    public class VehicleDetailsController(IVehicleDetailsService vehicleDetailsService) : ControllerBase
     {
         private readonly IVehicleDetailsService _vehicleDetailsService = vehicleDetailsService
             ?? throw new ArgumentNullException(nameof(vehicleDetailsService));
 
-        private readonly IVehicleDataService _vehicleDataService = vehicleDataService
-            ?? throw new ArgumentNullException(nameof(vehicleDataService));
-
         /// <summary>
-        /// Retrieves detailed information about a vehicle using its registration number.
+        /// Retrieves detailed information for a vehicle by its registration number.
         /// </summary>
-        /// <param name="registrationNumber">The unique registration number of the vehicle to look up.</param>
+        /// <param name="registrationNumber">The registration number of the vehicle to look up.</param>
         /// <returns>
-        /// Returns <see cref="OkObjectResult"/> with the vehicle details if found;
+        /// An <see cref="OkObjectResult"/> containing the vehicle details if found;
         /// <see cref="BadRequestObjectResult"/> if the registration number is invalid;
-        /// or <see cref="NotFoundObjectResult"/> if the vehicle is not found.
+        /// <see cref="NotFoundObjectResult"/> if the vehicle details cannot be retrieved.
         /// </returns>
         [HttpGet("{registrationNumber}")]
         public async Task<IActionResult> GetVehicleDetails(string registrationNumber)
@@ -34,14 +34,12 @@ namespace VehicleDetailsLookup.Controllers
             if (string.IsNullOrWhiteSpace(registrationNumber) || !regex.IsMatch(registrationNumber))
                 return BadRequest("Invalid registration number.");
 
-            var vehicle = await _vehicleDetailsService.GetVehicleDetailsAsync(registrationNumber);
+            var vehicleDetails = await _vehicleDetailsService.GetVehicleDetailsAsync(registrationNumber);
 
-            if (vehicle == null || string.IsNullOrEmpty(vehicle.RegistrationNumber))
-                return NotFound("Vehicle not found.");
+            if (vehicleDetails == null)
+                return NotFound("Unable to retrieve vehicle details.");
 
-            _vehicleDataService.LogLookup(vehicle);
-
-            return Ok(vehicle);
+            return Ok(vehicleDetails);
         }
     }
 }

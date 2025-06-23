@@ -8,38 +8,38 @@ namespace VehicleDetailsLookup.Repositories
     {
         private readonly VehicleDbContext _dbContext = dbContext;
 
-        public void AddLookup(string registrationNumber)
+        public async Task AddLookup(string registrationNumber)
         {
             var lookup = new LookupDbModel
             {
                 RegistrationNumber = registrationNumber,
                 DateTime = DateTime.UtcNow
             };
-            _dbContext.Lookups.Add(lookup);
-            _dbContext.SaveChanges();
+            await _dbContext.Lookups.AddAsync(lookup);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public IEnumerable<ILookupDbModel>? GetRecentLookups(int count)
+        public async ValueTask<IEnumerable<ILookupDbModel>?> GetRecentLookupsAsync(int count)
         {
-            return _dbContext.Lookups
+            return await _dbContext.Lookups
                 .Include(l => l.Details)
                 .OrderByDescending(l => l.DateTime)
                 .Take(count)
-                .ToList();
+                .ToListAsync();
         }
 
-        public IEnumerable<ILookupDbModel>? GetVehicleLookups(string registrationNumber)
+        public async ValueTask<IEnumerable<ILookupDbModel>?> GetVehicleLookupsAsync(string registrationNumber)
         {
-            return _dbContext.Lookups
+            return await _dbContext.Lookups
                 .Include(l => l.Details)
                 .Where(l => l.RegistrationNumber == registrationNumber)
                 .OrderByDescending(l => l.DateTime)
-                .ToList();
+                .ToListAsync();
         }
 
-        public int GetVehicleLookupCount(string registrationNumber)
+        public async ValueTask<int> GetVehicleLookupCountAsync(string registrationNumber)
         {
-            return _dbContext.Lookups.Count(l => l.RegistrationNumber == registrationNumber);
+            return await _dbContext.Lookups.CountAsync(l => l.RegistrationNumber == registrationNumber);
         }
     }
 }

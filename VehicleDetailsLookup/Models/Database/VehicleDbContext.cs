@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using VehicleDetailsLookup.Models.Database.Ai;
+using VehicleDetailsLookup.Models.Database.AiData;
 using VehicleDetailsLookup.Models.Database.Image;
 using VehicleDetailsLookup.Models.Database.Details;
 using VehicleDetailsLookup.Models.Database.Mot;
