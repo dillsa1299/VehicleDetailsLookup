@@ -1,6 +1,10 @@
 ﻿using System.Net.Http.Json;
+using VehicleDetailsLookup.Shared.Models.AiData;
+using VehicleDetailsLookup.Shared.Models.Details;
 using VehicleDetailsLookup.Shared.Models.Enums;
+using VehicleDetailsLookup.Shared.Models.Image;
 using VehicleDetailsLookup.Shared.Models.Lookup;
+using VehicleDetailsLookup.Shared.Models.Mot;
 using VehicleDetailsLookup.Shared.Models.Vehicle;
 
 namespace VehicleDetailsLookup.Client.Services.VehicleLookup
@@ -9,46 +13,60 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
     {
         private readonly HttpClient _httpClient = httpClient;
 
-        public async Task<VehicleModel> GetVehicleDetailsAsync(string registrationNumber)
+        public async ValueTask<IDetailsModel?> GetVehicleDetailsAsync(string registrationNumber)
         {
             // Call the backend API to retrieve vehicle details.
             var response = await _httpClient.GetAsync($"/api/VehicleDetails/{registrationNumber}");
 
-            // Return an empty VehicleModel if the request fails or vehicle not found.
             if (!response.IsSuccessStatusCode)
-                return new VehicleModel();
+                // Return null if the request fails or vehicle not found.
+                return null;
 
-            var vehicle = await response.Content.ReadFromJsonAsync<VehicleModel>();
+            var details = await response.Content.ReadFromJsonAsync<IDetailsModel>();
 
-            return vehicle is null ? throw new InvalidOperationException("Failed to deserialize vehicle data.") : vehicle;
+            return details;
         }
 
-        public async Task<VehicleModel> GetVehicleImagesAsync(string registrationNumber)
+        public async ValueTask<IEnumerable<IMotTestModel>?> GetMotTestsAsync(string registrationNumber)
+        {
+            // Call the backend API to retrieve vehicle MOT tests.
+            var response = await _httpClient.GetAsync($"/api/VehicleMot/{registrationNumber}");
+
+            // Return an empty list if the request fails or MOT tests not found.
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            var motTests = await response.Content.ReadFromJsonAsync<IEnumerable<IMotTestModel>>();
+
+            return motTests;
+        }
+
+        public async ValueTask<IEnumerable<IImageModel>?> GetVehicleImagesAsync(string registrationNumber)
         {
             // Call the backend API to retrieve vehicle images.
             var response = await _httpClient.GetAsync($"/api/VehicleImages/{registrationNumber}");
 
             // Return an empty VehicleModel if the request fails or vehicle not found.
             if (!response.IsSuccessStatusCode)
-                return new VehicleModel();
+                return null;
 
-            var vehicle = await response.Content.ReadFromJsonAsync<VehicleModel>();
+            var images = await response.Content.ReadFromJsonAsync<IEnumerable<IImageModel>>();
 
-            return vehicle is null ? throw new InvalidOperationException("Failed to deserialize vehicle data.") : vehicle;
+            return images;
         }
 
-        public async Task<VehicleModel> GetVehicleAIAsync(string registrationNumber, AiType type)
+        public async ValueTask<IAiDataModel?> GetVehicleAiDataAsync(string registrationNumber, AiType type)
         {
             // Call the backend API to retrieve vehicle AI.
-            var response = await _httpClient.GetAsync($"/api/VehicleAi/{type}/{registrationNumber}");
+            var response = await _httpClient.GetAsync($"/api/VehicleAiData/{registrationNumber}/{type}");
 
             // Return an empty VehicleModel if the request fails or vehicle not found.
             if (!response.IsSuccessStatusCode)
-                return new VehicleModel();
+                return null;
 
-            var vehicle = await response.Content.ReadFromJsonAsync<VehicleModel>();
+            var aiData = await response.Content.ReadFromJsonAsync<IAiDataModel>();
 
-            return vehicle is null ? throw new InvalidOperationException("Failed to deserialize vehicle data.") : vehicle;
+            return aiData;
         }
 
         public async Task<int> GetVehicleLookupCountAsync(string registrationNumber)
