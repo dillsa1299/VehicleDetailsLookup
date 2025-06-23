@@ -1,6 +1,7 @@
-﻿using VehicleDetailsLookup.Repositories;
+﻿using VehicleDetailsLookup.Repositories.Mot;
 using VehicleDetailsLookup.Services.Api.Mot;
-using VehicleDetailsLookup.Services.Mappers;
+using VehicleDetailsLookup.Services.Mappers.ApiDatabase;
+using VehicleDetailsLookup.Services.Mappers.DatabaseFrontend;
 using VehicleDetailsLookup.Shared.Models.Mot;
 
 namespace VehicleDetailsLookup.Services.Vehicle.Mot
@@ -19,7 +20,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.Mot
         public async ValueTask<IEnumerable<IMotTestModel>?> GetVehicleMotTestsAsync(string registrationNumber)
         {
             // Check if the MOT tests are already stored in the database
-            var dbMotTests = _motRepository.GetMotTests(registrationNumber);
+            var dbMotTests = await _motRepository.GetMotTestsAsync(registrationNumber);
             if (dbMotTests != null && dbMotTests.All(test => test.Updated > DateTime.UtcNow.AddMinutes(-15)))
             {
                 // Return stored MOT tests if they are recent enough
@@ -35,7 +36,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.Mot
 
             // Map the API response to database models and update the repository
             dbMotTests = _apiMapper.MapMotTests(registrationNumber, motResponse.MotTests);
-            _motRepository.UpdateMotTests(dbMotTests);
+            await _motRepository.UpdateMotTestsAsync(dbMotTests);
 
             return _databaseMapper.MapMotTests(dbMotTests);
         }

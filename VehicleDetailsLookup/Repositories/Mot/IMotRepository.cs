@@ -1,6 +1,6 @@
 ﻿using VehicleDetailsLookup.Models.Database.Mot;
 
-namespace VehicleDetailsLookup.Repositories
+namespace VehicleDetailsLookup.Repositories.Mot
 {
     /// <summary>
     /// Defines a contract for managing and retrieving MOT (Ministry of Transport) test records for vehicles from the database.

@@ -20,7 +20,7 @@ namespace VehicleDetailsLookup.Services.Api.Mot
                            ?? throw new InvalidOperationException("MOT API ScopeUrl not found in configuration.");
         private readonly string _tokenUrl = configuration["APIs:MOT:TokenUrl"]
                            ?? throw new InvalidOperationException("MOT API TokenUrl not found in configuration.");
-        private IMotAuthToken _authToken = new MotAuthToken();
+        private MotAuthToken _authToken = new();
 
         private readonly JsonSerializerOptions _jsonSerializerOptions = new()
         {

@@ -2,7 +2,7 @@
 using VehicleDetailsLookup.Models.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace VehicleDetailsLookup.Repositories
+namespace VehicleDetailsLookup.Repositories.Details
 {
     public class DetailsRepository(VehicleDbContext dbContext) : IDetailsRepository
     {

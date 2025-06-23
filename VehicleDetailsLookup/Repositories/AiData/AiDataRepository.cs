@@ -3,7 +3,7 @@ using VehicleDetailsLookup.Models.Database;
 using VehicleDetailsLookup.Models.Database.AiData;
 using VehicleDetailsLookup.Shared.Models.Enums;
 
-namespace VehicleDetailsLookup.Repositories
+namespace VehicleDetailsLookup.Repositories.AiData
 {
     public class AiDataRepository(VehicleDbContext dbContext) : IAiDataRepository
     {

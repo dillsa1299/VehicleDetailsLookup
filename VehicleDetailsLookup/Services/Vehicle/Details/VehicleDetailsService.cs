@@ -1,11 +1,12 @@
-﻿using VehicleDetailsLookup.Repositories;
+﻿using VehicleDetailsLookup.Repositories.Details;
+using VehicleDetailsLookup.Repositories.Lookup;
 using VehicleDetailsLookup.Services.Api.Mot;
 using VehicleDetailsLookup.Services.Api.Ves;
-using VehicleDetailsLookup.Services.Mappers;
-using VehicleDetailsLookup.Services.Vehicle.Details;
+using VehicleDetailsLookup.Services.Mappers.ApiDatabase;
+using VehicleDetailsLookup.Services.Mappers.DatabaseFrontend;
 using VehicleDetailsLookup.Shared.Models.Details;
 
-namespace VehicleDetailsLookup.Services.Vehicle.VehicleDetails
+namespace VehicleDetailsLookup.Services.Vehicle.Details
 {
     public class VehicleDetailsService(IDetailsRepository detailsRepository, ILookupRepository lookupRepository, IVesService vesService, IMotService motService, IApiDatabaseMapperService apiMapper, IDatabaseFrontendMapperService databaseMapper) : IVehicleDetailsService
     {
@@ -25,7 +26,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.VehicleDetails
         public async ValueTask<IDetailsModel?> GetVehicleDetailsAsync(string registrationNumber)
         {
             // Check if the vehicle details are already stored in the database
-            var dbDetails = _detailsRepository.GetDetails(registrationNumber);
+            var dbDetails = await _detailsRepository.GetDetailsAsync(registrationNumber);
 
             if (dbDetails?.Updated > DateTime.UtcNow.AddMinutes(-15))
             {
@@ -44,10 +45,10 @@ namespace VehicleDetailsLookup.Services.Vehicle.VehicleDetails
 
             // Map the API responses to database models and update the repository
             dbDetails = _apiMapper.MapDetails(vesResponse, motResponse);
-            _detailsRepository.UpdateDetails(dbDetails);
+            await _detailsRepository.UpdateDetailsAsync(dbDetails);
 
             // Log the lookup
-            lookupRepository.AddLookup(registrationNumber);
+            await lookupRepository.AddLookupAsync(registrationNumber);
 
             return _databaseMapper.MapDetails(dbDetails);
         }

@@ -4,7 +4,7 @@
 @using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotStatus
 @using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.TaxStatus
 
-@if ((Vehicle != null && !String.IsNullOrEmpty(Vehicle.RegistrationNumber)) || _isSearchingDetails)
+@if ((Vehicle != null && Vehicle.Details != null) || _isSearchingDetails)
 {
     <div class="mt-2">
         <ImageViewer Images="@Vehicle?.Images" PlaceholderImage="@_placeholderImage" IsSearching="@(_isSearchingImages || _isSearchingDetails)" />
@@ -35,7 +35,7 @@
                 <MudPaper Class="pa-4" Elevation="1">
                     <div class="d-flex align-items-start" style="width: 100%;">
                         <div style="flex: 1; text-align: center;">
-                            <MudText Typo="Typo.h3">@Vehicle?.YearOfManufacture @Vehicle?.Make @Vehicle?.Model</MudText>
+                            <MudText Typo="Typo.h3">@Vehicle?.Details?.YearOfManufacture @Vehicle?.Details?.Make @Vehicle?.Details?.Model</MudText>
                         </div>
                         <div>
                             <MudBadge Content="@_vehicleLookupCount" Overlap="true" Color="@Color.Primary">
@@ -50,23 +50,23 @@
                         <RowTemplate>
                             <MudTr>
                                 <MudTd>Colour</MudTd>
-                                <MudTd>@context?.Colour</MudTd>
+                                <MudTd>@context?.Details?.Colour</MudTd>
                             </MudTr>
                             <MudTr>
                                 <MudTd>Engine capacity</MudTd>
-                                <MudTd>@context?.EngineCapacity</MudTd>
+                                <MudTd>@context?.Details?.EngineCapacity</MudTd>
                             </MudTr>
                             <MudTr>
                                 <MudTd>Fuel</MudTd>
-                                <MudTd>@context?.FuelType</MudTd>
+                                <MudTd>@context?.Details?.FuelType</MudTd>
                             </MudTr>
                             <MudTr>
                                 <MudTd>First registered</MudTd>
-                                <MudTd>@context?.MonthOfFirstRegistration.ToString("MMMM yyyy")</MudTd>
+                                <MudTd>@context?.Details?.MonthOfFirstRegistration.ToString("MMMM yyyy")</MudTd>
                             </MudTr>
                             <MudTr>
                                 <MudTd>Last V5C issued</MudTd>
-                                <MudTd>@context?.DateOfLastV5CIssued</MudTd>
+                                <MudTd>@context?.Details?.DateOfLastV5CIssued</MudTd>
                             </MudTr>
                         </RowTemplate>
                     </MudTable>

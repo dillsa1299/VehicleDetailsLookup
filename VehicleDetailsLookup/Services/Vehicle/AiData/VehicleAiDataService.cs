@@ -1,9 +1,10 @@
-﻿using VehicleDetailsLookup.Repositories;
+﻿using VehicleDetailsLookup.Repositories.AiData;
 using VehicleDetailsLookup.Services.Api.Gemini;
-using VehicleDetailsLookup.Services.Mappers;
+using VehicleDetailsLookup.Services.Mappers.ApiDatabase;
+using VehicleDetailsLookup.Services.Mappers.DatabaseFrontend;
 using VehicleDetailsLookup.Services.Vehicle.Details;
 using VehicleDetailsLookup.Services.Vehicle.Mot;
-using VehicleDetailsLookup.Shared.Models.AiData;
+using VehicleDetailsLookup.Shared.Models.Ai;
 using VehicleDetailsLookup.Shared.Models.Details;
 using VehicleDetailsLookup.Shared.Models.Enums;
 using VehicleDetailsLookup.Shared.Models.Mot;
@@ -28,7 +29,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
         public async ValueTask<IAiDataModel?> GetVehicleAiDataAsync(string registrationNumber, AiType searchType)
         {
             // Check if the vehicle details are already stored in the database
-            var dbAiData = _aiDataRepository.GetAiData(registrationNumber, searchType);
+            var dbAiData = await _aiDataRepository.GetAiDataAsync(registrationNumber, searchType);
             
             TimeSpan cacheDuration = searchType == AiType.MotHistorySummary
                 ? TimeSpan.FromMinutes(15) // MOT history summary cache duration
@@ -69,7 +70,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
 
             // Map the API response to database model and update the repository
             dbAiData = _apiMapper.MapAiData(registrationNumber, searchType, geminiResponse);
-            _aiDataRepository.UpdateAiData(dbAiData);
+            await _aiDataRepository.UpdateAiDataAsync(dbAiData);
 
             return _databaseMapper.MapAiData(dbAiData);
         }
@@ -85,18 +86,14 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
                 carDetails = $"Year={vehicleDetails.YearOfManufacture}, Make={vehicleDetails.Make}, Model={vehicleDetails.Model}, Fuel Type={vehicleDetails.FuelType}, Engine Capacity={vehicleDetails.EngineCapacity}";
             }
 
-            switch (searchType)
+            return searchType switch
             {
-                case AiType.Overview:
-                    return $"Provide a brief overview of the following UK specification vehicle searching for additional information such as performance and pricing. " +
-                           $"Don't discuss common issues. Give me the information directly without any introductory sentences or titles: {carDetails}";
-                case AiType.CommonIssues:
-                    return $"List the common issues with the UK specification of the following vehicle with no introduction/title: {carDetails}";
-                case AiType.MotHistorySummary:
-                    return $"Provide an overall summary for the following UK MOT test results. Exclude any introductory sentences: {motTests}";
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(searchType), searchType, null);
-            }
+                AiType.Overview => $"Provide a brief overview of the following UK specification vehicle searching for additional information such as performance and pricing. " +
+                                           $"Don't discuss common issues. Give me the information directly without any introductory sentences or titles: {carDetails}",
+                AiType.CommonIssues => $"List the common issues with the UK specification of the following vehicle with no introduction/title: {carDetails}",
+                AiType.MotHistorySummary => $"Provide an overall summary for the following UK MOT test results. Exclude any introductory sentences: {motTests}",
+                _ => throw new ArgumentOutOfRangeException(nameof(searchType), searchType, null),
+            };
         }
     }
 }

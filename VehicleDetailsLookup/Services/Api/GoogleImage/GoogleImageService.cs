@@ -1,7 +1,6 @@
 ﻿using VehicleDetailsLookup.Models.ApiResponses.GoogleImage;
-using VehicleDetailsLookup.Services.Api.GoogleImage;
 
-namespace VehicleDetailsLookup.Services.Api.ImageSearch
+namespace VehicleDetailsLookup.Services.Api.GoogleImage
 {
     public class GoogleImageService(HttpClient httpClient, IConfiguration configuration) : IGoogleImageService
     {

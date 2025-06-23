@@ -7,6 +7,10 @@
         /// </summary>
         Details,
         /// <summary>
+        /// MOT history
+        /// </summary>
+        MotHistory,
+        /// <summary>
         /// Images
         /// </summary>
         Images,

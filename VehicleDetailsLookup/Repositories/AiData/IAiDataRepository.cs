@@ -2,7 +2,7 @@
 using VehicleDetailsLookup.Shared.Models.Enums;
 using System.Threading.Tasks;
 
-namespace VehicleDetailsLookup.Repositories
+namespace VehicleDetailsLookup.Repositories.AiData
 {
     /// <summary>
     /// Defines methods for storing and retrieving AI-generated vehicle data in the database.

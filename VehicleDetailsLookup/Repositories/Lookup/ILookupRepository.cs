@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-namespace VehicleDetailsLookup.Repositories
+namespace VehicleDetailsLookup.Repositories.Lookup
 {
     /// <summary>
     /// Defines methods for managing and retrieving vehicle lookup records from the database.
@@ -13,7 +13,7 @@ namespace VehicleDetailsLookup.Repositories
         /// Adds a new lookup record for the specified vehicle registration number.
         /// </summary>
         /// <param name="registrationNumber">The registration number of the vehicle to add a lookup for.</param>
-        Task AddLookup(string registrationNumber);
+        Task AddLookupAsync(string registrationNumber);
 
         /// <summary>
         /// Retrieves a collection of the most recent vehicle lookup records.

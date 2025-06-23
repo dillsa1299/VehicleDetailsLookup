@@ -2,7 +2,7 @@
 using VehicleDetailsLookup.Models.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace VehicleDetailsLookup.Repositories
+namespace VehicleDetailsLookup.Repositories.Mot
 {
     public class MotRepository(VehicleDbContext dbContext) : IMotRepository
     {

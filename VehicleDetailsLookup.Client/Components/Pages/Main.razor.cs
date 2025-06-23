@@ -25,11 +25,11 @@ namespace VehicleDetailsLookup.Client.Components.Pages
         [Parameter]
         public string? RegistrationNumberUrlInput { get; set; }
 
-        private string PageTitle => string.IsNullOrEmpty(_vehicle?.RegistrationNumber) ? "Vehicle Details Lookup"
-            : $"{_vehicle?.YearOfManufacture} {_vehicle?.Make} {_vehicle?.Model} | VDL";
+        private string PageTitle => string.IsNullOrEmpty(_vehicle?.Details?.RegistrationNumber) ? "Vehicle Details Lookup"
+            : $"{_vehicle?.Details?.YearOfManufacture} {_vehicle?.Details?.Make} {_vehicle?.Details?.Model} | VDL";
 
         private bool IsRecentLookupsHidden
-            => _lookupInProgress || !string.IsNullOrEmpty(_vehicle.RegistrationNumber);
+            => _lookupInProgress || !string.IsNullOrEmpty(_vehicle.Details?.RegistrationNumber);
 
         private VehicleModel _vehicle = new();
         private bool _lookupInProgress;
@@ -39,37 +39,64 @@ namespace VehicleDetailsLookup.Client.Components.Pages
             switch (lookupType)
             {
                 case VehicleLookupType.Details:
-                    _vehicle = await VehicleLookupService.GetVehicleDetailsAsync(registrationNumber);
+                    _vehicle.Details = await VehicleLookupService.GetVehicleDetailsAsync(registrationNumber);
 
-                    // Update URL if vehicle found
-                    var url = string.IsNullOrWhiteSpace(_vehicle.RegistrationNumber) ? "/" : $"/{_vehicle.RegistrationNumber}";
+                    // Update URL
+                    var url = _vehicle.Details == null
+                        ? "/"
+                        : $"/{_vehicle.Details.RegistrationNumber}";
                     NavigationManager.NavigateTo(url, forceLoad: false);
 
                     // Dont waste further API calls on failed lookup
-                    if (string.IsNullOrEmpty(_vehicle.RegistrationNumber)) return;
+                    if (_vehicle.Details == null) return;
 
                     // Perform parallel lookups for images and AI overview, but do not await them
                     _ = VehicleLookupEventsService.NotifyStartVehicleLookup(registrationNumber, VehicleLookupType.Images);
                     _ = VehicleLookupEventsService.NotifyStartVehicleLookup(registrationNumber, VehicleLookupType.AiOverview);
                     break;
-
+                case VehicleLookupType.MotHistory:
+                    _vehicle.MotTests = await VehicleLookupService.GetMotTestsAsync(registrationNumber) ?? [];
+                    break;
                 case VehicleLookupType.Images:
-                    _vehicle = await VehicleLookupService.GetVehicleImagesAsync(_vehicle.RegistrationNumber);
+                    _vehicle.Images = await VehicleLookupService.GetVehicleImagesAsync(registrationNumber) ?? [];
                     break;
                 case VehicleLookupType.AiOverview:
-                    _vehicle = await VehicleLookupService.GetVehicleAIAsync(_vehicle.RegistrationNumber, AiType.Overview);
-                    break;
                 case VehicleLookupType.AiCommonIssues:
-                    _vehicle = await VehicleLookupService.GetVehicleAIAsync(_vehicle.RegistrationNumber, AiType.CommonIssues);
-                    break;
                 case VehicleLookupType.AiMotHistorySummary:
-                    _vehicle = await VehicleLookupService.GetVehicleAIAsync(_vehicle.RegistrationNumber, AiType.MotHistorySummary);
+                    await GetAiData(registrationNumber, lookupType);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(lookupType), lookupType, null);
             }
 
             StateHasChanged();
+        }
+
+        private async Task GetAiData(string registrationNumber, VehicleLookupType lookupType)
+        {
+            var aiType = lookupType switch
+            {
+                VehicleLookupType.AiOverview => AiType.Overview,
+                VehicleLookupType.AiCommonIssues => AiType.CommonIssues,
+                VehicleLookupType.AiMotHistorySummary => AiType.MotHistorySummary,
+                _ => throw new ArgumentOutOfRangeException(nameof(lookupType), lookupType, null)
+            };
+
+            var aiData = await VehicleLookupService.GetVehicleAiDataAsync(registrationNumber, aiType);
+
+            if (aiData == null)
+            {
+                // If AI data is not found, clear any existing data for this type
+                _vehicle.AiData.Remove(aiType);
+                return;
+            }
+
+            // If AI data is found, add or update it in the vehicle model
+            if (!_vehicle.AiData.TryAdd(aiType, aiData))
+            {
+                // Update the existing entry
+                _vehicle.AiData[aiType] = aiData;
+            }
         }
 
         private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber)
@@ -93,7 +120,7 @@ namespace VehicleDetailsLookup.Client.Components.Pages
         {
             if (!String.IsNullOrEmpty(RegistrationNumberUrlInput)
                 && OperatingSystem.IsBrowser()
-                && !RegistrationNumberUrlInput.Replace(" ", "").Equals(_vehicle.RegistrationNumber, StringComparison.InvariantCultureIgnoreCase))
+                && !RegistrationNumberUrlInput.Replace(" ", "").Equals(_vehicle?.Details?.RegistrationNumber, StringComparison.InvariantCultureIgnoreCase))
                 await VehicleLookupEventsService.NotifyStartVehicleLookup(RegistrationNumberUrlInput, VehicleLookupType.Details);
 
             await base.OnParametersSetAsync();

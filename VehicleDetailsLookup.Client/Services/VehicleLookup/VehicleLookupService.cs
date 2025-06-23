@@ -1,5 +1,5 @@
 ﻿using System.Net.Http.Json;
-using VehicleDetailsLookup.Shared.Models.AiData;
+using VehicleDetailsLookup.Shared.Models.Ai;
 using VehicleDetailsLookup.Shared.Models.Details;
 using VehicleDetailsLookup.Shared.Models.Enums;
 using VehicleDetailsLookup.Shared.Models.Image;

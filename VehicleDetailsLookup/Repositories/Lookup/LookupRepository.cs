@@ -2,13 +2,13 @@
 using VehicleDetailsLookup.Models.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace VehicleDetailsLookup.Repositories
+namespace VehicleDetailsLookup.Repositories.Lookup
 {
     public class LookupRepository(VehicleDbContext dbContext) : ILookupRepository
     {
         private readonly VehicleDbContext _dbContext = dbContext;
 
-        public async Task AddLookup(string registrationNumber)
+        public async Task AddLookupAsync(string registrationNumber)
         {
             var lookup = new LookupDbModel
             {
