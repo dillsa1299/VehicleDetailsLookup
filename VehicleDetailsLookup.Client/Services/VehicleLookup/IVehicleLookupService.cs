@@ -1,58 +1,69 @@
-﻿using System.Net.Http;
+﻿using VehicleDetailsLookup.Shared.Models.AiData;
+using VehicleDetailsLookup.Shared.Models.Details;
 using VehicleDetailsLookup.Shared.Models.Enums;
+using VehicleDetailsLookup.Shared.Models.Image;
 using VehicleDetailsLookup.Shared.Models.Lookup;
-using VehicleDetailsLookup.Shared.Models.Vehicle;
+using VehicleDetailsLookup.Shared.Models.Mot;
 
 namespace VehicleDetailsLookup.Client.Services.VehicleLookup
 {
     /// <summary>
-    /// Provides methods for retrieving vehicle details, images, AI-generated information, and lookup statistics from the backend.
+    /// Provides methods for retrieving vehicle-related data from the backend, including vehicle details, images, AI-generated insights, MOT history, and lookup statistics.
     /// </summary>
     public interface IVehicleLookupService
     {
         /// <summary>
-        /// Retrieves detailed information about a vehicle by its registration number.
+        /// Retrieves detailed information about a vehicle asynchronously using its registration number.
         /// </summary>
-        /// <param name="registrationNumber">The vehicle's registration number.</param>
+        /// <param name="registrationNumber">The registration number of the vehicle to look up.</param>
         /// <returns>
-        /// A <see cref="VehicleModel"/> containing the vehicle's details.
+        /// A <see cref="ValueTask{TResult}"/> whose result is an <see cref="IDetailsModel"/> containing vehicle details, or <c>null</c> if not found.
         /// </returns>
-        Task<VehicleModel> GetVehicleDetailsAsync(string registrationNumber);
+        ValueTask<IDetailsModel?> GetVehicleDetailsAsync(string registrationNumber);
 
         /// <summary>
-        /// Retrieves image data associated with a vehicle by its registration number.
+        /// Retrieves the MOT test history for a vehicle asynchronously by its registration number.
         /// </summary>
-        /// <param name="registrationNumber">The vehicle's registration number.</param>
+        /// <param name="registrationNumber">The registration number of the vehicle.</param>
         /// <returns>
-        /// A <see cref="VehicleModel"/> containing the vehicle's image data.
+        /// A <see cref="ValueTask{TResult}"/> whose result is a collection of <see cref="IMotTestModel"/> instances, or <c>null</c> if not found.
         /// </returns>
-        Task<VehicleModel> GetVehicleImagesAsync(string registrationNumber);
+        ValueTask<IEnumerable<IMotTestModel>?> GetMotTestsAsync(string registrationNumber);
 
         /// <summary>
-        /// Retrieves AI-generated data for a vehicle, such as overviews or common issues, based on the specified AI data type.
+        /// Retrieves all images associated with a vehicle asynchronously by its registration number.
         /// </summary>
-        /// <param name="registrationNumber">The vehicle's registration number.</param>
-        /// <param name="type">The type of AI data to retrieve (e.g., overview, common issues).</param>
+        /// <param name="registrationNumber">The registration number of the vehicle.</param>
         /// <returns>
-        /// A <see cref="VehicleModel"/> containing the requested AI-generated data.
+        /// A <see cref="ValueTask{TResult}"/> whose result is a collection of <see cref="IImageModel"/> instances, or <c>null</c> if not found.
         /// </returns>
-        Task<VehicleModel> GetVehicleAIAsync(string registrationNumber, AiType type);
+        ValueTask<IEnumerable<IImageModel>?> GetVehicleImagesAsync(string registrationNumber);
 
         /// <summary>
-        /// Retrieves the number of times a vehicle has been looked up by its registration number.
+        /// Retrieves AI-generated data for a vehicle asynchronously, filtered by registration number and AI data type.
         /// </summary>
-        /// <param name="registrationNumber">The vehicle's registration number.</param>
+        /// <param name="registrationNumber">The registration number of the vehicle.</param>
+        /// <param name="type">The <see cref="AiType"/> specifying the category of AI-generated information to retrieve.</param>
         /// <returns>
-        /// An <see cref="int"/> representing the total lookup count for the specified vehicle.
+        /// A <see cref="ValueTask{TResult}"/> whose result is an <see cref="IAiDataModel"/> with the requested AI data, or <c>null</c> if not found.
         /// </returns>
-        Task<int> GetVehicleLookupCountAsync(string registrationNumber);
+        ValueTask<IAiDataModel?> GetVehicleAiDataAsync(string registrationNumber, AiType type);
 
         /// <summary>
-        /// Retrieves a collection of recent vehicle lookups.
+        /// Retrieves the total number of times a vehicle has been looked up asynchronously, identified by its registration number.
+        /// </summary>
+        /// <param name="registrationNumber">The registration number of the vehicle.</param>
+        /// <returns>
+        /// A <see cref="ValueTask{TResult}"/> whose result is the lookup count as an <see cref="int"/>, or <c>null</c> if not found.
+        /// </returns>
+        ValueTask<int?> GetVehicleLookupCountAsync(string registrationNumber);
+
+        /// <summary>
+        /// Retrieves a collection of recent vehicle lookup records asynchronously.
         /// </summary>
         /// <returns>
-        /// An <see cref="IEnumerable{VehicleLookupModel}"/> containing details of recently looked up vehicles.
+        /// A <see cref="ValueTask{TResult}"/> whose result is a collection of <see cref="ILookupModel"/> instances, or <c>null</c> if not found.
         /// </returns>
-        Task<IEnumerable<LookupModel>> GetRecentVehicleLookupsAsync();
+        ValueTask<IEnumerable<ILookupModel>?> GetRecentVehicleLookupsAsync();
     }
 }
