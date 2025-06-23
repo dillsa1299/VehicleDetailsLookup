@@ -5,7 +5,6 @@ using VehicleDetailsLookup.Shared.Models.Enums;
 using VehicleDetailsLookup.Shared.Models.Image;
 using VehicleDetailsLookup.Shared.Models.Lookup;
 using VehicleDetailsLookup.Shared.Models.Mot;
-using VehicleDetailsLookup.Shared.Models.Vehicle;
 
 namespace VehicleDetailsLookup.Client.Services.VehicleLookup
 {
@@ -32,7 +31,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             // Call the backend API to retrieve vehicle MOT tests.
             var response = await _httpClient.GetAsync($"/api/VehicleMot/{registrationNumber}");
 
-            // Return an empty list if the request fails or MOT tests not found.
+            // Return null if the request fails or no MOT tests found.
             if (!response.IsSuccessStatusCode)
                 return null;
 
@@ -46,7 +45,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             // Call the backend API to retrieve vehicle images.
             var response = await _httpClient.GetAsync($"/api/VehicleImages/{registrationNumber}");
 
-            // Return an empty VehicleModel if the request fails or vehicle not found.
+            // Return null if the request fails or no images found.
             if (!response.IsSuccessStatusCode)
                 return null;
 
@@ -60,7 +59,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             // Call the backend API to retrieve vehicle AI.
             var response = await _httpClient.GetAsync($"/api/VehicleAiData/{registrationNumber}/{type}");
 
-            // Return an empty VehicleModel if the request fails or vehicle not found.
+            // Return null if the request fails or AI data not found.
             if (!response.IsSuccessStatusCode)
                 return null;
 
@@ -69,32 +68,32 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             return aiData;
         }
 
-        public async Task<int> GetVehicleLookupCountAsync(string registrationNumber)
+        public async ValueTask<int?> GetVehicleLookupCountAsync(string registrationNumber)
         {
             // Call the backend API to retrieve the vehicle lookup count.
             var response = await _httpClient.GetAsync($"/api/VehicleLookupHistory/count/{registrationNumber}");
 
-            // Return 0 if the request fails or vehicle not found.
+            // Return null if the request fails or no lookup history found.
             if (!response.IsSuccessStatusCode)
-                return 0;
+                return null;
 
             var count = await response.Content.ReadFromJsonAsync<int>();
 
             return count;
         }
 
-        public async Task<IEnumerable<LookupModel>> GetRecentVehicleLookupsAsync()
+        public async ValueTask<IEnumerable<ILookupModel>?> GetRecentVehicleLookupsAsync()
         {
             // Call the backend API to retrieve recent vehicle lookups.
             var response = await _httpClient.GetAsync("/api/VehicleLookupHistory/recent");
 
-            // Return an empty list if the request fails or no recent vehicles found.
+            // Return null if the request fails or no recent lookups found.
             if (!response.IsSuccessStatusCode)
-                return [];
+                return null;
 
-            var vehicles = await response.Content.ReadFromJsonAsync<IEnumerable<LookupModel>>();
+            var lookups = await response.Content.ReadFromJsonAsync<IEnumerable<ILookupModel>>();
 
-            return vehicles ?? throw new InvalidOperationException("Failed to deserialize recent vehicles data.");
+            return lookups;
         }
     }
 }

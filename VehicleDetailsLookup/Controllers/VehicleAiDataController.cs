@@ -25,8 +25,8 @@ namespace VehicleDetailsLookup.Controllers
         /// <see cref="BadRequestObjectResult"/> if the search type or registration number is invalid;
         /// <see cref="NotFoundObjectResult"/> if the AI-generated data cannot be retrieved.
         /// </returns>
-        [HttpGet("{searchType}/{registrationNumber}")]
-        public async Task<IActionResult> GetVehicleAiDataAsync(string searchType, string registrationNumber)
+        [HttpGet("{registrationNumber}/{searchType}")]
+        public async Task<IActionResult> GetVehicleAiDataAsync(string registrationNumber, string searchType)
         {
             // Validate and parse searchType
             if (!Enum.TryParse<AiType>(searchType, true, out var parsedSearchType) ||
