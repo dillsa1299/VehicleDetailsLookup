@@ -21,7 +21,7 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
         /// </summary>
         /// <param name="details">The database details model.</param>
         /// <returns>The mapped frontend details model.</returns>
-        IDetailsModel MapDetails(IDetailsDbModel details);
+        DetailsModel MapDetails(IDetailsDbModel details);
 
         /// <summary>
         /// Maps a collection of database MOT test models to frontend MOT test models.

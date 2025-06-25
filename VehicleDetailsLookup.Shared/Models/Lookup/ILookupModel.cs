@@ -18,6 +18,6 @@ namespace VehicleDetailsLookup.Shared.Models.Lookup
         /// <summary>
         /// Details of the vehicle at the time of lookup.
         /// </summary>
-        IDetailsModel VehicleDetails { get; set; }
+        DetailsModel VehicleDetails { get; set; }
     }
 }

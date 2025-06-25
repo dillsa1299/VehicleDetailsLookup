@@ -42,7 +42,7 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
             {
                 RegistrationNumber = registrationNumber,
                 TestNumber = test.MotTestNumber,
-                CompletedDate = DateOnlyTryParseIso(test.CompletedDate) ?? default,
+                CompletedDate = DateTime.TryParse(test.CompletedDate, out var completedDate) ? completedDate : default,
                 Passed = string.Equals(test.TestResult, "PASSED", StringComparison.OrdinalIgnoreCase),
                 ExpiryDate = DateOnlyTryParse(test.ExpiryDate, "yyyy-MM-dd") ?? default,
                 OdometerValue = long.TryParse(test.OdometerValue, out var odo) ? odo : -1,

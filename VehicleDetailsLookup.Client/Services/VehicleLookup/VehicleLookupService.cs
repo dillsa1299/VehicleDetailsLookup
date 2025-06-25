@@ -37,7 +37,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
 
             var motTests = await response.Content.ReadFromJsonAsync<IEnumerable<MotTestModel>>();
 
-            return motTests?.OrderByDescending(m => m.TestNumber);
+            return motTests?.OrderByDescending(t => t.CompletedDate);
         }
 
         public async ValueTask<IEnumerable<IImageModel>?> GetVehicleImagesAsync(string registrationNumber)
