@@ -8,7 +8,7 @@
         /// <summary>
         /// The date the MOT test was completed.
         /// </summary>
-        DateOnly CompletedDate { get; set; }
+        DateTime CompletedDate { get; set; }
         /// <summary>
         /// The expiry date of the MOT certificate.
         /// </summary>

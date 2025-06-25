@@ -6,13 +6,9 @@ namespace VehicleDetailsLookup.Shared.Models.Mot
     public interface IMotTestModel
     {
         /// <summary>
-        /// Test number.
-        /// </summary>
-        string TestNumber { get; set; }
-        /// <summary>
         /// Date the MOT test was completed.
         /// </summary>
-        DateOnly CompletedDate { get; set; }
+        DateTime CompletedDate { get; set; }
         /// <summary>
         /// Indicates whether the vehicle passed the MOT test.
         /// </summary>

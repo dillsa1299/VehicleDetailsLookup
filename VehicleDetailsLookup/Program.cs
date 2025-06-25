@@ -19,6 +19,7 @@ using VehicleDetailsLookup.Repositories.Details;
 using VehicleDetailsLookup.Repositories.Image;
 using VehicleDetailsLookup.Repositories.Mot;
 using VehicleDetailsLookup.Repositories.Lookup;
+using VehicleDetailsLookup.Services.Vehicle.LookupHistory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +51,7 @@ builder.Services.AddScoped<IVehicleDetailsService, VehicleDetailsService>();
 builder.Services.AddScoped<IVehicleMotService, VehicleMotService>();
 builder.Services.AddScoped<IVehicleImageService, VehicleImageService>();
 builder.Services.AddScoped<IVehicleAiDataService, VehicleAiDataService>();
+builder.Services.AddScoped<IVehicleLookupHistoryService, VehicleLookupHistoryService>();
 
 builder.Services.AddScoped<IVehicleLookupService, VehicleLookupService>();
 builder.Services.AddScoped<IVehicleLookupEventsService, VehicleLookupEventsService>();

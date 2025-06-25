@@ -9,6 +9,6 @@ namespace VehicleDetailsLookup.Shared.Models.Lookup
     {
         public DateTime DateTime { get; set; }
         public string RegistrationNumber { get; set; } = string.Empty;
-        public IDetailsModel VehicleDetails { get; set; } = default!;
+        public DetailsModel VehicleDetails { get; set; } = default!;
     }
 }

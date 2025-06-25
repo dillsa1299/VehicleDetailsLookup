@@ -13,7 +13,7 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
 {
     public class DatabaseFrontendMapperService : IDatabaseFrontendMapperService
     {
-        public IDetailsModel MapDetails(IDetailsDbModel details)
+        public DetailsModel MapDetails(IDetailsDbModel details)
         {
             // TODO: Probably need to handle capitalised fields here. E.g. BMW, Audi TT etc.
             return new DetailsModel
@@ -41,7 +41,6 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
 
             return motTests.Select(test => new MotTestModel
             {
-                TestNumber = test.TestNumber ?? string.Empty,
                 CompletedDate = test.CompletedDate,
                 Passed = test.Passed,
                 ExpiryDate = test.ExpiryDate,
