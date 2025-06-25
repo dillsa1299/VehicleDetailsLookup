@@ -6,6 +6,10 @@ namespace VehicleDetailsLookup.Shared.Models.Mot
     public interface IMotTestModel
     {
         /// <summary>
+        /// Test number.
+        /// </summary>
+        string TestNumber { get; set; }
+        /// <summary>
         /// Date the MOT test was completed.
         /// </summary>
         DateOnly CompletedDate { get; set; }
@@ -28,6 +32,6 @@ namespace VehicleDetailsLookup.Shared.Models.Mot
         /// <summary>
         /// Collection of defects found during the MOT test.
         /// </summary>
-        IEnumerable<IMotDefectModel> Defects { get; set; }
+        IEnumerable<MotDefectModel> Defects { get; set; }
     }
 }

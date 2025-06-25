@@ -41,6 +41,7 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
 
             return motTests.Select(test => new MotTestModel
             {
+                TestNumber = test.TestNumber ?? string.Empty,
                 CompletedDate = test.CompletedDate,
                 Passed = test.Passed,
                 ExpiryDate = test.ExpiryDate,
@@ -50,7 +51,7 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
             });
         }
 
-        private static IEnumerable<IMotDefectModel> MapMotDefects(IEnumerable<IMotDefectDbModel> motDefects)
+        private static IEnumerable<MotDefectModel> MapMotDefects(IEnumerable<IMotDefectDbModel> motDefects)
         {
             if (motDefects == null)
                 return [];

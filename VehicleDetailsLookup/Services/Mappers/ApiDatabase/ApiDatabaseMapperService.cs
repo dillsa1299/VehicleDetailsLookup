@@ -57,6 +57,11 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
             if (motDefects == null)
                 return [];
 
+            // Deduplicate defects
+            motDefects = motDefects
+                .GroupBy(d => new { d.Text, d.Type, d.Dangerous })
+                .Select(g => g.First());
+
             return motDefects.Select(defect => new MotDefectDbModel
             {
                 TestNumber = testNumber,

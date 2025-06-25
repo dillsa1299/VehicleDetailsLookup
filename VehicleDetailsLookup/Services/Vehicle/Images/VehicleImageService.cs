@@ -25,7 +25,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.Images
             // Check if the vehicle images are already stored in the database
             var dbImages = await _imageRepository.GetImagesAsync(registrationNumber);
 
-            if (dbImages != null && dbImages.All(image => image.Updated > DateTime.UtcNow.AddDays(-1)))
+            if (dbImages != null && dbImages.Any() && dbImages.All(image => image.Updated > DateTime.UtcNow.AddDays(-1)))
             {
                 // Return stored images if they are recent enough
                 return _databaseMapper.MapImages(dbImages);

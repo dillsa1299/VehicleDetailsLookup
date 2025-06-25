@@ -37,7 +37,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
 
             var motTests = await response.Content.ReadFromJsonAsync<IEnumerable<MotTestModel>>();
 
-            return motTests;
+            return motTests?.OrderByDescending(m => m.TestNumber);
         }
 
         public async ValueTask<IEnumerable<IImageModel>?> GetVehicleImagesAsync(string registrationNumber)
@@ -51,7 +51,9 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
 
             var images = await response.Content.ReadFromJsonAsync<IEnumerable<ImageModel>>();
 
-            return images?.Cast<IImageModel>();
+            // TODO - Check if images can be loaded using JS before returning.
+
+            return images;
         }
 
         public async ValueTask<IAiDataModel?> GetVehicleAiDataAsync(string registrationNumber, AiType type)
