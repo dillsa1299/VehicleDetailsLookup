@@ -30,9 +30,9 @@ namespace VehicleDetailsLookup.Client.Components.UI.RecentLookups
             return $"{lookup.VehicleDetails.YearOfManufacture} {lookup.VehicleDetails.Make} {lookup.VehicleDetails.Model}";
         }
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        protected override async Task OnParametersSetAsync()
         {
-            if (firstRender && OperatingSystem.IsBrowser())
+            if (!IsHidden && OperatingSystem.IsBrowser())
             {
                 _loading = true;
                 _recentLookups = await VehicleLookupService.GetRecentVehicleLookupsAsync() ?? [];
@@ -40,7 +40,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.RecentLookups
                 StateHasChanged();
             }
 
-            await base.OnAfterRenderAsync(firstRender);
+            await base.OnParametersSetAsync();
         }
     }
 }

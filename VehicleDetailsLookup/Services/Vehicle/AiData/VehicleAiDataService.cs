@@ -1,4 +1,5 @@
-﻿using VehicleDetailsLookup.Repositories.AiData;
+﻿using System.Text.Json;
+using VehicleDetailsLookup.Repositories.AiData;
 using VehicleDetailsLookup.Services.Api.Gemini;
 using VehicleDetailsLookup.Services.Mappers.ApiDatabase;
 using VehicleDetailsLookup.Services.Mappers.DatabaseFrontend;
@@ -77,22 +78,31 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
 
         private static string BuildPrompt(AiType searchType, IDetailsModel? vehicleDetails, IEnumerable<IMotTestModel>? motTests)
         {
-            if (vehicleDetails == null && searchType != AiType.MotHistorySummary)
-                throw new ArgumentNullException(nameof(vehicleDetails), "Vehicle details cannot be null for overview and common issues search types.");
-
-            string carDetails = string.Empty;
-            if (searchType != AiType.MotHistorySummary && vehicleDetails != null)
+            string data;
+            switch (searchType)
             {
-                carDetails = $"Year={vehicleDetails.YearOfManufacture}, Make={vehicleDetails.Make}, Model={vehicleDetails.Model}, Fuel Type={vehicleDetails.FuelType}, Engine Capacity={vehicleDetails.EngineCapacity}";
+                case AiType.Overview:
+                case AiType.CommonIssues:
+                    if (vehicleDetails == null)
+                        throw new ArgumentNullException(nameof(vehicleDetails), "Vehicle details cannot be null for overview and common issues search types.");
+                    data = JsonSerializer.Serialize(vehicleDetails);
+                    break;
+                case AiType.MotHistorySummary:
+                    if (motTests == null || !motTests.Any())
+                        throw new ArgumentNullException(nameof(motTests), "MOT tests cannot be null or empty for MOT history summary search type.");
+                    data = JsonSerializer.Serialize(motTests);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(searchType), searchType, "Invalid AI data search type.");
             }
 
             return searchType switch
             {
                 AiType.Overview => $"Provide a brief overview of the following UK specification vehicle searching for additional information such as performance and pricing. " +
-                                           $"Don't discuss common issues. Give me the information directly without any introductory sentences or titles: {carDetails}",
-                AiType.CommonIssues => $"List the common issues with the UK specification of the following vehicle with no introduction/title: {carDetails}",
-                AiType.MotHistorySummary => $"Provide an overall summary for the following UK MOT test results. Exclude any introductory sentences: {motTests}",
-                _ => throw new ArgumentOutOfRangeException(nameof(searchType), searchType, null),
+                                           $"Don't discuss common issues. Give me the information directly without any introductory sentences or titles: {data}",
+                AiType.CommonIssues => $"List the common issues with the UK specification of the following vehicle with no introduction/title: {data}",
+                AiType.MotHistorySummary => $"Provide an overall summary for the following UK MOT test results. Exclude any introductory sentences: {data}",
+                _ => throw new ArgumentOutOfRangeException(nameof(searchType), searchType, "Invalid AI data search type."),
             };
         }
     }
