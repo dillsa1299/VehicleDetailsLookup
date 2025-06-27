@@ -64,10 +64,18 @@ builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<ILookupRepository, LookupRepository>();
 
 // Register DbContext with SQLite
+var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"]
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found in configuration.");
 builder.Services.AddDbContext<VehicleDbContext>(options =>
-    options.UseSqlite("Data Source=vehicledata.db"));
+    options.UseSqlite(connectionString));
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<VehicleDbContext>();
+    dbContext.Database.EnsureCreated();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

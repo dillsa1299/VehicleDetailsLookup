@@ -33,9 +33,6 @@ namespace VehicleDetailsLookup.Services.Vehicle.Details
 
             if (dbDetails?.Updated > DateTime.UtcNow.AddMinutes(-15))
             {
-                // Log the lookup
-                await lookupRepository.AddLookupAsync(registrationNumber);
-
                 // Return stored vehicle details if they are recent enough
                 return _databaseMapper.MapDetails(dbDetails);
             }
