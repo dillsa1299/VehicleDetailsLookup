@@ -66,6 +66,7 @@ builder.Services.AddScoped<ILookupRepository, LookupRepository>();
 // Register DbContext with SQLite
 var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"]
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found in configuration.");
+
 builder.Services.AddDbContext<VehicleDbContext>(options =>
     options.UseSqlite(connectionString));
 
@@ -74,7 +75,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<VehicleDbContext>();
-    dbContext.Database.EnsureCreated();
+    dbContext.Database.Migrate();
 }
 
 // Configure the HTTP request pipeline.
