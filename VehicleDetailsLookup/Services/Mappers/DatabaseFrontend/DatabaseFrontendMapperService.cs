@@ -15,7 +15,6 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
     {
         public DetailsModel MapDetails(IDetailsDbModel details)
         {
-            // TODO: Probably need to handle capitalised fields here. E.g. BMW, Audi TT etc.
             return new DetailsModel
             {
                 RegistrationNumber = details.RegistrationNumber ?? string.Empty,
@@ -25,9 +24,9 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
                 Colour = details.Colour ?? string.Empty,
                 EngineCapacity = details.EngineCapacity ?? string.Empty,
                 FuelType = details.FuelType ?? string.Empty,
-                TaxStatus = details.TaxStatus ?? string.Empty,
+                TaxStatus = details.TaxStatus,
                 TaxDueDate = details.TaxDueDate,
-                MotStatus = details.MotStatus ?? string.Empty,
+                MotStatus = details.MotStatus,
                 MotExpiryDate = details.MotExpiryDate,
                 DateOfLastV5CIssued = details.DateOfLastV5CIssued,
                 MonthOfFirstRegistration = details.MonthOfFirstRegistration

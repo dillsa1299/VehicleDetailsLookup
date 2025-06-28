@@ -1,4 +1,5 @@
-﻿using VehicleDetailsLookup.Models.ApiResponses.Gemini;
+﻿using System.Globalization;
+using VehicleDetailsLookup.Models.ApiResponses.Gemini;
 using VehicleDetailsLookup.Models.ApiResponses.GoogleImage;
 using VehicleDetailsLookup.Models.ApiResponses.Mot;
 using VehicleDetailsLookup.Models.ApiResponses.Ves;
@@ -18,14 +19,14 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
             {
                 RegistrationNumber = vesResponse.RegistrationNumber,
                 YearOfManufacture = vesResponse.YearOfManufacture,
-                Make = vesResponse.Make,
-                Model = motResponse?.Model ?? string.Empty,
-                Colour = vesResponse.Colour,
+                Make = FormatName(vesResponse.Make, 3),
+                Model = FormatName(motResponse.Model, 3),
+                Colour = FormatName(vesResponse.Colour, 0),
                 EngineCapacity = vesResponse.EngineCapacity > 0 ? $"{vesResponse.EngineCapacity} cc" : null,
-                FuelType = vesResponse.FuelType,
-                TaxStatus = vesResponse.TaxStatus,
+                FuelType = FormatName(vesResponse.FuelType, 0),
+                TaxStatus = GetTaxStatus(vesResponse.TaxStatus),
                 TaxDueDate = DateOnlyTryParse(vesResponse.TaxDueDate, "yyyy-MM-dd"),
-                MotStatus = vesResponse.MotStatus,
+                MotStatus = GetMotStatus(vesResponse.MotStatus),
                 MotExpiryDate = DateOnlyTryParse(vesResponse.MotExpiryDate, "yyyy-MM-dd"),
                 DateOfLastV5CIssued = DateOnlyTryParse(vesResponse.DateOfLastV5CIssued, "yyyy-MM-dd") ?? default,
                 MonthOfFirstRegistration = DateOnlyTryParse(vesResponse.MonthOfFirstRegistration, "yyyy-MM") ?? default,
@@ -38,6 +39,7 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
         {
             if (motTests == null)
                 return [];
+
             return motTests.Select(test => new MotTestDbModel
             {
                 RegistrationNumber = registrationNumber,
@@ -46,7 +48,7 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
                 Passed = string.Equals(test.TestResult, "PASSED", StringComparison.OrdinalIgnoreCase),
                 ExpiryDate = DateOnlyTryParse(test.ExpiryDate, "yyyy-MM-dd") ?? default,
                 OdometerValue = long.TryParse(test.OdometerValue, out var odo) ? odo : -1,
-                OdometerUnit = test.OdometerUnit,
+                OdometerUnit = test.OdometerUnit == "KM" ? "Kilometers" : "Miles",
                 MotDefects = [.. MapMotDefects(test.MotTestNumber, test.Defects)],
                 Updated = DateTime.UtcNow
             });
@@ -100,13 +102,15 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
         }
 
         // --- Helpers ---
+        private static string? FormatName(string? value, int maxLength)
+            => !string.IsNullOrWhiteSpace(value)
+                ? (value.Length > maxLength ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value.ToLowerInvariant()) : value)
+                : string.Empty;
+
         private static DateOnly? DateOnlyTryParse(string? value, string format)
             => !string.IsNullOrWhiteSpace(value) && DateOnly.TryParseExact(value, format, out var date)
                 ? date
                 : null;
-
-        private static DateOnly? DateOnlyTryParseIso(string? value)
-            => DateTimeOffset.TryParse(value, out var dt) ? DateOnly.FromDateTime(dt.DateTime) : null;
 
         private static MotDefectType GetDefectType(string? type)
         {
@@ -121,6 +125,29 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
                 "SYSTEM GENERATED" => MotDefectType.SystemGenerated,
                 "USER ENTERED" => MotDefectType.UserEntered,
                 _ => MotDefectType.UserEntered
+            };
+        }
+
+        private static TaxStatus GetTaxStatus(string? status)
+        {
+            return status?.ToUpperInvariant() switch
+            {
+                "TAXED" => TaxStatus.Taxed,
+                "UNTAXED" => TaxStatus.Untaxed,
+                "SORN" => TaxStatus.Sorn,
+                _ => throw new ArgumentException($"Unknown tax status: {status}")
+            };
+        }
+
+        private static MotStatus GetMotStatus(string? status)
+        {
+            return status?.ToUpperInvariant() switch
+            {
+                "VALID" => MotStatus.Valid,
+                "NOT VALID" => MotStatus.Invalid,
+                "NO DETAILS HELD BY DVLA" => MotStatus.NoDetails,
+                "NO RESULTS RETURNED" => MotStatus.NoResults,
+                _ => throw new ArgumentException($"Unknown MOT status: {status}")
             };
         }
     }

@@ -1,4 +1,5 @@
 ﻿using VehicleDetailsLookup.Models.Database.Lookup;
+using VehicleDetailsLookup.Shared.Models.Enums;
 
 namespace VehicleDetailsLookup.Models.Database.Details
 {
@@ -11,9 +12,9 @@ namespace VehicleDetailsLookup.Models.Database.Details
         public string? Colour { get; set; }
         public string? EngineCapacity { get; set; }
         public string? FuelType { get; set; }
-        public string? TaxStatus { get; set; }
+        public TaxStatus TaxStatus { get; set; }
         public DateOnly? TaxDueDate { get; set; }
-        public string? MotStatus { get; set; }
+        public MotStatus MotStatus { get; set; }
         public DateOnly? MotExpiryDate { get; set; }
         public DateOnly DateOfLastV5CIssued { get; set; }
         public DateOnly MonthOfFirstRegistration { get; set; }

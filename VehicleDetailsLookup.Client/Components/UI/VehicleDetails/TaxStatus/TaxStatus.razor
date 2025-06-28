@@ -1,7 +1,7 @@
 ﻿<MudPaper Style="@_style" Class="pa-4 d-flex flex-column align-center justify-center" Elevation="1" Height="50%">
     <MudText Align="Align.Center" Typo="Typo.h4"><b>Tax Status</b></MudText>
     <br />
-    <MudText Align="Align.Center" Typo="Typo.h4">@Vehicle?.Details?.TaxStatus</MudText>
+    <MudText Align="Align.Center" Typo="Typo.h4">@_statusText</MudText>
 
     @if (Vehicle?.Details?.TaxDueDate != null)
     {

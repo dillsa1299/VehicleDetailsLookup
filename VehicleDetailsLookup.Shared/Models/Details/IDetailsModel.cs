@@ -1,3 +1,5 @@
+using VehicleDetailsLookup.Shared.Models.Enums;
+
 namespace VehicleDetailsLookup.Shared.Models.Details
 {
     /// <summary>
@@ -36,7 +38,7 @@ namespace VehicleDetailsLookup.Shared.Models.Details
         /// <summary>
         /// Current tax status (e.g., taxed, untaxed).
         /// </summary>
-        string TaxStatus { get; set; }
+        TaxStatus TaxStatus { get; set; }
         /// <summary>
         /// Due date for the vehicle's tax, if available.
         /// </summary>
@@ -44,7 +46,7 @@ namespace VehicleDetailsLookup.Shared.Models.Details
         /// <summary>
         /// Current MOT status (e.g., valid, expired).
         /// </summary>
-        string MotStatus { get; set; }
+        MotStatus MotStatus { get; set; }
         /// <summary>
         /// Expiry date of the vehicle's MOT, if available.
         /// </summary>

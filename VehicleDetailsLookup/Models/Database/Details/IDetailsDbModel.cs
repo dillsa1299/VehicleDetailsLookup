@@ -1,4 +1,5 @@
 ﻿using VehicleDetailsLookup.Models.Database.Lookup;
+using VehicleDetailsLookup.Shared.Models.Enums;
 
 namespace VehicleDetailsLookup.Models.Database.Details
 {
@@ -42,7 +43,7 @@ namespace VehicleDetailsLookup.Models.Database.Details
         /// <summary>
         /// The current MOT status (e.g., valid, expired).
         /// </summary>
-        string? MotStatus { get; set; }
+        MotStatus MotStatus { get; set; }
         /// <summary>
         /// The vehicle's registration number.
         /// </summary>
@@ -54,7 +55,7 @@ namespace VehicleDetailsLookup.Models.Database.Details
         /// <summary>
         /// The current tax status (e.g., taxed, untaxed).
         /// </summary>
-        string? TaxStatus { get; set; }
+        TaxStatus TaxStatus { get; set; }
         /// <summary>
         /// The date and time when the record was last updated.
         /// </summary>

@@ -1,4 +1,6 @@
-﻿namespace VehicleDetailsLookup.Shared.Models.Details
+﻿using VehicleDetailsLookup.Shared.Models.Enums;
+
+namespace VehicleDetailsLookup.Shared.Models.Details
 {
     public class DetailsModel : IDetailsModel
     {
@@ -9,9 +11,9 @@
         public string Colour { get; set; } = string.Empty;
         public string EngineCapacity { get; set; } = string.Empty;
         public string FuelType { get; set; } = string.Empty;
-        public string TaxStatus { get; set; } = string.Empty;
+        public TaxStatus TaxStatus { get; set; }
         public DateOnly? TaxDueDate { get; set; }
-        public string MotStatus { get; set; } = string.Empty;
+        public MotStatus MotStatus { get; set; }
         public DateOnly? MotExpiryDate { get; set; }
         public DateOnly DateOfLastV5CIssued { get; set; }
         public DateOnly MonthOfFirstRegistration { get; set; }
