@@ -18,11 +18,11 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotStatus
             switch (Vehicle?.Details?.MotStatus)
             {
                 case Shared.Models.Enums.MotStatus.Valid:
-                    _statusText = "Taxed";
+                    _statusText = "Valid";
                     _style = "background-color: var(--mud-palette-success);";
                     break;
                 case Shared.Models.Enums.MotStatus.Invalid:
-                    _statusText = "Taxed";
+                    _statusText = "Invalid";
                     _style = "background-color: var(--mud-palette-error);";
                     break;
                 case Shared.Models.Enums.MotStatus.NoDetails:
