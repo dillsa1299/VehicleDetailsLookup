@@ -97,5 +97,19 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
 
             return lookups;
         }
+
+        public async ValueTask<IEnumerable<ILookupModel>?> GetRecentVehicleLookupsAsync(string registrationNumber)
+        {
+            // Call the backend API to retrieve recent lookups for the registration number.
+            var response = await _httpClient.GetAsync($"/api/VehicleLookupHistory/recent/{registrationNumber}");
+
+            // Return null if the request fails or no lookup history found.
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            var lookups = await response.Content.ReadFromJsonAsync<IEnumerable<LookupModel>>();
+
+            return lookups;
+        }
     }
 }

@@ -1,0 +1,10 @@
+﻿@using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.Lookups.LookupHistory
+<MudBadge Content="@_lookupCount" Overlap="true" Color="@Color.Primary">
+    <MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Size="@Size.Large" OnClick="@(OnLookupClicked)" />
+    <MudOverlay @bind-Visible="_historyVisible" AutoClose="true" LockScroll="false" />
+    <MudPopover Open="_historyVisible" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" RelativeWidth="DropdownWidth.Adaptive">
+        <div class="d-flex flex-column pa-2">
+            <LookupHistory RegistrationNumber="@RegistrationNumber"></LookupHistory>
+        </div>
+    </MudPopover>
+</MudBadge>

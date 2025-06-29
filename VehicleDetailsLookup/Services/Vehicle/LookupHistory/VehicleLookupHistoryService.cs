@@ -27,6 +27,16 @@ namespace VehicleDetailsLookup.Services.Vehicle.LookupHistory
             return recentLookups;
         }
 
-        
+        public async ValueTask<IEnumerable<ILookupModel>?> GetRecentLookupsAsync(string registrationNumber, int count)
+        {
+            var recentLookupsDb = await _lookupRepository.GetRecentLookupsAsync(registrationNumber, count);
+            var recentLookups = recentLookupsDb?
+                .Select(lookup => _databaseMapper.MapLookup(lookup))
+                .ToList();
+
+            return recentLookups;
+        }
+
+
     }
 }

@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System.Xml.Linq;
 using VehicleDetailsLookup.Client.Components.Enums;
-using VehicleDetailsLookup.Client.Services.VehicleLookup;
 using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
 using VehicleDetailsLookup.Shared.Models.Enums;
 using VehicleDetailsLookup.Shared.Models.Vehicle;
@@ -10,9 +8,6 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
 {
     public partial class VehicleDetails
     {
-        [Inject]
-        private IVehicleLookupService VehicleLookupService { get; set; } = default!;
-
         [Inject]
         private IVehicleLookupEventsService VehicleLookupEventsService { get; set; } = default!;
 
@@ -27,7 +22,6 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
         private bool _isSearchingAiOverview;
         private bool _isSearchingAiCommonIssues;
         private bool _isSearchingAiMotHistorySummary;
-        private int _vehicleLookupCount;
 
         private string? AiOverviewText =>
             (Vehicle?.AiData.TryGetValue(AiType.Overview, out var aiDataModel) == true)
@@ -112,14 +106,6 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
             {
                 await StartLookup(VehicleLookupType.AiMotHistorySummary);
             }
-        }
-
-        protected override async Task OnParametersSetAsync()
-        {
-            if (!String.IsNullOrEmpty(Vehicle?.Details?.RegistrationNumber))
-                _vehicleLookupCount = await VehicleLookupService.GetVehicleLookupCountAsync(Vehicle.Details.RegistrationNumber) ?? 0;
-
-            await base.OnParametersSetAsync();
         }
 
         protected override void OnInitialized()

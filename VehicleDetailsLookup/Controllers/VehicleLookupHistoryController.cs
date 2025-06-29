@@ -51,7 +51,22 @@ namespace VehicleDetailsLookup.Controllers
         [HttpGet("recent")]
         public async Task<IActionResult> GetRecentVehiclesAsync()
         {
+            // Current hardcoded to return the 10 most recent lookups.
             var recentLookups = await _vehicleLookupHistoryService.GetRecentLookupsAsync(10);
+            return Ok(recentLookups);
+        }
+
+        /// <summary>
+        /// Retrieves a collection of the most recent vehicle lookup records for a given registration number.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="OkObjectResult"/> containing a collection of the most recent lookup records.
+        /// </returns>
+        [HttpGet("recent/{registrationNumber}")]
+        public async Task<IActionResult> GetRecentVehiclesAsync(string registrationNumber)
+        {
+            // Current hardcoded to return the 10 most recent lookups.
+            var recentLookups = await _vehicleLookupHistoryService.GetRecentLookupsAsync(registrationNumber, 10);
             return Ok(recentLookups);
         }
     }

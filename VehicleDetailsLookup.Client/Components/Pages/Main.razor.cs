@@ -120,7 +120,7 @@ namespace VehicleDetailsLookup.Client.Components.Pages
 
         protected override async Task OnParametersSetAsync()
         {
-            if (!String.IsNullOrEmpty(RegistrationNumberUrlInput)
+            if (!string.IsNullOrEmpty(RegistrationNumberUrlInput)
                 && OperatingSystem.IsBrowser()
                 && !RegistrationNumberUrlInput.Replace(" ", "").Equals(_vehicle?.Details?.RegistrationNumber, StringComparison.InvariantCultureIgnoreCase))
                 await VehicleLookupEventsService.NotifyStartVehicleLookup(RegistrationNumberUrlInput, VehicleLookupType.Details);

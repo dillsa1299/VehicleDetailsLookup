@@ -22,6 +22,10 @@
                                             &nbsp;|&nbsp;
                                         </MudText>
                                         @BuildVehicleDetails(lookup)
+                                        <MudText Typo="Typo.body2" Color="Color.Primary" Inline=true>
+                                            &nbsp;|&nbsp;
+                                        </MudText>
+                                        @GetTimeSpan(lookup.DateTime)
                                     </MudText>
                                 </ChildContent>
                             </MudListItem>

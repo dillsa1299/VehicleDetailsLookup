@@ -65,5 +65,14 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
         /// A <see cref="ValueTask{TResult}"/> whose result is a collection of <see cref="ILookupModel"/> instances, or <c>null</c> if not found.
         /// </returns>
         ValueTask<IEnumerable<ILookupModel>?> GetRecentVehicleLookupsAsync();
+
+        /// <summary>
+        /// Retrieves a collection of recent vehicle lookup records for a given registration number asynchronously.
+        /// </summary>
+        /// <param name="registrationNumber">The registration number of the vehicle.</param>
+        /// <returns>
+        /// A <see cref="ValueTask{TResult}"/> whose result is a collection of <see cref="ILookupModel"/> instances, or <c>null</c> if not found.
+        /// </returns>
+        ValueTask<IEnumerable<ILookupModel>?> GetRecentVehicleLookupsAsync(string registrationNumber);
     }
 }

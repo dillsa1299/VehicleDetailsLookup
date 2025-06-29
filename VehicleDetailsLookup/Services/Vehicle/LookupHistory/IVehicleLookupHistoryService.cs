@@ -23,5 +23,16 @@ namespace VehicleDetailsLookup.Services.Vehicle.LookupHistory
         /// or <c>null</c> if no lookups are available.
         /// </returns>
         ValueTask<IEnumerable<ILookupModel>?> GetRecentLookupsAsync(int count);
+
+        /// <summary>
+        /// Retrieves a collection of the most recent vehicle lookups for a given registration number.
+        /// </summary>
+        /// <param name="registrationNumber">The registration number of the vehicle.</param>
+        /// <param name="count">The maximum number of recent lookups to retrieve.</param>
+        /// <returns>
+        /// An enumerable of <see cref="ILookupModel"/> representing the recent lookups
+        /// for the specified registration number, or <c>null</c> if no lookups are available.
+        /// </returns>
+        ValueTask<IEnumerable<ILookupModel>?> GetRecentLookupsAsync(string registrationNumber, int count);
     }
 }

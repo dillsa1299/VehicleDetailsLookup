@@ -1,5 +1,6 @@
 ﻿@using VehicleDetailsLookup.Client.Components.Enums
 @using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.ImageViewer
+@using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.Lookups.LookupCount
 @using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotHistory
 @using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotStatus
 @using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.TaxStatus
@@ -38,9 +39,7 @@
                             <MudText Typo="Typo.h3">@Vehicle?.Details?.YearOfManufacture @Vehicle?.Details?.Make @Vehicle?.Details?.Model</MudText>
                         </div>
                         <div>
-                            <MudBadge Content="@_vehicleLookupCount" Overlap="true" Color="@Color.Primary">
-                                <MudIcon Icon="@Icons.Material.Filled.RemoveRedEye" Size="@Size.Large" Title="Lookup count" />
-                            </MudBadge>
+                            <LookupCount RegistrationNumber="@Vehicle?.Details?.RegistrationNumber"></LookupCount>
                         </div>
                     </div>
 

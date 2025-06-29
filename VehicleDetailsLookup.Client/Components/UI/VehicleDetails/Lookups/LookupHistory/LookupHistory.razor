@@ -1,0 +1,15 @@
+﻿@using VehicleDetailsLookup.Client.Helpers
+@using VehicleDetailsLookup.Shared.Models.Lookup
+
+@if (_lookups.Any())
+{
+    <MudList T="ILookupModel">
+        @foreach(var lookup in _lookups)
+        {
+            <MudListItem T="ILookupModel" Value="@lookup">
+                <MudText Typo="Typo.subtitle2" Inline="true">@GetTimeSpan(lookup.DateTime) | </MudText>
+                <MudText Typo="Typo.caption" Color="Color.Primary">@lookup.DateTime.ToString("yyyy-MM-dd HH:mm")</MudText>
+            </MudListItem>
+        }
+    </MudList>
+}

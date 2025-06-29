@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using VehicleDetailsLookup.Client.Components.Enums;
+using VehicleDetailsLookup.Client.Helpers;
 using VehicleDetailsLookup.Client.Services.VehicleLookup;
 using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
 using VehicleDetailsLookup.Shared.Models.Lookup;
@@ -29,6 +30,9 @@ namespace VehicleDetailsLookup.Client.Components.UI.RecentLookups
         {
             return $"{lookup.VehicleDetails.YearOfManufacture} {lookup.VehicleDetails.Make} {lookup.VehicleDetails.Model}";
         }
+
+        private static string GetTimeSpan(DateTime dateTime)
+            => TimeSpanHelper.GetTimeSpan(dateTime);
 
         protected override async Task OnParametersSetAsync()
         {
