@@ -27,9 +27,6 @@ else
             {
                 @foreach (var image in Images)
                 {
-                    // Preload images
-                    <link rel="preload" href="@image.Url" as="image" />
-
                     <MudCarouselItem Transition="Transition.Fade" Color="@Color.Transparent">
                         <div class="d-flex justify-center">
                                 <MudImage Height="300" Style="max-width:100%;" Src="@image.Url" FallbackSrc="@PlaceholderImage" Alt="@image.Title" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" ObjectPosition="ObjectPosition.Center" />

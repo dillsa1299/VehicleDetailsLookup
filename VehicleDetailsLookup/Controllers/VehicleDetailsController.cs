@@ -34,7 +34,7 @@ namespace VehicleDetailsLookup.Controllers
             if (string.IsNullOrWhiteSpace(registrationNumber) || !regex.IsMatch(registrationNumber))
                 return BadRequest("Invalid registration number.");
 
-            var vehicleDetails = await _vehicleDetailsService.GetVehicleDetailsAsync(registrationNumber);
+            var vehicleDetails = await _vehicleDetailsService.GetVehicleDetailsAsync(registrationNumber, true);
 
             if (vehicleDetails == null)
                 return NotFound("Unable to retrieve vehicle details.");

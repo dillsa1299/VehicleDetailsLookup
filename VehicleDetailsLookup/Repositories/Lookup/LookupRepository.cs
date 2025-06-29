@@ -28,14 +28,17 @@ namespace VehicleDetailsLookup.Repositories.Lookup
                 .ToListAsync();
         }
 
-        public async ValueTask<IEnumerable<ILookupDbModel>?> GetRecentLookupsAsync(string registrationNumber, int count)
+        public async ValueTask<IEnumerable<ILookupDbModel>?> GetRecentLookupsAsync(string registrationNumber, int count = 0)
         {
-            return await _dbContext.Lookups
+            var query = _dbContext.Lookups
                 .Include(l => l.Details)
                 .Where(l => l.RegistrationNumber == registrationNumber)
-                .OrderByDescending(l => l.DateTime)
-                .Take(count)
-                .ToListAsync();
+                .OrderByDescending(l => l.DateTime);
+
+            if (count > 0)
+                return await query.Take(count).ToListAsync();
+
+            return await query.ToListAsync();
         }
 
         public async ValueTask<int> GetVehicleLookupCountAsync(string registrationNumber)

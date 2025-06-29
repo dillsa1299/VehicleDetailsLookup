@@ -25,14 +25,18 @@ namespace VehicleDetailsLookup.Services.Vehicle.Details
             ?? throw new ArgumentNullException(nameof(apiMapper));
         private readonly IDatabaseFrontendMapperService _databaseMapper = databaseMapper
             ?? throw new ArgumentNullException(nameof(databaseMapper));
-        
-        public async ValueTask<IDetailsModel?> GetVehicleDetailsAsync(string registrationNumber)
+
+        public async ValueTask<IDetailsModel?> GetVehicleDetailsAsync(string registrationNumber, bool primarySearch = false)
         {
             // Check if the vehicle details are already stored in the database
             var dbDetails = await _detailsRepository.GetDetailsAsync(registrationNumber);
 
             if (dbDetails?.Updated > DateTime.UtcNow.AddMinutes(-15))
             {
+                // Log the lookup if it was a user-initiated search instead of a background details load for additional information
+                if (primarySearch)
+                    await _lookupRepository.AddLookupAsync(registrationNumber);
+
                 // Return stored vehicle details if they are recent enough
                 return _databaseMapper.MapDetails(dbDetails);
             }
@@ -54,8 +58,9 @@ namespace VehicleDetailsLookup.Services.Vehicle.Details
             var dbMotTests = _apiMapper.MapMotTests(registrationNumber, motResponse.MotTests);
             await _motRepository.UpdateMotTestsAsync(dbMotTests);
 
-            // Log the lookup
-            await lookupRepository.AddLookupAsync(registrationNumber);
+            // Log the lookup if it was a user-initiated search instead of a background details load for additional information
+            if (primarySearch)
+                await _lookupRepository.AddLookupAsync(registrationNumber);
 
             return _databaseMapper.MapDetails(dbDetails);
         }

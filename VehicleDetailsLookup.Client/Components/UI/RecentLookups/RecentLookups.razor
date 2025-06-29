@@ -1,12 +1,12 @@
 ﻿@if (!IsHidden)
 {
     <MudGrid>
-        <MudItem md="4" />
-        <MudItem xs="12" md="4" Class="mx-auto">
-            <div class="d-flex flex-column align-center justify-center mt-6">
+        <MudItem md="3" />
+        <MudItem xs="12" md="6">
+            <div class="d-flex flex-column align-center justify-center">
                 @if (_loading)
                 {
-                    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="600px" Width="100%"></MudSkeleton>
+                    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="450px" Width="400px"></MudSkeleton>
                 }
                 else
                 {
@@ -18,14 +18,11 @@
                                 <ChildContent>
                                     <MudText Typo="Typo.body2">
                                         <b>@lookup.RegistrationNumber</b>
-                                        <MudText Typo="Typo.body2" Color="Color.Primary" Inline=true>
+                                        <MudText Color="Color.Primary" Inline=true>
                                             &nbsp;|&nbsp;
                                         </MudText>
                                         @BuildVehicleDetails(lookup)
-                                        <MudText Typo="Typo.body2" Color="Color.Primary" Inline=true>
-                                            &nbsp;|&nbsp;
-                                        </MudText>
-                                        @GetTimeSpan(lookup.DateTime)
+                                        <MudChip T="string" Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Small">@GetTimeSpan(lookup.DateTime)</MudChip>
                                     </MudText>
                                 </ChildContent>
                             </MudListItem>
@@ -34,6 +31,6 @@
                 }
             </div>
         </MudItem>
-        <MudItem md="4" />
+        <MudItem md="3" />
     </MudGrid>
 }

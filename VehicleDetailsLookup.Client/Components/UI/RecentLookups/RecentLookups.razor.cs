@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using VehicleDetailsLookup.Client.Components.Enums;
-using VehicleDetailsLookup.Client.Helpers;
 using VehicleDetailsLookup.Client.Services.VehicleLookup;
 using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
+using VehicleDetailsLookup.Shared.Helpers;
 using VehicleDetailsLookup.Shared.Models.Lookup;
 
 namespace VehicleDetailsLookup.Client.Components.UI.RecentLookups
@@ -32,7 +32,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.RecentLookups
         }
 
         private static string GetTimeSpan(DateTime dateTime)
-            => TimeSpanHelper.GetTimeSpan(dateTime);
+            => TimeSpanHelper.GetTimeSpan(dateTime, true);
 
         protected override async Task OnParametersSetAsync()
         {

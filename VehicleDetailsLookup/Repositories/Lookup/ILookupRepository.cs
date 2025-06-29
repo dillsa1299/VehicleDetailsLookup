@@ -1,6 +1,4 @@
 ﻿using VehicleDetailsLookup.Models.Database.Lookup;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace VehicleDetailsLookup.Repositories.Lookup
 {
@@ -29,12 +27,12 @@ namespace VehicleDetailsLookup.Repositories.Lookup
         /// Retrieves a collection of the most recent vehicle lookup records for a given registration number.
         /// </summary>
         /// <param name="registrationNumber">The registration number of the vehicle to retrieve lookup records for.</param>
-        /// <param name="count">The number of recent lookup records to retrieve.</param>
+        /// <param name="count">The number of recent lookup records to retrieve. 0 = all records.</param>
         /// <returns>
         /// A collection of the most recent lookup records implementing <see cref="ILookupDbModel"/>,
         /// or <c>null</c> if no records exist.
         /// </returns>
-        ValueTask<IEnumerable<ILookupDbModel>?> GetRecentLookupsAsync(string registrationNumber, int count);
+        ValueTask<IEnumerable<ILookupDbModel>?> GetRecentLookupsAsync(string registrationNumber, int count = 0);
 
         /// <summary>
         /// Gets the total number of lookup records for a specific vehicle registration number.

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
-using VehicleDetailsLookup.Client.Helpers;
 using VehicleDetailsLookup.Client.Services.VehicleLookup;
+using VehicleDetailsLookup.Shared.Helpers;
 using VehicleDetailsLookup.Shared.Models.Lookup;
 
 namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.Lookups.LookupHistory
@@ -15,8 +15,8 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.Lookups.Looku
 
         private IEnumerable<ILookupModel> _lookups = [];
 
-        private string GetTimeSpan(DateTime dateTime)
-            => TimeSpanHelper.GetTimeSpan(dateTime);
+        private static string GetTimeSpan(DateTime dateTime)
+            => TimeSpanHelper.GetTimeSpan(dateTime, false);
 
         protected override async Task OnParametersSetAsync()
         {

@@ -55,8 +55,8 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
 
             if (images != null && images.Any())
             {
-                // Try to load images in the browser to check if they are accessible.
-                var loadedUrls = await _jsRuntime.InvokeAsync<IEnumerable<string>>("checkImagesLoad", images.Select(image => image.Url));
+                // Preload images and return only those that successfully load.
+                var loadedUrls = await _jsRuntime.InvokeAsync<IEnumerable<string>>("preloadImages", images.Select(image => image.Url));
 
                 // Filter out images that failed to load.
                 images = images.Where(image => loadedUrls.Contains(image.Url));
