@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
-using VehicleDetailsLookup.Shared.Models.Vehicle;
+using VehicleDetailsLookup.Shared.Models.Mot;
 
 namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotHistory
 {
     public partial class MotHistory
     {
         [Parameter]
-        public IVehicleModel? Vehicle { get; set; }
+        public IEnumerable<IMotTestModel>? MotTests { get; set; }
     }
 }

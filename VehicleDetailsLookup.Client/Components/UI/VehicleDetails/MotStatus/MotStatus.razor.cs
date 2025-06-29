@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
-using VehicleDetailsLookup.Shared.Models.Vehicle;
+using VehicleDetailsLookup.Shared.Models.Details;
 
 namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotStatus
 {
     public partial class MotStatus
     {
         [Parameter]
-        public IVehicleModel? Vehicle { get; set; }
+        public IDetailsModel? Details { get; set; }
 
         private string _statusText = string.Empty;
         private string _style = string.Empty;
@@ -15,7 +15,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotStatus
         {
             base.OnParametersSet();
 
-            switch (Vehicle?.Details?.MotStatus)
+            switch (Details?.MotStatus)
             {
                 case Shared.Models.Enums.MotStatus.Valid:
                     _statusText = "Valid";

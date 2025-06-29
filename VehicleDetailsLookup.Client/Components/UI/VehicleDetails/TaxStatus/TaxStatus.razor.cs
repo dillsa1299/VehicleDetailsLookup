@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
-using VehicleDetailsLookup.Shared.Models.Vehicle;
+using VehicleDetailsLookup.Shared.Models.Details;
 
 namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.TaxStatus
 {
     public partial class TaxStatus
     {
         [Parameter]
-        public IVehicleModel? Vehicle { get; set; }
+        public IDetailsModel? Details { get; set; }
 
         private string _statusText = string.Empty;
         private string _style = string.Empty;
@@ -15,7 +15,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.TaxStatus
         {
             base.OnParametersSet();
 
-            switch (Vehicle?.Details?.TaxStatus)
+            switch (Details?.TaxStatus)
             {
                 case Shared.Models.Enums.TaxStatus.Taxed:
                     _statusText = "Taxed";

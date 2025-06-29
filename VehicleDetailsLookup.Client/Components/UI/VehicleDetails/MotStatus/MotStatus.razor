@@ -3,10 +3,10 @@
     <br />
     <MudText Align="Align.Center" Typo="Typo.h4">@_statusText</MudText>
 
-    @if (Vehicle?.Details?.MotExpiryDate != null)
+    @if (Details?.MotExpiryDate != null)
     {
         <MudText Align="Align.Center" Typo="Typo.h6">
-            @(Vehicle.Details?.MotExpiryDate.Value < DateOnly.FromDateTime(DateTime.Today) ? "Expired:" : "Expires:") @Vehicle.Details?.MotExpiryDate
+            @(Details?.MotExpiryDate.Value < DateOnly.FromDateTime(DateTime.Today) ? "Expired:" : "Expires:") @Details?.MotExpiryDate
         </MudText>
     }
 </MudPaper>
