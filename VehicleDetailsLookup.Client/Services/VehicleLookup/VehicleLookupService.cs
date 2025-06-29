@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using Microsoft.JSInterop;
+using System.Net.Http.Json;
 using VehicleDetailsLookup.Shared.Models.Ai;
 using VehicleDetailsLookup.Shared.Models.Details;
 using VehicleDetailsLookup.Shared.Models.Enums;
@@ -8,9 +9,10 @@ using VehicleDetailsLookup.Shared.Models.Mot;
 
 namespace VehicleDetailsLookup.Client.Services.VehicleLookup
 {
-    public class VehicleLookupService(HttpClient httpClient) : IVehicleLookupService
+    public class VehicleLookupService(HttpClient httpClient, IJSRuntime jsRuntime) : IVehicleLookupService
     {
         private readonly HttpClient _httpClient = httpClient;
+        private readonly IJSRuntime _jsRuntime = jsRuntime;
 
         public async ValueTask<IDetailsModel?> GetVehicleDetailsAsync(string registrationNumber)
         {
@@ -51,7 +53,19 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
 
             var images = await response.Content.ReadFromJsonAsync<IEnumerable<ImageModel>>();
 
-            // TODO - Check if images can be loaded using JS before returning.
+            if (images != null && images.Any())
+            {
+                // Try to load images in the browser to check if they are accessible.
+                var loadedUrls = await _jsRuntime.InvokeAsync<IEnumerable<string>>("checkImagesLoad", images.Select(image => image.Url));
+
+                // Filter out images that failed to load.
+                images = images.Where(image => loadedUrls.Contains(image.Url));
+
+                // Update the index of each image in-place after filtering.
+                int index = 1;
+                foreach (var image in images)
+                    image.Index = index++;
+            }
 
             return images;
         }
