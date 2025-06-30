@@ -119,12 +119,12 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
                 "ADVISORY" => MotDefectType.Advisory,
                 "DANGEROUS" => MotDefectType.Dangerous,
                 "FAIL" => MotDefectType.Fail,
-                "MAJOR" => MotDefectType.Major,
+                "MAJOR" or "PRS" => MotDefectType.Major,
                 "MINOR" => MotDefectType.Minor,
                 "NON SPECIFIC" => MotDefectType.NonSpecific,
                 "SYSTEM GENERATED" => MotDefectType.SystemGenerated,
                 "USER ENTERED" => MotDefectType.UserEntered,
-                _ => MotDefectType.UserEntered
+                _ => throw new ArgumentException($"Unknown MOT defect type: {type}")
             };
         }
 
