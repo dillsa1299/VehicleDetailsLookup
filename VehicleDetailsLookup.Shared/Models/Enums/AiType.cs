@@ -16,6 +16,19 @@
         /// <summary>
         /// AI-generated summary of the vehicle's MOT history.
         /// </summary>
-        MotHistorySummary
+        MotHistorySummary,
+
+        /// <summary>
+        /// AI-generated impersonation of Jeremy Clarkson giving an overview of the vehicle, including general information and highlights.
+        /// </summary>
+        ClarksonOverview,
+        /// <summary>
+        /// AI-generated impersonation of Jeremy Clarkson giving a list of common issues or problems associated with the vehicle model.
+        /// </summary>
+        ClarksonCommonIssues,
+        /// <summary>
+        /// AI-generated impersonation of Jeremy Clarkson giving a summary of the vehicle's MOT history.
+        /// </summary>
+        ClarksonMotHistorySummary
     }
 }

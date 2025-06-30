@@ -22,19 +22,32 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
         private bool _isSearchingAiOverview;
         private bool _isSearchingAiCommonIssues;
         private bool _isSearchingAiMotHistorySummary;
+        private bool _clarksonEasterEggEnabled;
 
         private string? AiOverviewText =>
-            (Vehicle?.AiData.TryGetValue(AiType.Overview, out var aiDataModel) == true)
+            _clarksonEasterEggEnabled
+                ? (Vehicle?.AiData.TryGetValue(AiType.ClarksonOverview, out var aiDataModel) == true
                     ? aiDataModel.Content
-                    : string.Empty;
+                    : string.Empty)
+                : (Vehicle?.AiData.TryGetValue(AiType.Overview, out aiDataModel) == true
+                    ? aiDataModel.Content
+                    : string.Empty);
 
         private string? AiCommonIssuesText =>
-            (Vehicle?.AiData.TryGetValue(AiType.CommonIssues, out var aiDataModel) == true)
+            _clarksonEasterEggEnabled
+                ? (Vehicle?.AiData.TryGetValue(AiType.ClarksonCommonIssues, out var aiDataModel) == true
+                    ? aiDataModel.Content
+                    : string.Empty)
+                : (Vehicle?.AiData.TryGetValue(AiType.CommonIssues, out aiDataModel) == true)
                     ? aiDataModel.Content
                     : string.Empty;
 
         private string? AiMotHistorySummaryText =>
-            (Vehicle?.AiData.TryGetValue(AiType.MotHistorySummary, out var aiDataModel) == true)
+            _clarksonEasterEggEnabled
+                ? (Vehicle?.AiData.TryGetValue(AiType.ClarksonMotHistorySummary, out var aiDataModel) == true
+                    ? aiDataModel.Content
+                    : string.Empty)
+                : (Vehicle?.AiData.TryGetValue(AiType.MotHistorySummary, out aiDataModel) == true)
                     ? aiDataModel.Content
                     : string.Empty;
 
@@ -53,6 +66,21 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
                 ? null
                 : (MarkupString)Markdig.Markdown.ToHtml(AiMotHistorySummaryText);
 
+        private string? AiOverviewTitle =>
+            _clarksonEasterEggEnabled
+                ? "Clarkson's Take"
+                : "AI Overview";
+
+        private string? CommonIssuesTitle =>
+            _clarksonEasterEggEnabled
+                ? "Clarkson's Common Gripes"
+                : "Common Issues";
+
+        private string? AiMotHistorySummaryTitle =>
+            _clarksonEasterEggEnabled
+                ? "Clarkson's MOT Rant"
+                : "AI Summary";
+
         private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber)
         {
             switch (lookupType)
@@ -67,15 +95,19 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
                     _isSearchingImages = lookupStarted;
                     break;
                 case VehicleLookupType.AiOverview:
+                case VehicleLookupType.AiClarksonOverview:
                     _isSearchingAiOverview = lookupStarted;
                     break;
                 case VehicleLookupType.AiCommonIssues:
+                case VehicleLookupType.AiClarksonCommonIssues:
                     _isSearchingAiCommonIssues = lookupStarted;
                     break;
                 case VehicleLookupType.AiMotHistorySummary:
+                case VehicleLookupType.AiClarksonMotHistorySummary:
                     _isSearchingAiMotHistorySummary = lookupStarted;
                     break;
             }
+
             StateHasChanged();
         }
 
@@ -108,15 +140,23 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
             }
         }
 
+        private void OnEasterEggActivated(bool activated)
+        {
+            _clarksonEasterEggEnabled = activated;
+            StateHasChanged();
+        }
+
         protected override void OnInitialized()
         {
             VehicleLookupEventsService.OnLookupStatusChanged += OnLookupStatusChanged;
+            VehicleLookupEventsService.OnEasterEggActivated += OnEasterEggActivated;
             base.OnInitialized();
         }
 
         public void Dispose()
         {
             VehicleLookupEventsService.OnLookupStatusChanged -= OnLookupStatusChanged;
+            VehicleLookupEventsService.OnEasterEggActivated -= OnEasterEggActivated;
         }
     }
 }

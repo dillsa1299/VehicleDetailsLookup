@@ -43,7 +43,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
             IDetailsModel? vehicleDetails = null;
             IEnumerable<IMotTestModel>? motTests = null;
 
-            if (searchType == AiType.MotHistorySummary)
+            if (searchType == AiType.MotHistorySummary || searchType == AiType.ClarksonMotHistorySummary)
             {
                 // For MOT history summary, we only need the MOT tests
                 motTests = await _vehicleMotService.GetVehicleMotTestsAsync(registrationNumber);
@@ -83,11 +83,14 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
             {
                 case AiType.Overview:
                 case AiType.CommonIssues:
+                case AiType.ClarksonOverview:
+                case AiType.ClarksonCommonIssues:
                     if (vehicleDetails == null)
                         throw new ArgumentNullException(nameof(vehicleDetails), "Vehicle details cannot be null for overview and common issues search types.");
                     data = JsonSerializer.Serialize(vehicleDetails);
                     break;
                 case AiType.MotHistorySummary:
+                case AiType.ClarksonMotHistorySummary:
                     if (motTests == null || !motTests.Any())
                         throw new ArgumentNullException(nameof(motTests), "MOT tests cannot be null or empty for MOT history summary search type.");
                     data = JsonSerializer.Serialize(motTests);
@@ -102,6 +105,10 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
                                            $"Don't discuss common issues. Give me the information directly without any introductory sentences or titles: {data}",
                 AiType.CommonIssues => $"List the common issues with the UK specification of the following vehicle with no introduction/title: {data}",
                 AiType.MotHistorySummary => $"Provide an overall summary for the following UK MOT test results. Exclude any introductory sentences: {data}",
+                AiType.ClarksonOverview => $"Impersonate Jeremy Clarkson, voicing his opinions, and provide a brief overview of the following UK specification vehicle searching for additional information such as performance and pricing. " +
+                                           $"Don't discuss common issues. Give me the information directly without any introductory sentences or titles: {data}",
+                AiType.ClarksonCommonIssues => $"Impersonate Jeremy Clarkson, voicing his opinions, and list the common issues with the UK specification of the following vehicle with no introduction/title: {data}",
+                AiType.ClarksonMotHistorySummary => $"Impersonate Jeremy Clarkson, voicing his opinions, and provide an overall summary for the following UK MOT test results. Exclude any introductory sentences: {data}",
                 _ => throw new ArgumentOutOfRangeException(nameof(searchType), searchType, "Invalid AI data search type."),
             };
         }

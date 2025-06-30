@@ -23,6 +23,13 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookupEvents
         public delegate void VehicleLookupEvent(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber);
 
         /// <summary>
+        /// Represents a method that handles the activation of an Easter egg.
+        /// </summary>
+        /// <param name="activated">A value indicating whether the Easter egg has been activated.  <see langword="true"/> if activated;
+        /// otherwise, <see langword="false"/>.</param>
+        public delegate void EasterEggActivatedEvent(bool activated);
+
+        /// <summary>
         /// Event triggered when a vehicle lookup is initiated.
         /// </summary>
         event VehicleLookupStartEvent OnStartVehicleLookup;
@@ -36,6 +43,11 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookupEvents
         /// Event triggered when the vehicle lookup state is cleared.
         /// </summary>
         event Action OnLookupClear;
+
+        /// <summary>
+        /// Event triggered when an Easter Egg is activated.
+        /// </summary>
+        event EasterEggActivatedEvent OnEasterEggActivated;
 
         /// <summary>
         /// Notifies subscribers to start a vehicle lookup.
@@ -56,5 +68,11 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookupEvents
         /// Notifies subscribers to clear lookup data.
         /// </summary>
         void NotifyLookupClear();
+
+        /// <summary>
+        /// Start searches for Easter Egg content.
+        /// </summary>
+        /// <param name="activated">Indicates whether the Easter egg has been activated.</param>
+        void NotifyEasterEggActivated(bool activated);
     }
 }
