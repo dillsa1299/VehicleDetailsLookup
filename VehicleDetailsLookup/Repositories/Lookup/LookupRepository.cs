@@ -21,11 +21,25 @@ namespace VehicleDetailsLookup.Repositories.Lookup
 
         public async ValueTask<IEnumerable<ILookupDbModel>?> GetRecentLookupsAsync(int count)
         {
-            return await _dbContext.Lookups
+            // Get distinct until changed recent lookups. Prevents multiple entries for the same registration number in a row.
+            var sql = $@"
+                SELECT l.*
+                FROM (
+                    SELECT *,
+                           LAG(RegistrationNumber) OVER (ORDER BY [DateTime] DESC) AS PrevReg
+                    FROM Lookups
+                ) l
+                WHERE l.RegistrationNumber <> COALESCE(l.PrevReg, '')
+                ORDER BY l.[DateTime] DESC
+                LIMIT {count}
+            ";
+
+            var lookups = await _dbContext.Lookups
+                .FromSqlRaw(sql)
                 .Include(l => l.Details)
-                .OrderByDescending(l => l.DateTime)
-                .Take(count)
                 .ToListAsync();
+
+            return lookups;
         }
 
         public async ValueTask<IEnumerable<ILookupDbModel>?> GetRecentLookupsAsync(string registrationNumber, int count = 0)
