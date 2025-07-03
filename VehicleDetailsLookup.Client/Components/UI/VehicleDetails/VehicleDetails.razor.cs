@@ -121,7 +121,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
 
         private async Task OnCommonIssuesExpandedAsync(bool expanded)
         {
-            if (!_isSearchingAiCommonIssues && Vehicle != null && !Vehicle.AiData.ContainsKey(AiType.CommonIssues))
+            if (!_isSearchingAiCommonIssues && Vehicle != null && !Vehicle.AiData.ContainsKey(AiType.CommonIssues) && !_clarksonEasterEggEnabled)
             {
                 await StartLookup(VehicleLookupType.AiCommonIssues);
             }
@@ -134,7 +134,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
                 await StartLookup(VehicleLookupType.MotHistory);
             }
 
-            if (!_isSearchingAiMotHistorySummary && Vehicle != null && !Vehicle.AiData.ContainsKey(AiType.MotHistorySummary))
+            if (!_isSearchingAiMotHistorySummary && Vehicle != null && !Vehicle.AiData.ContainsKey(AiType.MotHistorySummary) && !_clarksonEasterEggEnabled)
             {
                 await StartLookup(VehicleLookupType.AiMotHistorySummary);
             }
