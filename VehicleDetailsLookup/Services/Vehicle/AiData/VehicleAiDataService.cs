@@ -43,23 +43,20 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
 
             return searchType switch
             {
-                AiType.MotHistorySummary or AiType.ClarksonMotHistorySummary => await GetVehicleAiDataInternalAsync<IEnumerable<MotTestModel>>(registrationNumber, searchType, _vehicleMotService.GetVehicleMotTestsAsync),
-                _ => await GetVehicleAiDataInternalAsync<DetailsModel>(registrationNumber, searchType, (reg) => _vehicleDetailsService.GetVehicleDetailsAsync(reg, false))
+                AiType.MotHistorySummary or AiType.ClarksonMotHistorySummary => await GetVehicleAiDataInternalAsync<IEnumerable<MotTestModel>>(registrationNumber, searchType, await _vehicleMotService.GetVehicleMotTestsAsync(registrationNumber)),
+                _ => await GetVehicleAiDataInternalAsync<DetailsModel>(registrationNumber, searchType, await _vehicleDetailsService.GetVehicleDetailsAsync(registrationNumber, false))
             };
         }
 
-        private async ValueTask<AiDataModel?> GetVehicleAiDataInternalAsync<TData>(string registrationNumber, AiType searchType, Func<string, ValueTask<TData?>> getDataAsync) where TData : class
+        private async ValueTask<AiDataModel?> GetVehicleAiDataInternalAsync<TData>(string registrationNumber, AiType searchType, TData? data) where TData : class
         {
-            var data = await getDataAsync(registrationNumber);
             if (data == null)
-                // Failed to retrieve data, return null
                 return null;
 
             var prompt = BuildPrompt(searchType, data);
             var geminiResponse = await _geminiService.GetGeminiResponseAsync(prompt);
 
             if (geminiResponse == null)
-                // Failed to get a response from the Gemini API, return null
                 return null;
 
             var dbAiData = _apiMapper.MapAiData(registrationNumber, searchType, geminiResponse);
