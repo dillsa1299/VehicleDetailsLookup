@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using VehicleDetailsLookup.Client.Components.UI.VehicleDetails;
 using VehicleDetailsLookup.Repositories.AiData;
 using VehicleDetailsLookup.Services.Api.Gemini;
 using VehicleDetailsLookup.Services.Mappers.ApiDatabase;
@@ -10,6 +9,8 @@ using VehicleDetailsLookup.Shared.Models.Ai;
 using VehicleDetailsLookup.Shared.Models.Details;
 using VehicleDetailsLookup.Shared.Models.Enums;
 using VehicleDetailsLookup.Shared.Models.Mot;
+using VehicleDetailsLookup.Shared.Helpers;
+using VehicleDetailsLookup.Models.Database.AiData;
 
 namespace VehicleDetailsLookup.Services.Vehicle.AiData
 {
@@ -43,40 +44,47 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
 
             return searchType switch
             {
-                AiType.MotHistorySummary or AiType.ClarksonMotHistorySummary => await GetVehicleAiDataInternalAsync<IEnumerable<MotTestModel>>(registrationNumber, searchType, await _vehicleMotService.GetVehicleMotTestsAsync(registrationNumber)),
-                _ => await GetVehicleAiDataInternalAsync<DetailsModel>(registrationNumber, searchType, await _vehicleDetailsService.GetVehicleDetailsAsync(registrationNumber, false))
+                AiType.MotHistorySummary or AiType.ClarksonMotHistorySummary => await GetVehicleAiDataInternalAsync<IEnumerable<MotTestModel>>(registrationNumber, searchType, dbAiData, await _vehicleMotService.GetVehicleMotTestsAsync(registrationNumber)),
+                _ => await GetVehicleAiDataInternalAsync<DetailsModel>(registrationNumber, searchType, dbAiData, await _vehicleDetailsService.GetVehicleDetailsAsync(registrationNumber, false))
             };
         }
 
-        private async ValueTask<AiDataModel?> GetVehicleAiDataInternalAsync<TData>(string registrationNumber, AiType searchType, TData? data) where TData : class
+        private async ValueTask<AiDataModel?> GetVehicleAiDataInternalAsync<TData>(string registrationNumber, AiType searchType, AiDataDbModel? existingData,TData? additionalData) where TData : class
         {
-            if (data == null)
+            if (additionalData == null)
                 return null;
 
-            var prompt = BuildPrompt(searchType, data);
+            if (existingData != null && existingData.DataHash == DataHash.GenerateHash(additionalData))
+            {
+                // Underlying data hasn't changed, update the timestamp and return existing AI data
+                await _aiDataRepository.UpdateAiDataAsync(existingData);
+                return _databaseMapper.MapAiData(existingData);
+            }
+
+            var prompt = BuildPrompt(searchType, additionalData);
             var geminiResponse = await _geminiService.GetGeminiResponseAsync(prompt);
 
             if (geminiResponse == null)
                 return null;
 
-            var dbAiData = _apiMapper.MapAiData(registrationNumber, searchType, geminiResponse);
+            var dbAiData = _apiMapper.MapAiData(registrationNumber, searchType, geminiResponse, DataHash.GenerateHash(additionalData));
             await _aiDataRepository.UpdateAiDataAsync(dbAiData);
             return _databaseMapper.MapAiData(dbAiData);
         }
 
-        private static string BuildPrompt<TData>(AiType searchType, TData data)
+        private static string BuildPrompt<TData>(AiType searchType, TData additionalData)
         {
-            var dataJson = JsonSerializer.Serialize(data);
+            var additionalDataJson = JsonSerializer.Serialize(additionalData);
             return searchType switch
             {
                 AiType.Overview => $"Provide a brief overview of the following UK specification vehicle searching for additional information such as performance and pricing. " +
-                                           $"Don't discuss common issues. Give me the information directly without any introductory sentences or titles: {dataJson}",
-                AiType.CommonIssues => $"List the common issues with the UK specification of the following vehicle with no introduction/title: {dataJson}",
-                AiType.MotHistorySummary => $"Provide an overall summary for the following UK MOT test results. Exclude any introductory sentences: {dataJson}",
+                                           $"Don't discuss common issues. Give me the information directly without any introductory sentences or titles: {additionalDataJson}",
+                AiType.CommonIssues => $"List the common issues with the UK specification of the following vehicle with no introduction/title: {additionalDataJson}",
+                AiType.MotHistorySummary => $"Provide an overall summary for the following UK MOT test results. Exclude any introductory sentences: {additionalDataJson}",
                 AiType.ClarksonOverview => $"Impersonate Jeremy Clarkson, voicing his opinions, and provide a brief overview of the following UK specification vehicle searching for additional information such as performance and pricing. " +
-                                           $"Don't discuss common issues. Give me the information directly without any introductory sentences or titles: {dataJson}",
-                AiType.ClarksonCommonIssues => $"Impersonate Jeremy Clarkson, voicing his opinions, and list the common issues with the UK specification of the following vehicle with no introduction/title: {dataJson}",
-                AiType.ClarksonMotHistorySummary => $"Impersonate Jeremy Clarkson, voicing his opinions, and provide an overall summary for the following UK MOT test results. Exclude any introductory sentences: {dataJson}",
+                                           $"Don't discuss common issues. Give me the information directly without any introductory sentences or titles: {additionalDataJson}",
+                AiType.ClarksonCommonIssues => $"Impersonate Jeremy Clarkson, voicing his opinions, and list the common issues with the UK specification of the following vehicle with no introduction/title: {additionalDataJson}",
+                AiType.ClarksonMotHistorySummary => $"Impersonate Jeremy Clarkson, voicing his opinions, and provide an overall summary for the following UK MOT test results. Exclude any introductory sentences: {additionalDataJson}",
                 _ => throw new ArgumentOutOfRangeException(nameof(searchType), searchType, "Invalid AI data search type."),
             };
         }

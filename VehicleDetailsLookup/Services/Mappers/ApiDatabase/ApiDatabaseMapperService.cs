@@ -89,14 +89,15 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
                 });
         }
 
-        public AiDataDbModel MapAiData(string registrationNumber, AiType type, IGeminiResponse geminiResponse)
+        public AiDataDbModel MapAiData(string registrationNumber, AiType type, IGeminiResponse geminiResponse, string dataHash)
         {
             return new AiDataDbModel
             {
                 RegistrationNumber = registrationNumber,
                 Type = type,
                 GeneratedText = geminiResponse?.Response,
-                Updated = DateTime.UtcNow
+                Updated = DateTime.UtcNow,
+                DataHash = dataHash
             };
         }
 

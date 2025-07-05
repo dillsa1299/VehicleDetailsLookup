@@ -21,7 +21,7 @@ namespace VehicleDetailsLookup.Repositories.Image
 
             foreach (var image in images)
             {
-                await _dbContext.Images.AddAsync((ImageDbModel)image);
+                await _dbContext.Images.AddAsync(image);
             }
             await _dbContext.SaveChangesAsync();
         }

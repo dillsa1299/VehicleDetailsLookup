@@ -19,13 +19,14 @@ namespace VehicleDetailsLookup.Repositories.AiData
             {
                 // Update existing record
                 existing.GeneratedText = aiData.GeneratedText;
+                existing.DataHash = aiData.DataHash;
                 existing.Updated = DateTime.UtcNow;
                 _dbContext.AiData.Update(existing);
             }
             else
             {
                 // Add new record
-                await _dbContext.AiData.AddAsync((AiDataDbModel)aiData);
+                await _dbContext.AiData.AddAsync(aiData);
             }
             await _dbContext.SaveChangesAsync();
         }

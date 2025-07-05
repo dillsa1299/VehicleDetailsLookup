@@ -18,7 +18,7 @@ namespace VehicleDetailsLookup.Repositories.Mot
                 if (!await _dbContext.MotTests.AnyAsync(m => m.TestNumber == motTest.TestNumber))
                 {
                     // If the MOT test does not exist, add it
-                    await _dbContext.MotTests.AddAsync((MotTestDbModel)motTest);
+                    await _dbContext.MotTests.AddAsync(motTest);
                 }
                 else
                 {

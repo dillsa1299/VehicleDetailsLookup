@@ -27,7 +27,7 @@ namespace VehicleDetailsLookup.Repositories.Details
             else
             {
                 // Add new record
-                await _dbContext.Details.AddAsync((DetailsDbModel)details);
+                await _dbContext.Details.AddAsync(details);
             }
             await _dbContext.SaveChangesAsync();
         }

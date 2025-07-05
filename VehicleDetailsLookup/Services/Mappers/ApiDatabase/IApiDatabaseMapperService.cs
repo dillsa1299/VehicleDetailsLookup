@@ -15,6 +15,6 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
         DetailsDbModel MapDetails(IVesResponse vesResponse, IMotResponse motResponse);
         IEnumerable<MotTestDbModel> MapMotTests(string registrationNumber, IEnumerable<IMotResponseTest> motTests);
         IEnumerable<ImageDbModel> MapImages(string registrationNumber, IEnumerable<IGoogleImageResponseItem> images);
-        AiDataDbModel MapAiData(string registrationNumber, AiType type, IGeminiResponse geminiResponse);
+        AiDataDbModel MapAiData(string registrationNumber, AiType type, IGeminiResponse geminiResponse, string dataHash);
     }
 }
