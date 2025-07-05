@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using VehicleDetailsLookup.Client.Components.UI.VehicleDetails;
 using VehicleDetailsLookup.Repositories.AiData;
 using VehicleDetailsLookup.Services.Api.Gemini;
 using VehicleDetailsLookup.Services.Mappers.ApiDatabase;
@@ -31,7 +32,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
         {
             // Check if the vehicle details are already stored in the database
             var dbAiData = await _aiDataRepository.GetAiDataAsync(registrationNumber, searchType);
-            
+
             TimeSpan cacheDuration = searchType == AiType.MotHistorySummary
                 ? TimeSpan.FromMinutes(15) // MOT history summary cache duration
                 : TimeSpan.FromDays(1); // Overview and common issues cache duration
@@ -40,75 +41,45 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
                 // Return stored AI data if it is recent enough
                 return _databaseMapper.MapAiData(dbAiData);
 
-            DetailsModel? vehicleDetails = null;
-            IEnumerable<MotTestModel>? motTests = null;
-
-            if (searchType == AiType.MotHistorySummary || searchType == AiType.ClarksonMotHistorySummary)
+            return searchType switch
             {
-                // For MOT history summary, we only need the MOT tests
-                motTests = await _vehicleMotService.GetVehicleMotTestsAsync(registrationNumber);
+                AiType.MotHistorySummary or AiType.ClarksonMotHistorySummary => await GetVehicleAiDataInternalAsync<IEnumerable<MotTestModel>>(registrationNumber, searchType, _vehicleMotService.GetVehicleMotTestsAsync),
+                _ => await GetVehicleAiDataInternalAsync<DetailsModel>(registrationNumber, searchType, (reg) => _vehicleDetailsService.GetVehicleDetailsAsync(reg, false))
+            };
+        }
 
-                if (motTests == null)
-                    // If no MOT tests found, return null
-                    return null;
-            }
-            else
-            {
-                // Vehicle details are needed for overview and common issues
-                vehicleDetails = await _vehicleDetailsService.GetVehicleDetailsAsync(registrationNumber);
+        private async ValueTask<AiDataModel?> GetVehicleAiDataInternalAsync<TData>(string registrationNumber, AiType searchType, Func<string, ValueTask<TData?>> getDataAsync) where TData : class
+        {
+            var data = await getDataAsync(registrationNumber);
+            if (data == null)
+                // Failed to retrieve data, return null
+                return null;
 
-                if (vehicleDetails == null)
-                    // If no vehicle data is found, return null
-                    return null;
-            }
-
-            var prompt = BuildPrompt(searchType, vehicleDetails, motTests);
+            var prompt = BuildPrompt(searchType, data);
             var geminiResponse = await _geminiService.GetGeminiResponseAsync(prompt);
 
             if (geminiResponse == null)
-                // If no response from Gemini, return null
+                // Failed to get a response from the Gemini API, return null
                 return null;
 
-            // Map the API response to database model and update the repository
-            dbAiData = _apiMapper.MapAiData(registrationNumber, searchType, geminiResponse);
+            var dbAiData = _apiMapper.MapAiData(registrationNumber, searchType, geminiResponse);
             await _aiDataRepository.UpdateAiDataAsync(dbAiData);
-
             return _databaseMapper.MapAiData(dbAiData);
         }
 
-        private static string BuildPrompt(AiType searchType, DetailsModel? vehicleDetails, IEnumerable<MotTestModel>? motTests)
+        private static string BuildPrompt<TData>(AiType searchType, TData data)
         {
-            string data;
-            switch (searchType)
-            {
-                case AiType.Overview:
-                case AiType.CommonIssues:
-                case AiType.ClarksonOverview:
-                case AiType.ClarksonCommonIssues:
-                    if (vehicleDetails == null)
-                        throw new ArgumentNullException(nameof(vehicleDetails), "Vehicle details cannot be null for overview and common issues search types.");
-                    data = JsonSerializer.Serialize(vehicleDetails);
-                    break;
-                case AiType.MotHistorySummary:
-                case AiType.ClarksonMotHistorySummary:
-                    if (motTests == null || !motTests.Any())
-                        throw new ArgumentNullException(nameof(motTests), "MOT tests cannot be null or empty for MOT history summary search type.");
-                    data = JsonSerializer.Serialize(motTests);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(searchType), searchType, "Invalid AI data search type.");
-            }
-
+            var dataJson = JsonSerializer.Serialize(data);
             return searchType switch
             {
                 AiType.Overview => $"Provide a brief overview of the following UK specification vehicle searching for additional information such as performance and pricing. " +
-                                           $"Don't discuss common issues. Give me the information directly without any introductory sentences or titles: {data}",
-                AiType.CommonIssues => $"List the common issues with the UK specification of the following vehicle with no introduction/title: {data}",
-                AiType.MotHistorySummary => $"Provide an overall summary for the following UK MOT test results. Exclude any introductory sentences: {data}",
+                                           $"Don't discuss common issues. Give me the information directly without any introductory sentences or titles: {dataJson}",
+                AiType.CommonIssues => $"List the common issues with the UK specification of the following vehicle with no introduction/title: {dataJson}",
+                AiType.MotHistorySummary => $"Provide an overall summary for the following UK MOT test results. Exclude any introductory sentences: {dataJson}",
                 AiType.ClarksonOverview => $"Impersonate Jeremy Clarkson, voicing his opinions, and provide a brief overview of the following UK specification vehicle searching for additional information such as performance and pricing. " +
-                                           $"Don't discuss common issues. Give me the information directly without any introductory sentences or titles: {data}",
-                AiType.ClarksonCommonIssues => $"Impersonate Jeremy Clarkson, voicing his opinions, and list the common issues with the UK specification of the following vehicle with no introduction/title: {data}",
-                AiType.ClarksonMotHistorySummary => $"Impersonate Jeremy Clarkson, voicing his opinions, and provide an overall summary for the following UK MOT test results. Exclude any introductory sentences: {data}",
+                                           $"Don't discuss common issues. Give me the information directly without any introductory sentences or titles: {dataJson}",
+                AiType.ClarksonCommonIssues => $"Impersonate Jeremy Clarkson, voicing his opinions, and list the common issues with the UK specification of the following vehicle with no introduction/title: {dataJson}",
+                AiType.ClarksonMotHistorySummary => $"Impersonate Jeremy Clarkson, voicing his opinions, and provide an overall summary for the following UK MOT test results. Exclude any introductory sentences: {dataJson}",
                 _ => throw new ArgumentOutOfRangeException(nameof(searchType), searchType, "Invalid AI data search type."),
             };
         }
