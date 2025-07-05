@@ -20,7 +20,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.Images
         private readonly IDatabaseFrontendMapperService _databaseMapper = databaseMapper
             ?? throw new ArgumentNullException(nameof(databaseMapper));
 
-        public async ValueTask<IEnumerable<IImageModel>?> GetVehicleImagesAsync(string registrationNumber)
+        public async ValueTask<IEnumerable<ImageModel>?> GetVehicleImagesAsync(string registrationNumber)
         {
             // Check if the vehicle images are already stored in the database
             var dbImages = await _imageRepository.GetImagesAsync(registrationNumber);

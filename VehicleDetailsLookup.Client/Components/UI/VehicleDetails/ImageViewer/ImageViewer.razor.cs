@@ -8,7 +8,7 @@ public partial class ImageViewer
     public bool IsSearching { get; set; }
 
     [Parameter]
-    public IEnumerable<IImageModel> Images { get; set; } = [];
+    public IEnumerable<ImageModel> Images { get; set; } = [];
 
     [Parameter]
     public string? PlaceholderImage { get; set; } = string.Empty;

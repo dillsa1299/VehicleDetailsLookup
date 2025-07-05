@@ -8,7 +8,7 @@ namespace VehicleDetailsLookup.Repositories.Image
     {
         private readonly VehicleDbContext _dbContext = dbContext;
 
-        public async Task UpdateImagesAsync(IEnumerable<IImageDbModel> images)
+        public async Task UpdateImagesAsync(IEnumerable<ImageDbModel> images)
         {
             var registrationNumbers = images.Select(i => i.RegistrationNumber).ToList();
             var existingImages = await _dbContext.Images
@@ -26,7 +26,7 @@ namespace VehicleDetailsLookup.Repositories.Image
             await _dbContext.SaveChangesAsync();
         }
 
-        public async ValueTask<IEnumerable<IImageDbModel>?> GetImagesAsync(string registrationNumber)
+        public async ValueTask<IEnumerable<ImageDbModel>?> GetImagesAsync(string registrationNumber)
         {
             var images = await _dbContext.Images
                 .Where(img => img.RegistrationNumber == registrationNumber)

@@ -3,7 +3,7 @@ using VehicleDetailsLookup.Shared.Models.Enums;
 
 namespace VehicleDetailsLookup.Models.Database.Details
 {
-    public class DetailsDbModel : IDetailsDbModel
+    public class DetailsDbModel
     {
         public string? RegistrationNumber { get; set; }
         public int YearOfManufacture { get; set; }

@@ -15,6 +15,6 @@ namespace VehicleDetailsLookup.Services.Vehicle.Mot
         /// A task that represents the asynchronous operation. The task result contains a collection of MOT test models
         /// or null if no data is available.
         /// </returns>
-        ValueTask<IEnumerable<IMotTestModel>?> GetVehicleMotTestsAsync(string registrationNumber);
+        ValueTask<IEnumerable<MotTestModel>?> GetVehicleMotTestsAsync(string registrationNumber);
     }
 }

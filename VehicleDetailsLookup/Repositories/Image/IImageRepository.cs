@@ -12,7 +12,7 @@ namespace VehicleDetailsLookup.Repositories.Image
         /// </summary>
         /// <param name="images">A collection of image models to add or update. Each model must implement <see cref="IImageDbModel"/>.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
-        Task UpdateImagesAsync(IEnumerable<IImageDbModel> images);
+        Task UpdateImagesAsync(IEnumerable<ImageDbModel> images);
 
         /// <summary>
         /// Retrieves all images associated with a specific vehicle registration number.
@@ -22,6 +22,6 @@ namespace VehicleDetailsLookup.Repositories.Image
         /// A value task containing a collection of image models implementing <see cref="IImageDbModel"/> for the specified vehicle,
         /// or <c>null</c> if no images exist for the given registration number.
         /// </returns>
-        ValueTask<IEnumerable<IImageDbModel>?> GetImagesAsync(string registrationNumber);
+        ValueTask<IEnumerable<ImageDbModel>?> GetImagesAsync(string registrationNumber);
     }
 }

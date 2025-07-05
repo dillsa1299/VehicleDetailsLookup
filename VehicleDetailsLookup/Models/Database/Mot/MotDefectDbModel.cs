@@ -2,7 +2,7 @@
 
 namespace VehicleDetailsLookup.Models.Database.Mot
 {
-    public class MotDefectDbModel : IMotDefectDbModel
+    public class MotDefectDbModel
     {
         public string? TestNumber { get; set; }
         public string? Description { get; set; }

@@ -17,7 +17,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.Mot
         private readonly IDatabaseFrontendMapperService _databaseMapper = databaseMapper
             ?? throw new ArgumentNullException(nameof(databaseMapper));
 
-        public async ValueTask<IEnumerable<IMotTestModel>?> GetVehicleMotTestsAsync(string registrationNumber)
+        public async ValueTask<IEnumerable<MotTestModel>?> GetVehicleMotTestsAsync(string registrationNumber)
         {
             // Check if the MOT tests are already stored in the database
             var dbMotTests = await _motRepository.GetMotTestsAsync(registrationNumber);

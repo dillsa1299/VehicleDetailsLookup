@@ -14,7 +14,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
         private readonly HttpClient _httpClient = httpClient;
         private readonly IJSRuntime _jsRuntime = jsRuntime;
 
-        public async ValueTask<IDetailsModel?> GetVehicleDetailsAsync(string registrationNumber)
+        public async ValueTask<DetailsModel?> GetVehicleDetailsAsync(string registrationNumber)
         {
             // Call the backend API to retrieve vehicle details.
             var response = await _httpClient.GetAsync($"/api/VehicleDetails/{registrationNumber}");
@@ -28,7 +28,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             return details;
         }
 
-        public async ValueTask<IEnumerable<IMotTestModel>?> GetMotTestsAsync(string registrationNumber)
+        public async ValueTask<IEnumerable<MotTestModel>?> GetMotTestsAsync(string registrationNumber)
         {
             // Call the backend API to retrieve vehicle MOT tests.
             var response = await _httpClient.GetAsync($"/api/VehicleMot/{registrationNumber}");
@@ -42,7 +42,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             return motTests?.OrderByDescending(t => t.CompletedDate);
         }
 
-        public async ValueTask<IEnumerable<IImageModel>?> GetVehicleImagesAsync(string registrationNumber)
+        public async ValueTask<IEnumerable<ImageModel>?> GetVehicleImagesAsync(string registrationNumber)
         {
             // Call the backend API to retrieve vehicle images.
             var response = await _httpClient.GetAsync($"/api/VehicleImages/{registrationNumber}");
@@ -70,7 +70,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             return images;
         }
 
-        public async ValueTask<IAiDataModel?> GetVehicleAiDataAsync(string registrationNumber, AiType type)
+        public async ValueTask<AiDataModel?> GetVehicleAiDataAsync(string registrationNumber, AiType type)
         {
             // Call the backend API to retrieve vehicle AI.
             var response = await _httpClient.GetAsync($"/api/VehicleAiData/{registrationNumber}/{type}");
@@ -98,7 +98,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             return count;
         }
 
-        public async ValueTask<IEnumerable<ILookupModel>?> GetRecentVehicleLookupsAsync()
+        public async ValueTask<IEnumerable<LookupModel>?> GetRecentVehicleLookupsAsync()
         {
             // Call the backend API to retrieve recent vehicle lookups.
             var response = await _httpClient.GetAsync("/api/VehicleLookupHistory/recent");
@@ -112,7 +112,7 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             return lookups;
         }
 
-        public async ValueTask<IEnumerable<ILookupModel>?> GetRecentVehicleLookupsAsync(string registrationNumber)
+        public async ValueTask<IEnumerable<LookupModel>?> GetRecentVehicleLookupsAsync(string registrationNumber)
         {
             // Call the backend API to retrieve recent lookups for the registration number.
             var response = await _httpClient.GetAsync($"/api/VehicleLookupHistory/recent/{registrationNumber}");

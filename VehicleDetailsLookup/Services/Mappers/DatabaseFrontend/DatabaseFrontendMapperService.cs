@@ -13,7 +13,7 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
 {
     public class DatabaseFrontendMapperService : IDatabaseFrontendMapperService
     {
-        public DetailsModel MapDetails(IDetailsDbModel details)
+        public DetailsModel MapDetails(DetailsDbModel details)
         {
             return new DetailsModel
             {
@@ -33,7 +33,7 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
             };
         }
 
-        public IEnumerable<IMotTestModel> MapMotTests(IEnumerable<IMotTestDbModel> motTests)
+        public IEnumerable<MotTestModel> MapMotTests(IEnumerable<MotTestDbModel> motTests)
         {
             if (motTests == null)
                 return [];
@@ -49,7 +49,7 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
             });
         }
 
-        private static IEnumerable<MotDefectModel> MapMotDefects(IEnumerable<IMotDefectDbModel> motDefects)
+        private static IEnumerable<MotDefectModel> MapMotDefects(IEnumerable<MotDefectDbModel> motDefects)
         {
             if (motDefects == null)
                 return [];
@@ -62,7 +62,7 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
             });
         }
 
-        public IEnumerable<IImageModel> MapImages(IEnumerable<IImageDbModel> images)
+        public IEnumerable<ImageModel> MapImages(IEnumerable<ImageDbModel> images)
         {
             if (images == null)
                 return [];
@@ -76,7 +76,7 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
             });
         }
 
-        public IAiDataModel MapAiData(IAiDataDbModel aiData)
+        public AiDataModel MapAiData(AiDataDbModel aiData)
         {
             return new AiDataModel
             {
@@ -85,7 +85,7 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
             };
         }
 
-        public ILookupModel MapLookup(ILookupDbModel lookup)
+        public LookupModel MapLookup(LookupDbModel lookup)
         {
             return new LookupModel
             {

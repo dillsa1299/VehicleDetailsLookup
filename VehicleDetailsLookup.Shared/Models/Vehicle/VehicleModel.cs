@@ -6,11 +6,11 @@ using VehicleDetailsLookup.Shared.Models.Ai;
 
 namespace VehicleDetailsLookup.Shared.Models.Vehicle
 {
-    public class VehicleModel : IVehicleModel
+    public class VehicleModel
     {
-        public IDetailsModel? Details { get; set; }
-        public IEnumerable<IMotTestModel> MotTests { get; set; } = [];
-        public IEnumerable<IImageModel> Images { get; set; } = [];
-        public IDictionary<AiType, IAiDataModel> AiData { get; set; } = new Dictionary<AiType, IAiDataModel>();
+        public DetailsModel? Details { get; set; }
+        public IEnumerable<MotTestModel> MotTests { get; set; } = [];
+        public IEnumerable<ImageModel> Images { get; set; } = [];
+        public IDictionary<AiType, AiDataModel> AiData { get; set; } = new Dictionary<AiType, AiDataModel>();
     }
 }

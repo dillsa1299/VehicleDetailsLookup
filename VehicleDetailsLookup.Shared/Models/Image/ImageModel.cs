@@ -1,6 +1,6 @@
 ﻿namespace VehicleDetailsLookup.Shared.Models.Image
 {
-    public class ImageModel: IImageModel
+    public class ImageModel
     {
         public int Index { get; set; }
         public string? Title { get; set; }

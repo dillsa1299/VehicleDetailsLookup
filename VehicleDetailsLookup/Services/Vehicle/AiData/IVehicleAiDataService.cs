@@ -17,6 +17,6 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
         /// <returns>
         /// A <see cref="ValueTask{TResult}"/> containing the <see cref="IAiDataModel"/> if found; otherwise, <c>null</c>.
         /// </returns>
-        ValueTask<IAiDataModel?> GetVehicleAiDataAsync(string registrationNumber, AiType searchType);
+        ValueTask<AiDataModel?> GetVehicleAiDataAsync(string registrationNumber, AiType searchType);
     }
 }

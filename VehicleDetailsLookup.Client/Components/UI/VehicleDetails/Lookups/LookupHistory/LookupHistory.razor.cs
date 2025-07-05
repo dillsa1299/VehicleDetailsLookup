@@ -13,7 +13,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.Lookups.Looku
         [Inject]
         private IVehicleLookupService VehicleLookupService { get; set; } = default!;
 
-        private IEnumerable<ILookupModel> _lookups = [];
+        private IEnumerable<LookupModel> _lookups = [];
 
         private static string GetTimeSpan(DateTime dateTime)
             => TimeSpanHelper.GetTimeSpan(dateTime, false);

@@ -8,7 +8,7 @@ namespace VehicleDetailsLookup.Repositories.Mot
     {
         private readonly VehicleDbContext _dbContext = dbContext;
 
-        public async Task UpdateMotTestsAsync(IEnumerable<IMotTestDbModel> motTests)
+        public async Task UpdateMotTestsAsync(IEnumerable<MotTestDbModel> motTests)
         {
             if (motTests == null || !motTests.Any())
                 return;
@@ -30,7 +30,7 @@ namespace VehicleDetailsLookup.Repositories.Mot
             await _dbContext.SaveChangesAsync();
         }
 
-        public async ValueTask<IEnumerable<IMotTestDbModel>?> GetMotTestsAsync(string registrationNumber)
+        public async ValueTask<IEnumerable<MotTestDbModel>?> GetMotTestsAsync(string registrationNumber)
         {
             return await _dbContext.MotTests
                 .Include(m => m.MotDefects)

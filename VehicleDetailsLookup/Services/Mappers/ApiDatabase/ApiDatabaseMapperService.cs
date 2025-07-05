@@ -13,7 +13,7 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
 {
     public class ApiDatabaseMapperService : IApiDatabaseMapperService
     {
-        public IDetailsDbModel MapDetails(IVesResponse vesResponse, IMotResponse motResponse)
+        public DetailsDbModel MapDetails(IVesResponse vesResponse, IMotResponse motResponse)
         {
             return new DetailsDbModel
             {
@@ -30,12 +30,11 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
                 MotExpiryDate = DateOnlyTryParse(vesResponse.MotExpiryDate, "yyyy-MM-dd"),
                 DateOfLastV5CIssued = DateOnlyTryParse(vesResponse.DateOfLastV5CIssued, "yyyy-MM-dd") ?? default,
                 MonthOfFirstRegistration = DateOnlyTryParse(vesResponse.MonthOfFirstRegistration, "yyyy-MM") ?? default,
-                Updated = DateTime.UtcNow,
-                Lookups = []
+                Updated = DateTime.UtcNow
             };
         }
 
-        public IEnumerable<IMotTestDbModel> MapMotTests(string registrationNumber, IEnumerable<IMotResponseTest> motTests)
+        public IEnumerable<MotTestDbModel> MapMotTests(string registrationNumber, IEnumerable<IMotResponseTest> motTests)
         {
             if (motTests == null)
                 return [];
@@ -73,7 +72,7 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
             });
         }
 
-        public IEnumerable<IImageDbModel> MapImages(string registrationNumber, IEnumerable<IGoogleImageResponseItem> images)
+        public IEnumerable<ImageDbModel> MapImages(string registrationNumber, IEnumerable<IGoogleImageResponseItem> images)
         {
             if (images == null)
                 return [];
@@ -90,7 +89,7 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
                 });
         }
 
-        public IAiDataDbModel MapAiData(string registrationNumber, AiType type, IGeminiResponse geminiResponse)
+        public AiDataDbModel MapAiData(string registrationNumber, AiType type, IGeminiResponse geminiResponse)
         {
             return new AiDataDbModel
             {

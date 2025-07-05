@@ -4,10 +4,10 @@
 @if (_lookups.Any())
 {
     <div style="max-height: 384px; overflow-y: auto;">
-        <MudList T="ILookupModel" Dense="true">
+        <MudList T="LookupModel" Dense="true">
             @foreach(var lookup in _lookups)
             {
-                <MudListItem T="ILookupModel" Value="@lookup">
+                <MudListItem T="LookupModel" Value="@lookup">
                     <MudText Typo="Typo.subtitle2" Inline="true">@GetTimeSpan(lookup.DateTime) | </MudText>
                     <MudText Typo="Typo.caption" Color="Color.Primary">@lookup.DateTime.ToString("yyyy-MM-dd HH:mm")</MudText>
                 </MudListItem>

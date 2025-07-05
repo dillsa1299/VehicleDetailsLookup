@@ -2,7 +2,7 @@
 
 namespace VehicleDetailsLookup.Shared.Models.Mot
 {
-    public class MotDefectModel : IMotDefectModel
+    public class MotDefectModel
     {
         public string Description { get; set; } = string.Empty;
         public MotDefectType Type { get; set; }

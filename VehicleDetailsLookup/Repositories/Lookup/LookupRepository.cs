@@ -19,7 +19,7 @@ namespace VehicleDetailsLookup.Repositories.Lookup
             await _dbContext.SaveChangesAsync();
         }
 
-        public async ValueTask<IEnumerable<ILookupDbModel>?> GetRecentLookupsAsync(int count)
+        public async ValueTask<IEnumerable<LookupDbModel>?> GetRecentLookupsAsync(int count)
         {
             // Get distinct until changed recent lookups. Prevents multiple entries for the same registration number in a row.
             var sql = $@"
@@ -42,7 +42,7 @@ namespace VehicleDetailsLookup.Repositories.Lookup
             return lookups;
         }
 
-        public async ValueTask<IEnumerable<ILookupDbModel>?> GetRecentLookupsAsync(string registrationNumber, int count = 0)
+        public async ValueTask<IEnumerable<LookupDbModel>?> GetRecentLookupsAsync(string registrationNumber, int count = 0)
         {
             var query = _dbContext.Lookups
                 .Include(l => l.Details)

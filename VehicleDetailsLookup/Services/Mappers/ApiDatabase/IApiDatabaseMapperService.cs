@@ -12,9 +12,9 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
 {
     public interface IApiDatabaseMapperService
     {
-        IDetailsDbModel MapDetails(IVesResponse vesResponse, IMotResponse motResponse);
-        IEnumerable<IMotTestDbModel> MapMotTests(string registrationNumber, IEnumerable<IMotResponseTest> motTests);
-        IEnumerable<IImageDbModel> MapImages(string registrationNumber, IEnumerable<IGoogleImageResponseItem> images);
-        IAiDataDbModel MapAiData(string registrationNumber, AiType type, IGeminiResponse geminiResponse);
+        DetailsDbModel MapDetails(IVesResponse vesResponse, IMotResponse motResponse);
+        IEnumerable<MotTestDbModel> MapMotTests(string registrationNumber, IEnumerable<IMotResponseTest> motTests);
+        IEnumerable<ImageDbModel> MapImages(string registrationNumber, IEnumerable<IGoogleImageResponseItem> images);
+        AiDataDbModel MapAiData(string registrationNumber, AiType type, IGeminiResponse geminiResponse);
     }
 }

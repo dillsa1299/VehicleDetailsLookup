@@ -22,7 +22,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.LookupHistory
         /// An enumerable of <see cref="ILookupModel"/> representing the recent lookups,
         /// or <c>null</c> if no lookups are available.
         /// </returns>
-        ValueTask<IEnumerable<ILookupModel>?> GetRecentLookupsAsync(int count);
+        ValueTask<IEnumerable<LookupModel>?> GetRecentLookupsAsync(int count);
 
         /// <summary>
         /// Retrieves a collection of the most recent vehicle lookups for a given registration number.
@@ -33,6 +33,6 @@ namespace VehicleDetailsLookup.Services.Vehicle.LookupHistory
         /// An enumerable of <see cref="ILookupModel"/> representing the recent lookups
         /// for the specified registration number, or <c>null</c> if no lookups are available.
         /// </returns>
-        ValueTask<IEnumerable<ILookupModel>?> GetRecentLookupsAsync(string registrationNumber, int count = 0);
+        ValueTask<IEnumerable<LookupModel>?> GetRecentLookupsAsync(string registrationNumber, int count = 0);
     }
 }

@@ -17,7 +17,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.LookupHistory
             return count;
         }
 
-        public async ValueTask<IEnumerable<ILookupModel>?> GetRecentLookupsAsync(int count)
+        public async ValueTask<IEnumerable<LookupModel>?> GetRecentLookupsAsync(int count)
         {
             var recentLookupsDb = await _lookupRepository.GetRecentLookupsAsync(count);
             var recentLookups = recentLookupsDb?
@@ -27,7 +27,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.LookupHistory
             return recentLookups;
         }
 
-        public async ValueTask<IEnumerable<ILookupModel>?> GetRecentLookupsAsync(string registrationNumber, int count = 0)
+        public async ValueTask<IEnumerable<LookupModel>?> GetRecentLookupsAsync(string registrationNumber, int count = 0)
         {
             var recentLookupsDb = await _lookupRepository.GetRecentLookupsAsync(registrationNumber);
             var recentLookups = recentLookupsDb?

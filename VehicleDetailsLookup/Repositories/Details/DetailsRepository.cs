@@ -8,7 +8,7 @@ namespace VehicleDetailsLookup.Repositories.Details
     {
         private readonly VehicleDbContext _dbContext = dbContext;
 
-        public async Task UpdateDetailsAsync(IDetailsDbModel details)
+        public async Task UpdateDetailsAsync(DetailsDbModel details)
         {
             var existing = await _dbContext.Details
                 .FirstOrDefaultAsync(d => d.RegistrationNumber == details.RegistrationNumber);
@@ -32,7 +32,7 @@ namespace VehicleDetailsLookup.Repositories.Details
             await _dbContext.SaveChangesAsync();
         }
 
-        public async ValueTask<IDetailsDbModel?> GetDetailsAsync(string registrationNumber)
+        public async ValueTask<DetailsDbModel?> GetDetailsAsync(string registrationNumber)
         {
             return await _dbContext.Details
                 .Include(d => d.Lookups)

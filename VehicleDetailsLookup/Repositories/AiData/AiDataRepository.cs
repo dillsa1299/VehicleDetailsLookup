@@ -9,7 +9,7 @@ namespace VehicleDetailsLookup.Repositories.AiData
     {
         private readonly VehicleDbContext _dbContext = dbContext;
 
-        public async Task UpdateAiDataAsync(IAiDataDbModel aiData)
+        public async Task UpdateAiDataAsync(AiDataDbModel aiData)
         {
             // Try to find existing AI data for the given registration number and type
             var existing = await _dbContext.AiData
@@ -30,7 +30,7 @@ namespace VehicleDetailsLookup.Repositories.AiData
             await _dbContext.SaveChangesAsync();
         }
 
-        public async ValueTask<IAiDataDbModel?> GetAiDataAsync(string registrationNumber, AiType type)
+        public async ValueTask<AiDataDbModel?> GetAiDataAsync(string registrationNumber, AiType type)
         {
             return await _dbContext.AiData
                 .FirstOrDefaultAsync(x => x.RegistrationNumber == registrationNumber && x.Type == type);

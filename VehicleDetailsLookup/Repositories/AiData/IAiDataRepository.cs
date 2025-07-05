@@ -1,6 +1,5 @@
 ﻿using VehicleDetailsLookup.Models.Database.AiData;
 using VehicleDetailsLookup.Shared.Models.Enums;
-using System.Threading.Tasks;
 
 namespace VehicleDetailsLookup.Repositories.AiData
 {
@@ -13,7 +12,7 @@ namespace VehicleDetailsLookup.Repositories.AiData
         /// Adds a new AI data record or updates an existing one for a vehicle in the database.
         /// </summary>
         /// <param name="aiData">The AI data model containing vehicle information to add or update.</param>
-        Task UpdateAiDataAsync(IAiDataDbModel aiData);
+        Task UpdateAiDataAsync(AiDataDbModel aiData);
 
         /// <summary>
         /// Retrieves AI-generated data for a specific vehicle registration number and AI data type.
@@ -23,6 +22,6 @@ namespace VehicleDetailsLookup.Repositories.AiData
         /// <returns>
         /// The AI data model for the specified vehicle and type, or <c>null</c> if no data is found.
         /// </returns>
-        ValueTask<IAiDataDbModel?> GetAiDataAsync(string registrationNumber, AiType type);
+        ValueTask<AiDataDbModel?> GetAiDataAsync(string registrationNumber, AiType type);
     }
 }

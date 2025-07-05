@@ -11,7 +11,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.RegistrationInput
         private IVehicleLookupEventsService VehicleLookupEventsService { get; set; } = default!;
 
         [Parameter]
-        public IVehicleModel Vehicle { get; set; } = default!;
+        public VehicleModel Vehicle { get; set; } = default!;
 
         private readonly RegistrationInputModel _registrationInput = new();
         private bool _lookupFailed;

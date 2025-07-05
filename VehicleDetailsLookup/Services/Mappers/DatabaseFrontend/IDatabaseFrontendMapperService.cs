@@ -21,34 +21,34 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
         /// </summary>
         /// <param name="details">The database details model.</param>
         /// <returns>The mapped frontend details model.</returns>
-        DetailsModel MapDetails(IDetailsDbModel details);
+        DetailsModel MapDetails(DetailsDbModel details);
 
         /// <summary>
         /// Maps a collection of database MOT test models to frontend MOT test models.
         /// </summary>
         /// <param name="motTests">The collection of database MOT test models.</param>
         /// <returns>The mapped collection of frontend MOT test models.</returns>
-        IEnumerable<IMotTestModel> MapMotTests(IEnumerable<IMotTestDbModel> motTests);
+        IEnumerable<MotTestModel> MapMotTests(IEnumerable<MotTestDbModel> motTests);
 
         /// <summary>
         /// Maps a collection of database image models to frontend image models.
         /// </summary>
         /// <param name="images">The collection of database image models.</param>
         /// <returns>The mapped collection of frontend image models.</returns>
-        IEnumerable<IImageModel> MapImages(IEnumerable<IImageDbModel> images);
+        IEnumerable<ImageModel> MapImages(IEnumerable<ImageDbModel> images);
 
         /// <summary>
         /// Maps a database AI data model to a frontend AI data model.
         /// </summary>
         /// <param name="aiData">The database AI data model.</param>
         /// <returns>The mapped frontend AI data model.</returns>
-        IAiDataModel MapAiData(IAiDataDbModel aiData);
+        AiDataModel MapAiData(AiDataDbModel aiData);
 
         /// <summary>
         /// Maps a database lookup model to a frontend lookup model.
         /// </summary>
         /// <param name="lookup">The database lookup model.</param>
         /// <returns>The mapped frontend lookup model.</returns>
-        ILookupModel MapLookup(ILookupDbModel lookup);
+        LookupModel MapLookup(LookupDbModel lookup);
     }
 }

@@ -12,7 +12,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
         private IVehicleLookupEventsService VehicleLookupEventsService { get; set; } = default!;
 
         [Parameter]
-        public IVehicleModel? Vehicle { get; set; }
+        public VehicleModel? Vehicle { get; set; }
 
         private readonly string _placeholderImage = "images/placeholder-car.svg";
         private readonly string _aiFailedMessage = "Unable to generate AI response. Please try again.";

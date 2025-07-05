@@ -21,7 +21,7 @@ namespace VehicleDetailsLookup.Repositories.Lookup
         /// A collection of the most recent lookup records implementing <see cref="ILookupDbModel"/>,
         /// or <c>null</c> if no records exist.
         /// </returns>
-        ValueTask<IEnumerable<ILookupDbModel>?> GetRecentLookupsAsync(int count);
+        ValueTask<IEnumerable<LookupDbModel>?> GetRecentLookupsAsync(int count);
 
         /// <summary>
         /// Retrieves a collection of the most recent vehicle lookup records for a given registration number.
@@ -32,7 +32,7 @@ namespace VehicleDetailsLookup.Repositories.Lookup
         /// A collection of the most recent lookup records implementing <see cref="ILookupDbModel"/>,
         /// or <c>null</c> if no records exist.
         /// </returns>
-        ValueTask<IEnumerable<ILookupDbModel>?> GetRecentLookupsAsync(string registrationNumber, int count = 0);
+        ValueTask<IEnumerable<LookupDbModel>?> GetRecentLookupsAsync(string registrationNumber, int count = 0);
 
         /// <summary>
         /// Gets the total number of lookup records for a specific vehicle registration number.

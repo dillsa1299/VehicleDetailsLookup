@@ -18,6 +18,6 @@ namespace VehicleDetailsLookup.Services.Vehicle.Images
         /// The result contains an <see cref="IEnumerable{IImageModel}"/> of <see cref="IImageModel"/> instances,
         /// or <c>null</c> if no images are found for the specified vehicle.
         /// </returns>
-        ValueTask<IEnumerable<IImageModel>?> GetVehicleImagesAsync(string registrationNumber);
+        ValueTask<IEnumerable<ImageModel>?> GetVehicleImagesAsync(string registrationNumber);
     }
 }

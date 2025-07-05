@@ -6,7 +6,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.TaxStatus
     public partial class TaxStatus
     {
         [Parameter]
-        public IDetailsModel? Details { get; set; }
+        public DetailsModel? Details { get; set; }
 
         private string _statusText = string.Empty;
         private string _style = string.Empty;

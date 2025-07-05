@@ -12,7 +12,7 @@ namespace VehicleDetailsLookup.Repositories.Details
         /// </summary>
         /// <param name="details">The details model containing information about the vehicle to add or update.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
-        public Task UpdateDetailsAsync(IDetailsDbModel details);
+        public Task UpdateDetailsAsync(DetailsDbModel details);
 
         /// <summary>
         /// Retrieves the details for a specific vehicle by its registration number.
@@ -22,6 +22,6 @@ namespace VehicleDetailsLookup.Repositories.Details
         /// A value task that resolves to the details model for the specified vehicle, implementing <see cref="IDetailsDbModel"/>,
         /// or <c>null</c> if no record is found.
         /// </returns>
-        public ValueTask<IDetailsDbModel?> GetDetailsAsync(string registrationNumber);
+        public ValueTask<DetailsDbModel?> GetDetailsAsync(string registrationNumber);
     }
 }

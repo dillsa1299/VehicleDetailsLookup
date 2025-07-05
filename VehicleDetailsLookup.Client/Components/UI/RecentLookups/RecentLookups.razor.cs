@@ -18,7 +18,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.RecentLookups
         [Parameter]
         public bool IsHidden { get; set; }
 
-        private IEnumerable<ILookupModel> _recentLookups = [];
+        private IEnumerable<LookupModel> _recentLookups = [];
         private bool _loading = true;
 
         private async Task HandleLookupClick(string registrationNumber)
@@ -26,7 +26,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.RecentLookups
             await VehicleLookupEventsService.NotifyStartVehicleLookup(registrationNumber, VehicleLookupType.Details);
         }
 
-        private static string BuildVehicleDetails(ILookupModel lookup)
+        private static string BuildVehicleDetails(LookupModel lookup)
         {
             return $"{lookup.VehicleDetails.YearOfManufacture} {lookup.VehicleDetails.Make} {lookup.VehicleDetails.Model}";
         }

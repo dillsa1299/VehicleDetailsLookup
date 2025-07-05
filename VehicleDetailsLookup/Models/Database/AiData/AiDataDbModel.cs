@@ -2,7 +2,7 @@
 
 namespace VehicleDetailsLookup.Models.Database.AiData
 {
-    public class AiDataDbModel : IAiDataDbModel
+    public class AiDataDbModel
     {
         public string? RegistrationNumber { get; set; }
         public AiType Type { get; set; }

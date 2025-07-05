@@ -17,6 +17,6 @@ namespace VehicleDetailsLookup.Services.Vehicle.Details
         /// <returns>
         /// A <see cref="IDetailsModel"/> instance containing the vehicle's details if found; otherwise, <c>null</c>.
         /// </returns>
-        ValueTask<IDetailsModel?> GetVehicleDetailsAsync(string registrationNumber, bool primarySearch = false);
+        ValueTask<DetailsModel?> GetVehicleDetailsAsync(string registrationNumber, bool primarySearch = false);
     }
 }

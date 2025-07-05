@@ -2,7 +2,7 @@
 
 namespace VehicleDetailsLookup.Shared.Models.Details
 {
-    public class DetailsModel : IDetailsModel
+    public class DetailsModel
     {
         public string RegistrationNumber { get; set; } = string.Empty;
         public int YearOfManufacture { get; set; }

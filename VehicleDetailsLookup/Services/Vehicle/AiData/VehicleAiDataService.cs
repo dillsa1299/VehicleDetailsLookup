@@ -27,7 +27,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
         private readonly IDatabaseFrontendMapperService _databaseMapper = databaseMapper
             ?? throw new ArgumentNullException(nameof(databaseMapper));
 
-        public async ValueTask<IAiDataModel?> GetVehicleAiDataAsync(string registrationNumber, AiType searchType)
+        public async ValueTask<AiDataModel?> GetVehicleAiDataAsync(string registrationNumber, AiType searchType)
         {
             // Check if the vehicle details are already stored in the database
             var dbAiData = await _aiDataRepository.GetAiDataAsync(registrationNumber, searchType);
@@ -40,8 +40,8 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
                 // Return stored AI data if it is recent enough
                 return _databaseMapper.MapAiData(dbAiData);
 
-            IDetailsModel? vehicleDetails = null;
-            IEnumerable<IMotTestModel>? motTests = null;
+            DetailsModel? vehicleDetails = null;
+            IEnumerable<MotTestModel>? motTests = null;
 
             if (searchType == AiType.MotHistorySummary || searchType == AiType.ClarksonMotHistorySummary)
             {
@@ -76,7 +76,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
             return _databaseMapper.MapAiData(dbAiData);
         }
 
-        private static string BuildPrompt(AiType searchType, IDetailsModel? vehicleDetails, IEnumerable<IMotTestModel>? motTests)
+        private static string BuildPrompt(AiType searchType, DetailsModel? vehicleDetails, IEnumerable<MotTestModel>? motTests)
         {
             string data;
             switch (searchType)

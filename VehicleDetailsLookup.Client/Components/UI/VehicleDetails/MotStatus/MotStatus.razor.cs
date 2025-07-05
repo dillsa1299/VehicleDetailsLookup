@@ -6,7 +6,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotStatus
     public partial class MotStatus
     {
         [Parameter]
-        public IDetailsModel? Details { get; set; }
+        public DetailsModel? Details { get; set; }
 
         private string _statusText = string.Empty;
         private string _dateText = string.Empty;

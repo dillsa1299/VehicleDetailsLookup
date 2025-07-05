@@ -26,7 +26,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.Details
         private readonly IDatabaseFrontendMapperService _databaseMapper = databaseMapper
             ?? throw new ArgumentNullException(nameof(databaseMapper));
 
-        public async ValueTask<IDetailsModel?> GetVehicleDetailsAsync(string registrationNumber, bool primarySearch = false)
+        public async ValueTask<DetailsModel?> GetVehicleDetailsAsync(string registrationNumber, bool primarySearch = false)
         {
             // Check if the vehicle details are already stored in the database
             var dbDetails = await _detailsRepository.GetDetailsAsync(registrationNumber);
