@@ -1,6 +1,6 @@
 ﻿namespace VehicleDetailsLookup.Models.ApiResponses.Mot
 {
-    public class MotResponse : IMotResponse
+    public class MotResponseModel
     {
         public string Registration { get; set; } = string.Empty;
         public string Make { get; set; } = string.Empty;
@@ -11,6 +11,6 @@
         public string RegistrationDate { get; set; } = string.Empty;
         public string ManufactureDate { get; set; } = string.Empty;
         public string HasOutstandingRecall { get; set; } = string.Empty;
-        public IEnumerable<MotResponseTest> MotTests { get; set; } = [];
+        public IEnumerable<MotResponseTestModel> MotTests { get; set; } = [];
     }
 }

@@ -18,6 +18,6 @@ namespace VehicleDetailsLookup.Services.Api.GoogleImage
         /// with a result of <see cref="IGoogleImageResponse"/> containing the image search results,
         /// or <c>null</c> if no results are found or an error occurs.
         /// </returns>
-        ValueTask<IGoogleImageResponse?> GetGoogleImageResponseAsync(string query);
+        ValueTask<GoogleImageResponseModel?> GetGoogleImageResponseAsync(string query);
     }
 }

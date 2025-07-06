@@ -20,14 +20,14 @@ namespace VehicleDetailsLookup.Services.Api.Mot
                            ?? throw new InvalidOperationException("MOT API ScopeUrl not found in configuration.");
         private readonly string _tokenUrl = configuration["APIs:MOT:TokenUrl"]
                            ?? throw new InvalidOperationException("MOT API TokenUrl not found in configuration.");
-        private MotAuthToken _authToken = new();
+        private MotAuthTokenModel _authToken = new();
 
         private readonly JsonSerializerOptions _jsonSerializerOptions = new()
         {
             PropertyNameCaseInsensitive = true
         };
 
-        public async ValueTask<IMotResponse?> GetMotResponseAsync(string registrationNumber)
+        public async ValueTask<MotResponseModel?> GetMotResponseAsync(string registrationNumber)
         {
             // Get authentication token
             if (!await GetAuthTokenAsync())
@@ -48,7 +48,7 @@ namespace VehicleDetailsLookup.Services.Api.Mot
 
             // Parse response
             var motContent = await response.Content.ReadAsStringAsync();
-            var parsedResponse = JsonSerializer.Deserialize<MotResponse>(motContent, _jsonSerializerOptions);
+            var parsedResponse = JsonSerializer.Deserialize<MotResponseModel>(motContent, _jsonSerializerOptions);
 
             return parsedResponse;
         }
@@ -90,7 +90,7 @@ namespace VehicleDetailsLookup.Services.Api.Mot
                 return false;
 
             // Set new token details
-            _authToken = new MotAuthToken
+            _authToken = new MotAuthTokenModel
             {
                 Type = tokenType,
                 ExpireTime = DateTime.UtcNow.AddSeconds(expiresIn),

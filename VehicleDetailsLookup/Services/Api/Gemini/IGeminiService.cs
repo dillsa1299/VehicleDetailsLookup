@@ -15,6 +15,6 @@ namespace VehicleDetailsLookup.Services.Api.Gemini
         /// A <see cref="ValueTask{TResult}"/> representing the asynchronous operation,
         /// with an <see cref="IGeminiResponse"/> containing the AI-generated response, or <c>null</c> if no response is available.
         /// </returns>
-        ValueTask<IGeminiResponse?> GetGeminiResponseAsync(string prompt);
+        ValueTask<GeminiResponseModel?> GetGeminiResponseAsync(string prompt);
     }
 }

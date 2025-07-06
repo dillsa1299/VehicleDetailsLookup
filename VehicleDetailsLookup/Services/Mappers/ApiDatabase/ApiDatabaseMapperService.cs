@@ -13,7 +13,7 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
 {
     public class ApiDatabaseMapperService : IApiDatabaseMapperService
     {
-        public DetailsDbModel MapDetails(IVesResponse vesResponse, IMotResponse motResponse)
+        public DetailsDbModel MapDetails(VesResponseModel vesResponse, MotResponseModel motResponse)
         {
             return new DetailsDbModel
             {
@@ -34,7 +34,7 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
             };
         }
 
-        public IEnumerable<MotTestDbModel> MapMotTests(string registrationNumber, IEnumerable<IMotResponseTest> motTests)
+        public IEnumerable<MotTestDbModel> MapMotTests(string registrationNumber, IEnumerable<MotResponseTestModel> motTests)
         {
             if (motTests == null)
                 return [];
@@ -53,7 +53,7 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
             });
         }
 
-        private static IEnumerable<MotDefectDbModel> MapMotDefects(string testNumber, IEnumerable<IMotResponseDefect> motDefects)
+        private static IEnumerable<MotDefectDbModel> MapMotDefects(string testNumber, IEnumerable<MotResponseDefectModel> motDefects)
         {
             if (motDefects == null)
                 return [];
@@ -72,7 +72,7 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
             });
         }
 
-        public IEnumerable<ImageDbModel> MapImages(string registrationNumber, IEnumerable<IGoogleImageResponseItem> images)
+        public IEnumerable<ImageDbModel> MapImages(string registrationNumber, IEnumerable<GoogleImageResponseItemModel> images)
         {
             if (images == null)
                 return [];
@@ -89,13 +89,15 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
                 });
         }
 
-        public AiDataDbModel MapAiData(string registrationNumber, AiType type, IGeminiResponse geminiResponse, string dataHash)
+        public AiDataDbModel MapAiData(string registrationNumber, AiType type, GeminiResponseModel geminiResponse, string dataHash)
         {
+            // Extract the first candidate's first part's text as the generated text
+            string? generatedText = geminiResponse?.Candidates?.FirstOrDefault()?.Content?.Parts?.FirstOrDefault()?.Text;
             return new AiDataDbModel
             {
                 RegistrationNumber = registrationNumber,
                 Type = type,
-                GeneratedText = geminiResponse?.Response,
+                GeneratedText = generatedText,
                 Updated = DateTime.UtcNow,
                 DataHash = dataHash
             };

@@ -12,9 +12,9 @@ namespace VehicleDetailsLookup.Services.Api.Ves
         /// </summary>
         /// <param name="registrationNumber">The vehicle registration number to look up.</param>
         /// <returns>
-        /// A <see cref="ValueTask{TResult}"/> representing the asynchronous operation, with a result of <see cref="IVesResponse"/>
+        /// A <see cref="ValueTask{TResult}"/> representing the asynchronous operation, with a result of <see cref="VesResponseModel"/>
         /// containing the vehicle details if found; otherwise, <c>null</c>.
         /// </returns>
-        ValueTask<IVesResponse?> GetVesResponseAsync(string registrationNumber);
+        ValueTask<VesResponseModel?> GetVesResponseAsync(string registrationNumber);
     }
 }

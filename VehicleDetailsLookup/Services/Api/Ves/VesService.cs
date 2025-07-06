@@ -18,7 +18,7 @@ namespace VehicleDetailsLookup.Services.Api.Ves
             PropertyNameCaseInsensitive = true
         };
 
-        public async ValueTask<IVesResponse?> GetVesResponseAsync(string registrationNumber)
+        public async ValueTask<VesResponseModel?> GetVesResponseAsync(string registrationNumber)
         {
             using var request = new HttpRequestMessage(HttpMethod.Post, _url)
             {
@@ -37,7 +37,7 @@ namespace VehicleDetailsLookup.Services.Api.Ves
 
             // Parse response
             var responseContent = await response.Content.ReadAsStringAsync();
-            var parsedResponse = JsonSerializer.Deserialize<VesResponse>(responseContent, _jsonSerializerOptions);
+            var parsedResponse = JsonSerializer.Deserialize<VesResponseModel>(responseContent, _jsonSerializerOptions);
 
             return parsedResponse;
         }

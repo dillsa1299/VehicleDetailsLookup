@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
 using VehicleDetailsLookup.Models.ApiResponses.Gemini;
+using VehicleDetailsLookup.Models.ApiResponses.Mot;
 
 namespace VehicleDetailsLookup.Services.Api.Gemini
 {
@@ -9,14 +10,19 @@ namespace VehicleDetailsLookup.Services.Api.Gemini
         private readonly HttpClient _httpClient = httpClient
             ?? throw new ArgumentNullException(nameof(httpClient));
 
-        private readonly string _geminiUrl = configuration["APIs:Gemini:URL"]
+        private readonly string _url = configuration["APIs:Gemini:URL"]
                          ?? throw new InvalidOperationException("Gemini API URL not found in configuration.");
-        private readonly string _geminiKey = configuration["APIs:Gemini:Key"]
+        private readonly string _key = configuration["APIs:Gemini:Key"]
                          ?? throw new InvalidOperationException("Gemini API key not found in configuration.");
 
-        public async ValueTask<IGeminiResponse?> GetGeminiResponseAsync(string prompt)
+        private readonly JsonSerializerOptions _jsonSerializerOptions = new()
         {
-            var geminiRequest = new
+            PropertyNameCaseInsensitive = true
+        };
+
+        public async ValueTask<GeminiResponseModel?> GetGeminiResponseAsync(string prompt)
+        {
+            var requestBody = new
             {
                 contents = new[]
                 {
@@ -32,7 +38,7 @@ namespace VehicleDetailsLookup.Services.Api.Gemini
                     }
                 }
             };
-            var jsonBody = JsonSerializer.Serialize(geminiRequest);
+            var jsonBody = JsonSerializer.Serialize(requestBody);
             var requestContent = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
             const int maxRetries = 10;
@@ -40,23 +46,18 @@ namespace VehicleDetailsLookup.Services.Api.Gemini
 
             for (int attempt = 1; attempt <= maxRetries; attempt++)
             {
-                HttpResponseMessage response = await _httpClient.PostAsync(_geminiUrl + _geminiKey, requestContent);
+                using var requestMessage = new HttpRequestMessage(HttpMethod.Post, _url + _key)
+                {
+                    Content = requestContent
+                };
+
+                using var response = await _httpClient.SendAsync(requestMessage);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    string responseString = await response.Content.ReadAsStringAsync();
-                    using var doc = JsonDocument.Parse(responseString);
-                    var text = doc.RootElement
-                        .GetProperty("candidates")[0]
-                        .GetProperty("content")
-                        .GetProperty("parts")[0]
-                        .GetProperty("text")
-                        .GetString();
-
-                    if (string.IsNullOrEmpty(text))
-                        return null;
-
-                    return new GeminiResponse { Response = text };
+                    var responseStream = await response.Content.ReadAsStreamAsync();
+                    var parsedResponse = await JsonSerializer.DeserializeAsync<GeminiResponseModel>(responseStream, _jsonSerializerOptions);
+                    return parsedResponse;
                 }
                 else if ((int)response.StatusCode >= 500 && (int)response.StatusCode < 600 && attempt < maxRetries)
                 {

@@ -12,9 +12,9 @@ namespace VehicleDetailsLookup.Services.Api.Mot
         /// </summary>
         /// <param name="registrationNumber">The vehicle registration number to look up MOT data for.</param>
         /// <returns>
-        /// A <see cref="ValueTask{IMotResponse}"/> representing the asynchronous operation, 
+        /// A <see cref="ValueTask{MotResponse}"/> representing the asynchronous operation, 
         /// containing the MOT response data for the specified vehicle, or <c>null</c> if not found.
         /// </returns>
-        ValueTask<IMotResponse?> GetMotResponseAsync(string registrationNumber);
+        ValueTask<MotResponseModel?> GetMotResponseAsync(string registrationNumber);
     }
 }

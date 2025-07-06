@@ -1,6 +1,6 @@
 ﻿namespace VehicleDetailsLookup.Models.ApiResponses.Ves
 {
-    public class VesResponse : IVesResponse
+    public class VesResponseModel
     {
         public string RegistrationNumber { get; set; } = string.Empty;
         public string TaxStatus { get; set; } = string.Empty;

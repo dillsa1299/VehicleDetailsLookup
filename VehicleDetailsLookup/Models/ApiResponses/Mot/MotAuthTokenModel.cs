@@ -1,6 +1,6 @@
 ﻿namespace VehicleDetailsLookup.Models.ApiResponses.Mot
 {
-    public class MotAuthToken : IMotAuthToken
+    public class MotAuthTokenModel
     {
         public string Type { get; set; } = string.Empty;
         public DateTime ExpireTime { get; set; }
