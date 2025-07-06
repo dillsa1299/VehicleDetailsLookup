@@ -40,14 +40,14 @@ namespace VehicleDetailsLookup.Services.Vehicle.Images
 
             // Fetch images from the image search service
             var query = $"{vehicleDetails.Colour} {vehicleDetails.YearOfManufacture} {vehicleDetails.Make} {vehicleDetails.Model}";
-            var googleImageResponse = await _googleImageService.GetGoogleImageResponseAsync(query);
+            var response = await _googleImageService.GetGoogleImageResponseAsync(query);
 
-            if (googleImageResponse?.Items == null || !googleImageResponse.Items.Any())
+            if (response?.Items == null || !response.Items.Any())
                 // If no images are found, return null
                 return null;
 
             // Map the API response to database model and update the repository
-            dbImages = _apiMapper.MapImages(registrationNumber, googleImageResponse.Items);
+            dbImages = _apiMapper.MapImages(registrationNumber, response);
             await _imageRepository.UpdateImagesAsync(dbImages);
 
             return _databaseMapper.MapImages(dbImages);

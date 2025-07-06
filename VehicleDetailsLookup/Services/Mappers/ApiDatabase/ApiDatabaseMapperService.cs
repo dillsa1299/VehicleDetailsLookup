@@ -72,13 +72,13 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
             });
         }
 
-        public IEnumerable<ImageDbModel> MapImages(string registrationNumber, IEnumerable<GoogleImageResponseItemModel> images)
+        public IEnumerable<ImageDbModel> MapImages(string registrationNumber, GoogleImageResponseModel googleImageResponse)
         {
-            if (images == null)
+            if (googleImageResponse.Items == null || !googleImageResponse.Items.Any())
                 return [];
 
             var now = DateTime.UtcNow;
-            return images
+            return googleImageResponse.Items
                 .Where(img => !string.IsNullOrWhiteSpace(img.Link))
                 .Select(img => new ImageDbModel
                 {

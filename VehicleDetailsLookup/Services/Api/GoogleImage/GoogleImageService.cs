@@ -14,17 +14,16 @@ namespace VehicleDetailsLookup.Services.Api.GoogleImage
 
         public async ValueTask<GoogleImageResponseModel?> GetGoogleImageResponseAsync(string query)
         {
-            // TODO: Revisit this to allow passing in additional parameters
             var url = $"https://www.googleapis.com/customsearch/v1?q={Uri.EscapeDataString(query)}&cx={_googleCx}&key={_googleKey}&searchType=image";
 
-            var httpResponse = await _httpClient.GetAsync(url);
+            var response = await _httpClient.GetAsync(url);
 
-            if (!httpResponse.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
                 return null;
 
-            var response = await httpResponse.Content.ReadFromJsonAsync<GoogleImageResponseModel>();
+            var parsedResponse = await response.Content.ReadFromJsonAsync<GoogleImageResponseModel>();
 
-            return response;
+            return parsedResponse;
         }
     }
 }

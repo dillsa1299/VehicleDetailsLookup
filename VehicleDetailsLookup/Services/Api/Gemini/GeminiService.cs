@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
 using VehicleDetailsLookup.Models.ApiResponses.Gemini;
-using VehicleDetailsLookup.Models.ApiResponses.Mot;
 
 namespace VehicleDetailsLookup.Services.Api.Gemini
 {
