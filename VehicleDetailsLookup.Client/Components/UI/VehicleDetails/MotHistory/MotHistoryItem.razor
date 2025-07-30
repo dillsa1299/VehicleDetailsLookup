@@ -8,7 +8,7 @@
                          Title="@(Mot.Passed? "Passed": "Failed")"
                          Size="@_iconSize" Class="mr-2" />
                 <MudText Class="mt-2">
-                    @Mot.CompletedDate.ToString("d MMMM yyyy") | @(Mot.OdometerValue == -1 ? "N/A" : $"{Mot.OdometerValue:N0} {Mot.OdometerUnit}"))
+                    @Mot.CompletedDate.ToString("d MMMM yyyy") | @(Mot.OdometerValue == -1 ? "N/A" : $"{Mot.OdometerValue:N0} {Mot.OdometerUnit}")
                 </MudText>
 
                 <div class="d-flex align-items-center ml-auto">
