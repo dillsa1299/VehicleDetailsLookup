@@ -34,10 +34,8 @@ jobs:
     #       VehicleDetailsLookup.Client/wwwroot/appsettings.Production.json > tmp.json && \
     #     mv tmp.json VehicleDetailsLookup.Client/wwwroot/appsettings.Production.json
 
-    - name: Install EF Core CLI tools
-      run: dotnet tool install --global dotnet-ef
-      env:
-        DOTNET_ROOT: /home/runner/.dotnet
+    - name: Install dotnet-ef as a local tool
+      run: dotnet tool install dotnet-ef --version 9.0.0 --tool-path .tools
 
     - name: Update database (apply migrations)
       run: dotnet ef database update --project VehicleDetailsLookup/VehicleDetailsLookup.csproj --startup-project VehicleDetailsLookup/VehicleDetailsLookup.csproj
