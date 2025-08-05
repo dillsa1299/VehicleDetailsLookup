@@ -35,7 +35,6 @@ namespace VehicleDetailsLookup.Services.Vehicle.Images
             var vehicleDetails = await _vehicleDetailsService.GetVehicleDetailsAsync(registrationNumber);
 
             if (vehicleDetails == null)
-                // If no vehicle data is found, return null
                 return null;
 
             // Fetch images from the image search service
