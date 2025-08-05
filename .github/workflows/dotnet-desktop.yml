@@ -19,19 +19,6 @@ jobs:
       with:
         dotnet-version: 9.0.x
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
-
-    - name: Install npm dependencies
-      run: npm install
-      working-directory: VehicleDetailsLookup.Client
-
-    - name: Build npm assets
-      run: npm run build
-      working-directory: VehicleDetailsLookup.Client
-
     - name: Restore .NET dependencies
       run: dotnet restore VehicleDetailsLookup.sln
 
