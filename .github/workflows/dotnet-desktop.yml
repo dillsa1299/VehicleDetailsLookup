@@ -25,8 +25,11 @@ jobs:
     - name: Build solution
       run: dotnet build VehicleDetailsLookup.sln --configuration Release --no-restore
 
+    - name: Restore dotnet tools
+      run: dotnet tool restore
+
     - name: Update database (apply migrations)
-      run: dotnet ef database update --project VehicleDetailsLookup/VehicleDetailsLookup.csproj --startup-project VehicleDetailsLookup/VehicleDetailsLookup.csproj
+      run: dotnet tool run dotnet-ef database update --project VehicleDetailsLookup/VehicleDetailsLookup.csproj --startup-project VehicleDetailsLookup/VehicleDetailsLookup.csproj
       env:
         ConnectionStrings__DefaultConnection: ${{ secrets.DEFAULT_CONNECTION_STRING }}
         DOTNET_ROOT: /home/runner/.dotnet
