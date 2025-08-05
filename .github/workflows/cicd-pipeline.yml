@@ -100,9 +100,6 @@ jobs:
       - name: Publish Blazor WebAssembly App
         run: dotnet publish VehicleDetailsLookup.Client/VehicleDetailsLookup.Client.csproj --configuration Release --output ./publish
 
-      - name: Update base href for GitHub Pages
-        run: sed -i 's|<base href="/" />|<base href="/VehicleDetailsLookup/" />|' ./publish/wwwroot/index.html
-
       - name: Upload Published Artifact
         uses: actions/upload-artifact@v4
         with:
