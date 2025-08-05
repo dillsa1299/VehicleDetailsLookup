@@ -38,7 +38,7 @@ jobs:
       run: dotnet tool install dotnet-ef --version 9.0.0 --tool-path .tools
 
     - name: Update database (apply migrations)
-      run: dotnet ef database update --project VehicleDetailsLookup/VehicleDetailsLookup.csproj --startup-project VehicleDetailsLookup/VehicleDetailsLookup.csproj
+      run: ./.tools/dotnet-ef database update --project VehicleDetailsLookup/VehicleDetailsLookup.csproj --startup-project VehicleDetailsLookup/VehicleDetailsLookup.csproj
       env:
         # ConnectionStrings__DefaultConnection: ${{ secrets.DEFAULT_CONNECTION_STRING }}
         DOTNET_ROOT: /home/runner/.dotnet
