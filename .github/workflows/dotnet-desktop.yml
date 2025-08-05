@@ -1,0 +1,68 @@
+name: Build and Publish Blazor WebAssembly
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 9
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Install npm dependencies
+      run: npm install
+      working-directory: VehicleDetailsLookup.Client
+
+    - name: Build npm assets
+      run: npm run build
+      working-directory: VehicleDetailsLookup.Client
+
+    - name: Restore .NET dependencies
+      run: dotnet restore VehicleDetailsLookup.sln
+
+    - name: Build solution
+      run: dotnet build VehicleDetailsLookup.sln --configuration Release --no-restore
+
+    - name: Run tests
+      run: dotnet test VehicleDetailsLookup.sln --no-build --verbosity normal
+
+    # - name: Inject Google API secrets into appsettings.Production.json
+    #   run: |
+    #     jq '.APIs.Google.Key = "${{ secrets.GOOGLE_API_KEY }}" | .APIs.Google.Cx = "${{ secrets.GOOGLE_CX }}"' \
+    #       VehicleDetailsLookup.Client/wwwroot/appsettings.Production.json > tmp.json && \
+    #     mv tmp.json VehicleDetailsLookup.Client/wwwroot/appsettings.Production.json
+
+    - name: Install EF Core CLI tools
+      run: dotnet tool install --global dotnet-ef
+      env:
+        DOTNET_ROOT: /home/runner/.dotnet
+
+    - name: Update database (apply migrations)
+      run: dotnet ef database update --project VehicleDetailsLookup/VehicleDetailsLookup.csproj --startup-project VehicleDetailsLookup/VehicleDetailsLookup.csproj
+      env:
+        # ConnectionStrings__DefaultConnection: ${{ secrets.DEFAULT_CONNECTION_STRING }}
+        DOTNET_ROOT: /home/runner/.dotnet
+
+    - name: Publish Blazor WebAssembly app
+      run: dotnet publish VehicleDetailsLookup.Client/VehicleDetailsLookup.Client.csproj --configuration Release --output ./publish
+
+    - name: Upload published app
+      uses: actions/upload-artifact@v4
+      with:
+        name: blazor-publish
+        path: ./publish
