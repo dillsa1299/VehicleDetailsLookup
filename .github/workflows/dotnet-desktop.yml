@@ -25,23 +25,20 @@ jobs:
     - name: Build solution
       run: dotnet build VehicleDetailsLookup.sln --configuration Release --no-restore
 
-    - name: Run tests
-      run: dotnet test VehicleDetailsLookup.sln --no-build --verbosity normal
-
-    # - name: Inject Google API secrets into appsettings.Production.json
-    #   run: |
-    #     jq '.APIs.Google.Key = "${{ secrets.GOOGLE_API_KEY }}" | .APIs.Google.Cx = "${{ secrets.GOOGLE_CX }}"' \
-    #       VehicleDetailsLookup.Client/wwwroot/appsettings.Production.json > tmp.json && \
-    #     mv tmp.json VehicleDetailsLookup.Client/wwwroot/appsettings.Production.json
-
     - name: Install dotnet-ef as a local tool
       run: dotnet tool install dotnet-ef --version 9.0.0 --tool-path .tools
-
+  
+    - name: Add local tool path to PATH
+      run: echo "$(pwd)/.tools" >> $GITHUB_PATH
+    
     - name: Update database (apply migrations)
-      run: ./.tools/dotnet-ef database update --project VehicleDetailsLookup/VehicleDetailsLookup.csproj --startup-project VehicleDetailsLookup/VehicleDetailsLookup.csproj
+      run: dotnet-ef database update --project VehicleDetailsLookup/VehicleDetailsLookup.csproj --startup-project VehicleDetailsLookup/VehicleDetailsLookup.csproj
       env:
-        # ConnectionStrings__DefaultConnection: ${{ secrets.DEFAULT_CONNECTION_STRING }}
+        ConnectionStrings__DefaultConnection: ${{ secrets.DEFAULT_CONNECTION_STRING }}
         DOTNET_ROOT: /home/runner/.dotnet
+
+    - name: Run tests
+      run: dotnet test VehicleDetailsLookup.sln --no-build --verbosity normal
 
     - name: Publish Blazor WebAssembly app
       run: dotnet publish VehicleDetailsLookup.Client/VehicleDetailsLookup.Client.csproj --configuration Release --output ./publish
