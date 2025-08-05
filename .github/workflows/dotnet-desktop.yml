@@ -25,14 +25,6 @@ jobs:
     - name: Build solution
       run: dotnet build VehicleDetailsLookup.sln --configuration Release --no-restore
 
-    - name: Install dotnet-ef globally
-      run: dotnet tool install --global dotnet-ef --version 9.0.0
-      env:
-        DOTNET_ROOT: /home/runner/.dotnet
-
-    - name: Add dotnet tools to PATH
-      run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
-
     - name: Update database (apply migrations)
       run: dotnet ef database update --project VehicleDetailsLookup/VehicleDetailsLookup.csproj --startup-project VehicleDetailsLookup/VehicleDetailsLookup.csproj
       env:
