@@ -1,4 +1,4 @@
-name: Build and Publish Blazor WebAssembly
+name: 🚀 Build, Test & Publish
 
 on:
   push:
@@ -7,40 +7,106 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
+  checkout:
+    name: 🧾 Checkout Repository
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Setup .NET 9
+  setup:
+    name: ⚙️ Setup .NET
+    runs-on: ubuntu-latest
+    needs: checkout
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 9 SDK
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.x
 
-    - name: Restore .NET dependencies
+  restore-build:
+    name: 🔧 Restore & Build Solution
+    runs-on: ubuntu-latest
+    needs: setup
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 9 SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+
+    - name: Restore NuGet Packages
       run: dotnet restore VehicleDetailsLookup.sln
 
-    - name: Build solution
+    - name: Build Solution
       run: dotnet build VehicleDetailsLookup.sln --configuration Release --no-restore
+
+  migrations:
+    name: 🗃️ Apply EF Migrations
+    runs-on: ubuntu-latest
+    needs: restore-build
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 9 SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
 
     - name: Restore dotnet tools
       run: dotnet tool restore
 
-    - name: Update database (apply migrations)
+    - name: Apply Migrations to Database
       run: dotnet tool run dotnet-ef database update --project VehicleDetailsLookup/VehicleDetailsLookup.csproj --startup-project VehicleDetailsLookup/VehicleDetailsLookup.csproj
       env:
         ConnectionStrings__DefaultConnection: ${{ secrets.DEFAULT_CONNECTION_STRING }}
         DOTNET_ROOT: /home/runner/.dotnet
 
-    - name: Run tests
+  test:
+    name: 🧪 Run Tests
+    runs-on: ubuntu-latest
+    needs: restore-build
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 9 SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+
+    - name: Run Unit Tests
       run: dotnet test VehicleDetailsLookup.sln --no-build --verbosity normal
 
-    - name: Publish Blazor WebAssembly app
+  publish:
+    name: 🚀 Publish Blazor App
+    runs-on: ubuntu-latest
+    needs: [restore-build, migrations]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 9 SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+
+    - name: Publish Blazor WebAssembly App
       run: dotnet publish VehicleDetailsLookup.Client/VehicleDetailsLookup.Client.csproj --configuration Release --output ./publish
 
-    - name: Upload published app
+    - name: Upload Published Artifact
       uses: actions/upload-artifact@v4
       with:
         name: blazor-publish
