@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using VehicleDetailsLookup.Models.ApiResponses.Gemini;
 using VehicleDetailsLookup.Models.ApiResponses.GoogleImage;
 using VehicleDetailsLookup.Models.ApiResponses.Mot;
 using VehicleDetailsLookup.Models.ApiResponses.Ves;
@@ -89,15 +88,13 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
                 });
         }
 
-        public AiDataDbModel MapAiData(string registrationNumber, AiType type, GeminiResponseModel geminiResponse, string dataHash)
+        public AiDataDbModel MapAiData(string registrationNumber, AiType type, string aiResponse, string dataHash)
         {
-            // Extract the first candidate's first part's text as the generated text
-            string? generatedText = geminiResponse?.Candidates?.FirstOrDefault()?.Content?.Parts?.FirstOrDefault()?.Text;
             return new AiDataDbModel
             {
                 RegistrationNumber = registrationNumber,
                 Type = type,
-                GeneratedText = generatedText,
+                GeneratedText = aiResponse,
                 Updated = DateTime.UtcNow,
                 DataHash = dataHash
             };

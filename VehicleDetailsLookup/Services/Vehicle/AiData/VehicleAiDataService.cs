@@ -62,12 +62,12 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
             }
 
             var prompt = BuildPrompt(searchType, additionalData);
-            var geminiResponse = await _geminiService.GetGeminiResponseAsync(prompt);
+            var aiResponse = await _geminiService.GetGeminiResponseAsync(prompt);
 
-            if (geminiResponse == null)
+            if (aiResponse == null)
                 return null;
 
-            var dbAiData = _apiMapper.MapAiData(registrationNumber, searchType, geminiResponse, DataHash.GenerateHash(additionalData));
+            var dbAiData = _apiMapper.MapAiData(registrationNumber, searchType, aiResponse, DataHash.GenerateHash(additionalData));
             await _aiDataRepository.UpdateAiDataAsync(dbAiData);
             return _databaseMapper.MapAiData(dbAiData);
         }

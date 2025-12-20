@@ -1,5 +1,4 @@
-﻿using VehicleDetailsLookup.Models.ApiResponses.Gemini;
-using VehicleDetailsLookup.Models.ApiResponses.GoogleImage;
+﻿using VehicleDetailsLookup.Models.ApiResponses.GoogleImage;
 using VehicleDetailsLookup.Models.ApiResponses.Mot;
 using VehicleDetailsLookup.Models.ApiResponses.Ves;
 using VehicleDetailsLookup.Models.Database.AiData;
@@ -15,6 +14,6 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
         DetailsDbModel MapDetails(VesResponseModel vesResponse, MotResponseModel motResponse);
         IEnumerable<MotTestDbModel> MapMotTests(string registrationNumber, IEnumerable<MotResponseTestModel> motTests);
         IEnumerable<ImageDbModel> MapImages(string registrationNumber, GoogleImageResponseModel googleImageResponse);
-        AiDataDbModel MapAiData(string registrationNumber, AiType type, GeminiResponseModel geminiResponse, string dataHash);
+        AiDataDbModel MapAiData(string registrationNumber, AiType type, string aiResponse, string dataHash);
     }
 }
