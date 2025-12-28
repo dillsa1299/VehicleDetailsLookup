@@ -30,6 +30,10 @@
         /// AI MOT summary
         /// </summary>
         AiMotSummary,
+        /// <summary>
+        /// AI MOT price estimate
+        /// </summary>
+        AiMotPriceEstimate,
 
         /// <summary>
         /// AI Jeremy Clarkson overview

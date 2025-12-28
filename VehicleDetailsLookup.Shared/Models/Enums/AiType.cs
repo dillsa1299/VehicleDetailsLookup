@@ -21,6 +21,10 @@
         /// AI-generated summary of a specific MOT test.
         /// </summary>
         MotTestSummary,
+        /// <summary>
+        /// AI-generated price estimate for repairs based on selected MOT defects.
+        /// </summary>
+        MotPriceEstimate,
 
 
         /// <summary>

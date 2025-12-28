@@ -66,6 +66,7 @@ namespace VehicleDetailsLookup.Client.Components.Pages
                 case VehicleLookupType.AiCommonIssues:
                 case VehicleLookupType.AiMotHistorySummary:
                 case VehicleLookupType.AiMotSummary:
+                case VehicleLookupType.AiMotPriceEstimate:
                 case VehicleLookupType.AiClarksonOverview:
                 case VehicleLookupType.AiClarksonCommonIssues:
                 case VehicleLookupType.AiClarksonMotHistorySummary:
@@ -86,6 +87,7 @@ namespace VehicleDetailsLookup.Client.Components.Pages
                 VehicleLookupType.AiCommonIssues => AiType.CommonIssues,
                 VehicleLookupType.AiMotHistorySummary => AiType.MotHistorySummary,
                 VehicleLookupType.AiMotSummary => AiType.MotTestSummary,
+                VehicleLookupType.AiMotPriceEstimate => AiType.MotPriceEstimate,
                 VehicleLookupType.AiClarksonOverview => AiType.ClarksonOverview,
                 VehicleLookupType.AiClarksonCommonIssues => AiType.ClarksonCommonIssues,
                 VehicleLookupType.AiClarksonMotHistorySummary => AiType.ClarksonMotHistorySummary,

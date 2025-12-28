@@ -25,41 +25,79 @@ public partial class MotHistoryItem
     public MotTestModel Mot { get; set; } = default!;
 
     private IEnumerable<MotDefectModel> DangerousDefects =>
-        Mot?.Defects.Where(d => d.Type == MotDefectType.Dangerous || d.Dangerous)
-        ?? [];
+        Mot.Defects.Where(d => d.Type == MotDefectType.Dangerous || d.Dangerous)
+            ?? [];
 
     private IEnumerable<MotDefectModel> MajorDefects =>
-        Mot?.Defects.Where(d => d.Type == MotDefectType.Fail || d.Type == MotDefectType.Major)
-        ?? [];
+        Mot.Defects.Where(d => d.Type == MotDefectType.Fail || d.Type == MotDefectType.Major)
+            ?? [];
 
     private IEnumerable<MotDefectModel> OtherDefects =>
-        Mot?.Defects.Where(d => !(d.Type == MotDefectType.Dangerous || d.Dangerous || d.Type == MotDefectType.Fail || d.Type == MotDefectType.Major))
-        ?? [];
+        Mot.Defects.Where(d => !(d.Type == MotDefectType.Dangerous || d.Dangerous || d.Type == MotDefectType.Fail || d.Type == MotDefectType.Major))
+            ?? [];
+
+    private string SummaryLookupMetaData => JsonSerializer.Serialize(new AiMotTestSummaryMetaDataModel
+    {
+        TestNumber = Mot.TestNumber,
+    });
+
+    private string PriceEstimateLookupMetaData => JsonSerializer.Serialize(new AiMotPriceEstimateMetaDataModel
+    {
+        TestNumber = Mot.TestNumber,
+        DefectIds = _selectedDefectIds.OrderBy(id => id),
+    });
 
     private string? AiMotSummaryText =>
-        Vehicle?.AiData.TryGetValue(AiType.MotTestSummary.ToString() + _metaData, out var aiDataModel) == true
-                    ? aiDataModel.Content
-                    : string.Empty;
+        Vehicle?.AiData.TryGetValue(AiType.MotTestSummary.ToString() + SummaryLookupMetaData, out var aiDataModel) == true
+            ? aiDataModel.Content
+            : string.Empty;
+
+    private string? AiPriceEstimateText =>
+        Vehicle?.AiData.TryGetValue(AiType.MotPriceEstimate.ToString() + PriceEstimateLookupMetaData, out var aiDataModel) == true
+            ? aiDataModel.Content
+            : string.Empty;
 
     private MarkupString? AiMotSummaryHtml =>
         string.IsNullOrWhiteSpace(AiMotSummaryText)
             ? null
             : (MarkupString)Markdig.Markdown.ToHtml(AiMotSummaryText);
 
+    private MarkupString? AiPriceEstimateHtml =>
+        string.IsNullOrWhiteSpace(AiPriceEstimateText)
+            ? null
+            : (MarkupString)Markdig.Markdown.ToHtml(AiPriceEstimateText);
+
+    private bool PriceEstimateDisabled =>
+        !_selectedDefectIds.Any() || _isSearchingPriceEstimate;
+
     private const string _aiFailedMessage = "Unable to generate AI response. Please try again.";
     private Size _iconSize = Size.Large;
-    private string _metaData = string.Empty;
     private bool _isSearchingMotSummary;
+    private bool _isSearchingPriceEstimate;
+    private bool _hasSearchedPriceEstimate;
+    private IEnumerable<Guid> _selectedDefectIds = [];
+
+    private bool IsDefectSelected(MotDefectModel defect) =>
+        _selectedDefectIds.Contains(defect.Id);
+
+    private void OnDefectSelected(MotDefectModel defect, bool selected)
+    {
+        _hasSearchedPriceEstimate = false;
+
+        _selectedDefectIds = selected
+            ? _selectedDefectIds.Append(defect.Id)
+            : _selectedDefectIds.Where(id => id != defect.Id);
+    }
 
     private async Task OnExpandedAsync(bool expanded)
     {
         if (_isSearchingMotSummary || !string.IsNullOrWhiteSpace(AiMotSummaryText))
             return;
 
-        await StartSummaryLookup();
+        await StartSummaryLookupAsync();
     }
 
-    private async Task StartSummaryLookup()
+    private async Task StartSummaryLookupAsync()
     {
         if (Vehicle.Details is null)
             return;
@@ -67,21 +105,38 @@ public partial class MotHistoryItem
         await VehicleLookupEventsService.NotifyStartVehicleLookup(
             Vehicle.Details.RegistrationNumber,
             VehicleLookupType.AiMotSummary,
-            _metaData
+            SummaryLookupMetaData
+        );
+    }
+
+    private async Task StartPriceEstimateLookupAsync()
+    {
+        if (Vehicle.Details is null)
+            return;
+
+        _hasSearchedPriceEstimate = true;
+
+        await VehicleLookupEventsService.NotifyStartVehicleLookup(
+            Vehicle.Details.RegistrationNumber,
+            VehicleLookupType.AiMotPriceEstimate,
+            PriceEstimateLookupMetaData
         );
     }
 
     private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber, string metaData)
     {
-        if (lookupType == VehicleLookupType.AiMotSummary)
+        if (lookupType == VehicleLookupType.AiMotSummary && string.Equals(metaData,SummaryLookupMetaData))
         {
-            var data = JsonSerializer.Deserialize<AiMotTestSummaryMetaDataModel>(metaData);
+            _isSearchingMotSummary = lookupStarted;
+            StateHasChanged();
+            return;
+        }
 
-            if (data != null && Mot != null && data.TestNumber == Mot.TestNumber)
-            {
-                _isSearchingMotSummary = lookupStarted;
-                StateHasChanged();
-            }
+        if (lookupType == VehicleLookupType.AiMotPriceEstimate && string.Equals(metaData, PriceEstimateLookupMetaData))
+        {
+            _isSearchingPriceEstimate = lookupStarted;
+            StateHasChanged();
+            return;
         }
     }
 
@@ -101,16 +156,6 @@ public partial class MotHistoryItem
             };
             StateHasChanged();
         }
-    }
-
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-
-        _metaData = JsonSerializer.Serialize(new AiMotTestSummaryMetaDataModel
-        {
-            TestNumber = Mot?.TestNumber,
-        });
     }
 
     protected override void OnInitialized()

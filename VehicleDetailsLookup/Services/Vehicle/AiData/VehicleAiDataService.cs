@@ -47,11 +47,11 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
             var dbAiData = await _aiDataRepository.GetAiDataAsync(registrationNumber, searchType, metaData);
 
             TimeSpan cacheDuration = searchType == AiType.MotHistorySummary
-                ? TimeSpan.FromMinutes(15) // MOT history summary cache duration
-                : TimeSpan.FromDays(1); // Overview and common issues cache duration
+                ? TimeSpan.FromMinutes(15) // MOT history summary cache duration - more frequent updates due to new MOT tests
+                : TimeSpan.FromDays(1);
 
-            if (dbAiData != null && ((dbAiData.Updated > DateTime.UtcNow.Subtract(cacheDuration)) || searchType == AiType.MotTestSummary))
-                // Return stored AI data if it is recent enough - MOT test summary will never change so always return stored data
+            if (dbAiData != null && (dbAiData.Updated > DateTime.UtcNow.Subtract(cacheDuration)))
+                // Return stored AI data if it is recent enough
                 return _databaseMapper.MapAiData(dbAiData!);
 
             return searchType switch
@@ -65,7 +65,10 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
                         await _vehicleMotService.GetVehicleMotTestsAsync(registrationNumber)),
 
                 AiType.MotTestSummary =>
-                    await GetMotTestSummary(registrationNumber, metaData),
+                    await GetMotTestSummary(registrationNumber, metaData, dbAiData),
+
+                AiType.MotPriceEstimate =>
+                    await GetMotPriceEstimate(registrationNumber, metaData, dbAiData),
 
                 _ =>
                     await GetVehicleAiDataInternalAsync<DetailsModel>(
@@ -75,6 +78,75 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
                         dbAiData,
                         await _vehicleDetailsService.GetVehicleDetailsAsync(registrationNumber))
             };
+        }
+
+        private async ValueTask<AiDataModel?> GetMotTestSummary(string registrationNumber, string? metaData, AiDataDbModel? existingData)
+        {
+            if (string.IsNullOrWhiteSpace(metaData))
+                return null;
+
+            var data = JsonSerializer.Deserialize<AiMotTestSummaryMetaDataModel>(metaData);
+
+            var motTests = await _vehicleMotService.GetVehicleMotTestsAsync(registrationNumber);
+            var test = motTests?.FirstOrDefault(t => t.TestNumber == data?.TestNumber);
+            var vehicleDetails = await _vehicleDetailsService.GetVehicleDetailsAsync(registrationNumber);
+
+            if (test == null || vehicleDetails == null)
+                return null;
+
+            var additionalData = new MotTestSummaryDataModel
+            {
+                YearOfManufacture = vehicleDetails.YearOfManufacture,
+                Make = vehicleDetails.Make,
+                Model = vehicleDetails.Model,
+                EngineCapacity = vehicleDetails.EngineCapacity,
+                FuelType = vehicleDetails.FuelType,
+                TestModel = test
+            };
+
+            return await GetVehicleAiDataInternalAsync<MotTestSummaryDataModel>(
+                registrationNumber,
+                AiType.MotTestSummary,
+                metaData,
+                existingData,
+                additionalData);
+        }
+
+        private async ValueTask<AiDataModel?> GetMotPriceEstimate(string registrationNumber, string? metaData, AiDataDbModel? existingData)
+        {
+            if (string.IsNullOrWhiteSpace(metaData))
+                return null;
+
+            var data = JsonSerializer.Deserialize<AiMotPriceEstimateMetaDataModel>(metaData);
+
+            var motTests = await _vehicleMotService.GetVehicleMotTestsAsync(registrationNumber);
+            var test = motTests?.FirstOrDefault(t => t.TestNumber == data?.TestNumber);
+            var vehicleDetails = await _vehicleDetailsService.GetVehicleDetailsAsync(registrationNumber);
+
+            if (test == null || vehicleDetails == null || data == null || data.DefectIds == null || !data.DefectIds.Any())
+                return null;
+
+            var selectedDefects = test.Defects
+                .Where(d => data.DefectIds.Contains(d.Id))
+                .ToList();
+
+            var additionalData = new MotPriceEstimateDataModel
+            {
+                YearOfManufacture = vehicleDetails.YearOfManufacture,
+                Make = vehicleDetails.Make,
+                Model = vehicleDetails.Model,
+                EngineCapacity = vehicleDetails.EngineCapacity,
+                FuelType = vehicleDetails.FuelType,
+                Mileage = $"{test.OdometerValue} {test.OdometerUnit}",
+                Defects = selectedDefects.Select(d => d.Description)
+            };
+
+            return await GetVehicleAiDataInternalAsync<MotPriceEstimateDataModel>(
+                registrationNumber,
+                AiType.MotPriceEstimate,
+                metaData,
+                existingData,
+                additionalData);
         }
 
         private async ValueTask<AiDataModel?> GetVehicleAiDataInternalAsync<TData>(
@@ -169,41 +241,47 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
                         • Ignore minor wear-and-tear unless it contributes to a larger concern.
                     Data: {additionalDataJson}",
 
+                AiType.MotPriceEstimate =>
+                    @$"Return a MOT repair cost estimate using the exact Markdown structure and ordering defined below.
+                    Deviation from this structure is not allowed.
+
+                    The response MUST be valid Markdown. Plain text responses are not allowed.
+
+                    Markdown structure (use this exactly):
+
+                    **Itemised Repairs:**
+                    - **[Short defect name]**
+                      - Parts: £min–£max
+                      - Labour: £min–£max
+                    - **[Short defect name]**
+                      - Parts: £min–£max
+                      - Labour: £min–£max
+
+                    **Potential Additional Costs:**
+                    - **[Item]:** £min–£max
+
+                    **Total Estimated Cost (Parts & Labour):**
+                    £min–£max
+
+                    Content rules:
+                    • No explanations, commentary, assumptions, or reasoning.
+                    • Do NOT repeat full MOT defect wording — use short, clear repair names.
+                    • Use realistic UK independent garage pricing.
+                    • Assume aftermarket parts unless OEM is explicitly required.
+                    • Each repair MUST include both Parts and Labour lines.
+                    • Potential Additional Costs must be made up of likely additional costs based on the required work. E.g. alignment for suspension work.
+                    • The Total Estimated Cost MUST include all parts, labour, and additional costs.
+                    • If no additional costs are applicable, do not include the section.
+                    • Do NOT add, remove, rename, or reorder sections.
+                    • Do NOT include vehicle summaries or defect descriptions.
+                    • Prices must be ranges, not single values.
+                    • Currency must be GBP (£) only.
+
+                    Data: {additionalDataJson}",
+
                 _ =>
                     throw new ArgumentOutOfRangeException(nameof(searchType), searchType, "Invalid AI data search type."),
             };
-        }
-
-        private async ValueTask<AiDataModel?> GetMotTestSummary(string registrationNumber, string? metaData)
-        {
-            if (string.IsNullOrWhiteSpace(metaData))
-                return null;
-
-            var data = JsonSerializer.Deserialize<AiMotTestSummaryMetaDataModel>(metaData);
-
-            var motTests = await _vehicleMotService.GetVehicleMotTestsAsync(registrationNumber);
-            var test = motTests?.FirstOrDefault(t => t.TestNumber == data?.TestNumber);
-            var vehicleDetails = await _vehicleDetailsService.GetVehicleDetailsAsync(registrationNumber);
-
-            if (test == null || vehicleDetails == null)
-                return null;
-
-            var additionalData = new MotTestSummaryDataModel
-            {
-                YearOfManufacture = vehicleDetails.YearOfManufacture,
-                Make = vehicleDetails.Make,
-                Model = vehicleDetails.Model,
-                EngineCapacity = vehicleDetails.EngineCapacity,
-                FuelType = vehicleDetails.FuelType,
-                TestModel = test
-            };
-
-            return await GetVehicleAiDataInternalAsync<MotTestSummaryDataModel>(
-                registrationNumber,
-                AiType.MotTestSummary,
-                metaData,
-                null, // No existing data check for MOT test summary - the underlying data will never change
-                additionalData);
         }
     }
 }
