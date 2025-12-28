@@ -32,25 +32,25 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookupEvents
             remove => OnEasterEggActivated -= value;
         }
 
-        public void NotifyLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber)
+        public void NotifyLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber, string metaData)
         {
-            OnLookupStatusChanged?.Invoke(lookupType, lookupStarted, registrationNumber);
+            OnLookupStatusChanged?.Invoke(lookupType, lookupStarted, registrationNumber, metaData);
         }
 
-        public async Task NotifyStartVehicleLookup(string registrationNumber, VehicleLookupType lookupType)
+        public async Task NotifyStartVehicleLookup(string registrationNumber, VehicleLookupType lookupType, string metaData)
         {
-            OnLookupStatusChanged?.Invoke(lookupType, true, registrationNumber);
+            OnLookupStatusChanged?.Invoke(lookupType, true, registrationNumber, metaData);
 
             // Await lookup response before invoking the next event
             if (OnStartVehicleLookup != null)
             {
                 foreach (var handler in OnStartVehicleLookup.GetInvocationList())
                 {
-                    await ((IVehicleLookupEventsService.VehicleLookupStartEvent)handler)(registrationNumber, lookupType);
+                    await ((IVehicleLookupEventsService.VehicleLookupStartEvent)handler)(registrationNumber, lookupType, metaData);
                 }
             }
 
-            OnLookupStatusChanged?.Invoke(lookupType, false, registrationNumber);
+            OnLookupStatusChanged?.Invoke(lookupType, false, registrationNumber, metaData);
         }
 
         public void NotifyLookupClear()

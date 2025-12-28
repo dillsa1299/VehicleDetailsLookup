@@ -64,6 +64,7 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
 
             return motDefects.Select(defect => new MotDefectDbModel
             {
+                Id = defect.Id,
                 TestNumber = testNumber,
                 Description = defect.Text,
                 Type = GetDefectType(defect.Type),
@@ -88,12 +89,13 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
                 });
         }
 
-        public AiDataDbModel MapAiData(string registrationNumber, AiType type, string aiResponse, string dataHash)
+        public AiDataDbModel MapAiData(string registrationNumber, AiType type, string? metaData, string aiResponse, string dataHash)
         {
             return new AiDataDbModel
             {
                 RegistrationNumber = registrationNumber,
                 Type = type,
+                MetaData = metaData,
                 GeneratedText = aiResponse,
                 Updated = DateTime.UtcNow,
                 DataHash = dataHash

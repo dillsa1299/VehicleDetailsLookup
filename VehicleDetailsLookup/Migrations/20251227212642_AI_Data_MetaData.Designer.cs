@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VehicleDetailsLookup.Models.Database;
 
@@ -10,9 +11,11 @@ using VehicleDetailsLookup.Models.Database;
 namespace VehicleDetailsLookup.Migrations
 {
     [DbContext(typeof(VehicleDbContext))]
-    partial class VehicleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251227212642_AI_Data_MetaData")]
+    partial class AI_Data_MetaData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
@@ -25,22 +28,19 @@ namespace VehicleDetailsLookup.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("MetaData")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("DataHash")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("GeneratedText")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("MetaData")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("Updated")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("RegistrationNumber", "Type", "MetaData");
-
-                    b.HasIndex("RegistrationNumber", "Type", "MetaData")
-                        .IsUnique();
+                    b.HasKey("RegistrationNumber", "Type");
 
                     b.ToTable("AiData");
                 });

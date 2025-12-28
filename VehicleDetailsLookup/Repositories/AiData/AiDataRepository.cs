@@ -9,11 +9,11 @@ namespace VehicleDetailsLookup.Repositories.AiData
     {
         private readonly VehicleDbContext _dbContext = dbContext;
 
-        public async Task UpdateAiDataAsync(AiDataDbModel aiData)
+        public async Task UpsertAiDataAsync(AiDataDbModel aiData)
         {
             // Try to find existing AI data for the given registration number and type
             var existing = await _dbContext.AiData
-                .FirstOrDefaultAsync(x => x.RegistrationNumber == aiData.RegistrationNumber && x.Type == aiData.Type);
+                .FirstOrDefaultAsync(x => x.RegistrationNumber == aiData.RegistrationNumber && x.Type == aiData.Type && x.MetaData == aiData.MetaData);
 
             if (existing != null)
             {
@@ -31,10 +31,10 @@ namespace VehicleDetailsLookup.Repositories.AiData
             await _dbContext.SaveChangesAsync();
         }
 
-        public async ValueTask<AiDataDbModel?> GetAiDataAsync(string registrationNumber, AiType type)
+        public async ValueTask<AiDataDbModel?> GetAiDataAsync(string registrationNumber, AiType type, string? metaData)
         {
             return await _dbContext.AiData
-                .FirstOrDefaultAsync(x => x.RegistrationNumber == registrationNumber && x.Type == type);
+                .FirstOrDefaultAsync(x => x.RegistrationNumber == registrationNumber && x.Type == type && x.MetaData == metaData);
         }
     }
 }

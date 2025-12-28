@@ -44,10 +44,11 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
         /// </summary>
         /// <param name="registrationNumber">The registration number of the vehicle.</param>
         /// <param name="type">The <see cref="AiType"/> specifying the category of AI-generated information to retrieve.</param>
+        /// <param name="metaData">Optional metadata to further specify the AI data request.</param>
         /// <returns>
         /// A <see cref="ValueTask{TResult}"/> whose result is an <see cref="IAiDataModel"/> with the requested AI data, or <c>null</c> if not found.
         /// </returns>
-        ValueTask<AiDataModel?> GetVehicleAiDataAsync(string registrationNumber, AiType type);
+        ValueTask<AiDataModel?> GetVehicleAiDataAsync(string registrationNumber, AiType type, string metaData);
 
         /// <summary>
         /// Retrieves the total number of times a vehicle has been looked up asynchronously, identified by its registration number.

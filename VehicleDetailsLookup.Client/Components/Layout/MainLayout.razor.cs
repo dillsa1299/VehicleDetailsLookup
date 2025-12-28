@@ -42,7 +42,7 @@ namespace VehicleDetailsLookup.Client.Components.Layout
             return Icons.Material.Filled.DirectionsCar;
         }
 
-        private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber)
+        private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber, string metaData)
         {
             _clarksonEasterEggEnabled = lookupType switch
             {

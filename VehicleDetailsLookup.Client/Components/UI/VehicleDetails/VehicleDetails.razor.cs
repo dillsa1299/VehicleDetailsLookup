@@ -14,8 +14,8 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
         [Parameter]
         public VehicleModel? Vehicle { get; set; }
 
-        private readonly string _placeholderImage = "images/placeholder-car.svg";
-        private readonly string _aiFailedMessage = "Unable to generate AI response. Please try again.";
+        private const string _placeholderImage = "images/placeholder-car.svg";
+        private const string _aiFailedMessage = "Unable to generate AI response. Please try again.";
         private bool _isSearchingDetails;
         private bool _isSearchingMotHistory;
         private bool _isSearchingImages;
@@ -26,28 +26,28 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
 
         private string? AiOverviewText =>
             _clarksonEasterEggEnabled
-                ? (Vehicle?.AiData.TryGetValue(AiType.ClarksonOverview, out var aiDataModel) == true
+                ? (Vehicle?.AiData.TryGetValue(AiType.ClarksonOverview.ToString(), out var aiDataModel) == true
                     ? aiDataModel.Content
                     : string.Empty)
-                : (Vehicle?.AiData.TryGetValue(AiType.Overview, out aiDataModel) == true
+                : (Vehicle?.AiData.TryGetValue(AiType.Overview.ToString(), out aiDataModel) == true
                     ? aiDataModel.Content
                     : string.Empty);
 
         private string? AiCommonIssuesText =>
             _clarksonEasterEggEnabled
-                ? (Vehicle?.AiData.TryGetValue(AiType.ClarksonCommonIssues, out var aiDataModel) == true
+                ? (Vehicle?.AiData.TryGetValue(AiType.ClarksonCommonIssues.ToString(), out var aiDataModel) == true
                     ? aiDataModel.Content
                     : string.Empty)
-                : (Vehicle?.AiData.TryGetValue(AiType.CommonIssues, out aiDataModel) == true)
+                : (Vehicle?.AiData.TryGetValue(AiType.CommonIssues.ToString(), out aiDataModel) == true)
                     ? aiDataModel.Content
                     : string.Empty;
 
         private string? AiMotHistorySummaryText =>
             _clarksonEasterEggEnabled
-                ? (Vehicle?.AiData.TryGetValue(AiType.ClarksonMotHistorySummary, out var aiDataModel) == true
+                ? (Vehicle?.AiData.TryGetValue(AiType.ClarksonMotHistorySummary.ToString(), out var aiDataModel) == true
                     ? aiDataModel.Content
                     : string.Empty)
-                : (Vehicle?.AiData.TryGetValue(AiType.MotHistorySummary, out aiDataModel) == true)
+                : (Vehicle?.AiData.TryGetValue(AiType.MotHistorySummary.ToString(), out aiDataModel) == true)
                     ? aiDataModel.Content
                     : string.Empty;
 
@@ -81,7 +81,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
                 ? "Clarkson's MOT Rant"
                 : "AI Summary";
 
-        private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber)
+        private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber, string metaData)
         {
             switch (lookupType)
             {
@@ -121,7 +121,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
 
         private async Task OnCommonIssuesExpandedAsync(bool expanded)
         {
-            if (!_isSearchingAiCommonIssues && Vehicle != null && !Vehicle.AiData.ContainsKey(AiType.CommonIssues) && !_clarksonEasterEggEnabled)
+            if (!_isSearchingAiCommonIssues && Vehicle != null && !Vehicle.AiData.ContainsKey(AiType.CommonIssues.ToString()) && !_clarksonEasterEggEnabled)
             {
                 await StartLookup(VehicleLookupType.AiCommonIssues);
             }
@@ -134,7 +134,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
                 await StartLookup(VehicleLookupType.MotHistory);
             }
 
-            if (!_isSearchingAiMotHistorySummary && Vehicle != null && !Vehicle.AiData.ContainsKey(AiType.MotHistorySummary) && !_clarksonEasterEggEnabled)
+            if (!_isSearchingAiMotHistorySummary && Vehicle != null && !Vehicle.AiData.ContainsKey(AiType.MotHistorySummary.ToString()) && !_clarksonEasterEggEnabled)
             {
                 await StartLookup(VehicleLookupType.AiMotHistorySummary);
             }

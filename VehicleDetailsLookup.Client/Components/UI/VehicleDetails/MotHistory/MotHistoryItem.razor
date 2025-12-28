@@ -1,6 +1,6 @@
 ﻿@if (Mot != null)
 {
-    <MudExpansionPanel HideIcon="true" Disabled="@(!Mot.Defects.Any())">
+    <MudExpansionPanel HideIcon="true" Disabled="@(!Mot.Defects.Any())" ExpandedChanged="@OnExpandedAsync">
         <TitleContent>
             <div class="d-flex align-center">
                 <MudIcon Icon="@(Mot.Passed? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Cancel)"
@@ -36,6 +36,35 @@
             </div>
         </TitleContent>
         <ChildContent>
+            <MudText Typo="Typo.h5">AI Summary</MudText>
+            
+            @if (_isSearchingMotSummary)
+            {
+                <MudSkeleton />
+                <MudSkeleton />
+                <MudSkeleton />
+                <MudSkeleton />
+                <MudSkeleton />
+                <MudSkeleton />
+            }
+            else
+            {
+                @if (AiMotSummaryHtml != null)
+                {
+                    <div class="ai-html">
+                        @(AiMotSummaryHtml)
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex align-center">
+                        <MudText>@_aiFailedMessage</MudText>
+                        <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="@(() => StartSummaryLookup())" Class="ml-2" />
+                    </div>
+                }
+            }
+            <br />
+
             @if (DangerousDefects.Any())
             {
                 <div class="d-flex align-center">

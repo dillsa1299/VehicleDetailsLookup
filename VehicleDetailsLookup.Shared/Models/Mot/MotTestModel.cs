@@ -2,6 +2,7 @@
 {
     public class MotTestModel
     {
+        public string TestNumber { get; set; } = string.Empty;
         public DateTime CompletedDate { get; set; }
         public bool Passed { get; set; }
         public DateOnly ExpiryDate { get; set; }

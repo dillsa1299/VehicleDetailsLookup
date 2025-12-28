@@ -26,6 +26,10 @@
         /// AI MOT history summary
         /// </summary>
         AiMotHistorySummary,
+        /// <summary>
+        /// AI MOT summary
+        /// </summary>
+        AiMotSummary,
 
         /// <summary>
         /// AI Jeremy Clarkson overview

@@ -17,6 +17,11 @@
         /// AI-generated summary of the vehicle's MOT history.
         /// </summary>
         MotHistorySummary,
+        /// <summary>
+        /// AI-generated summary of a specific MOT test.
+        /// </summary>
+        MotTestSummary,
+
 
         /// <summary>
         /// AI-generated impersonation of Jeremy Clarkson giving an overview of the vehicle, including general information and highlights.

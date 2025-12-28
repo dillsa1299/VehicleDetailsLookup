@@ -11,7 +11,7 @@
         {
             var client = new Client(apiKey: _key);
             var response =  await client.Models.GenerateContentAsync(
-                model: "gemini-2.5-flash", contents: prompt
+                model: "gemini-2.5-flash-lite", contents: prompt
             );
 
             return response?.Candidates?.FirstOrDefault()?.Content?.Parts?.FirstOrDefault()?.Text;

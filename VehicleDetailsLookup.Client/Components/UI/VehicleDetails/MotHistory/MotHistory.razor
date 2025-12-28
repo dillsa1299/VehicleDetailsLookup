@@ -1,9 +1,9 @@
-﻿@if (MotTests != null && MotTests.Any())
+﻿@if (Vehicle != null && Vehicle.MotTests.Any())
 {
     <MudExpansionPanels MultiExpansion="true" Class="mt-4">
-        @foreach (var test in MotTests)
+        @foreach (var test in Vehicle.MotTests)
         {
-            <MotHistoryItem Mot="@test"></MotHistoryItem>
+            <MotHistoryItem Vehicle="@Vehicle" Mot="@test"></MotHistoryItem>
         }
     </MudExpansionPanels>
 }

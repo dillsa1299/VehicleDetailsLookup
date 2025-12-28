@@ -6,6 +6,7 @@ using VehicleDetailsLookup.Shared.Models.Enums;
 using VehicleDetailsLookup.Shared.Models.Image;
 using VehicleDetailsLookup.Shared.Models.Lookup;
 using VehicleDetailsLookup.Shared.Models.Mot;
+using VehicleDetailsLookup.Shared.Models.Requests;
 
 namespace VehicleDetailsLookup.Client.Services.VehicleLookup
 {
@@ -70,10 +71,17 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             return images;
         }
 
-        public async ValueTask<AiDataModel?> GetVehicleAiDataAsync(string registrationNumber, AiType type)
+        public async ValueTask<AiDataModel?> GetVehicleAiDataAsync(string registrationNumber, AiType type, string metaData)
         {
+            var request = new GetVehicleAiDataRequest
+            {
+                RegistrationNumber = registrationNumber,
+                SearchType = type,
+                MetaData = metaData
+            };
+
             // Call the backend API to retrieve vehicle AI.
-            var response = await _httpClient.GetAsync($"/api/VehicleAiData/{registrationNumber}/{type}");
+            var response = await _httpClient.PostAsJsonAsync($"/api/VehicleAiData", request);
 
             // Return null if the request fails or AI data not found.
             if (!response.IsSuccessStatusCode)
@@ -124,6 +132,16 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookup
             var lookups = await response.Content.ReadFromJsonAsync<IEnumerable<LookupModel>>();
 
             return lookups;
+        }
+
+        public ValueTask<string?> GetMotSummaryAsync(string registrationNumber, MotTestModel motTest)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ValueTask<string?> GetMotDefectsPricingAsync(string registrationNumber, IEnumerable<MotDefectModel> defects)
+        {
+            throw new NotImplementedException();
         }
     }
 }
