@@ -40,6 +40,7 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
 
             return motTests.Select(test => new MotTestModel
             {
+                TestNumber = test.TestNumber ?? string.Empty,
                 CompletedDate = test.CompletedDate,
                 Passed = test.Passed,
                 ExpiryDate = test.ExpiryDate,
@@ -56,6 +57,7 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
 
             return motDefects.Select(defect => new MotDefectModel
             {
+                Id = defect.Id,
                 Description = defect.Description ?? string.Empty,
                 Type = defect.Type,
                 Dangerous = defect.Dangerous
@@ -81,7 +83,8 @@ namespace VehicleDetailsLookup.Services.Mappers.DatabaseFrontend
             return new AiDataModel
             {
                 Type = aiData.Type,
-                Content = aiData.GeneratedText ?? string.Empty
+                Content = aiData.GeneratedText ?? string.Empty,
+                MetaData = aiData.MetaData
             };
         }
 

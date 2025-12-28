@@ -18,9 +18,12 @@ namespace VehicleDetailsLookup.Models.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Composite key for AiDbModel
+            // Composite key for AiDbModel (remove old key, add unique index)
             modelBuilder.Entity<AiDataDbModel>()
-                .HasKey(a => new { a.RegistrationNumber, a.Type });
+                .HasKey(a => new { a.RegistrationNumber, a.Type, a.MetaData });
+            modelBuilder.Entity<AiDataDbModel>()
+                .HasIndex(a => new { a.RegistrationNumber, a.Type, a.MetaData })
+                .IsUnique();
 
             // RegistrationNumber as key for DetailsDbModel
             modelBuilder.Entity<DetailsDbModel>()

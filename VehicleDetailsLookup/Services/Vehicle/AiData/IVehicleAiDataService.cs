@@ -1,5 +1,6 @@
 ﻿using VehicleDetailsLookup.Shared.Models.Ai;
 using VehicleDetailsLookup.Shared.Models.Enums;
+using VehicleDetailsLookup.Shared.Models.Requests;
 
 namespace VehicleDetailsLookup.Services.Vehicle.AiData
 {
@@ -12,11 +13,10 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
         /// <summary>
         /// Asynchronously retrieves AI-generated data for a vehicle, given its registration number and the desired AI data type.
         /// </summary>
-        /// <param name="registrationNumber">The vehicle's registration number.</param>
-        /// <param name="searchType">The type of AI-generated information to retrieve (e.g., overview, common issues, MOT history summary).</param>
+        /// <param name="request">The request containing the vehicle registration number and AI data type.</param>
         /// <returns>
         /// A <see cref="ValueTask{TResult}"/> containing the <see cref="IAiDataModel"/> if found; otherwise, <c>null</c>.
         /// </returns>
-        ValueTask<AiDataModel?> GetVehicleAiDataAsync(string registrationNumber, AiType searchType);
+        ValueTask<AiDataModel?> GetVehicleAiDataAsync(GetVehicleAiDataRequest request);
     }
 }

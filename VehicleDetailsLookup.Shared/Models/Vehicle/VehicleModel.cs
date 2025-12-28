@@ -11,6 +11,6 @@ namespace VehicleDetailsLookup.Shared.Models.Vehicle
         public DetailsModel? Details { get; set; }
         public IEnumerable<MotTestModel> MotTests { get; set; } = [];
         public IEnumerable<ImageModel> Images { get; set; } = [];
-        public IDictionary<AiType, AiDataModel> AiData { get; set; } = new Dictionary<AiType, AiDataModel>();
+        public IDictionary<string, AiDataModel> AiData { get; set; } = new Dictionary<string, AiDataModel>();
     }
 }

@@ -34,7 +34,7 @@ namespace VehicleDetailsLookup.Client.Components.Pages
         private VehicleModel _vehicle = new();
         private bool _lookupInProgress;
 
-        private async Task StartLookup(string registrationNumber, VehicleLookupType lookupType)
+        private async Task StartLookup(string registrationNumber, VehicleLookupType lookupType, string metaData)
         {
             switch (lookupType)
             {
@@ -65,10 +65,12 @@ namespace VehicleDetailsLookup.Client.Components.Pages
                 case VehicleLookupType.AiOverview:
                 case VehicleLookupType.AiCommonIssues:
                 case VehicleLookupType.AiMotHistorySummary:
+                case VehicleLookupType.AiMotSummary:
+                case VehicleLookupType.AiMotPriceEstimate:
                 case VehicleLookupType.AiClarksonOverview:
                 case VehicleLookupType.AiClarksonCommonIssues:
                 case VehicleLookupType.AiClarksonMotHistorySummary:
-                    await GetAiData(registrationNumber, lookupType);
+                    await GetAiData(registrationNumber, lookupType, metaData);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(lookupType), lookupType, null);
@@ -77,37 +79,39 @@ namespace VehicleDetailsLookup.Client.Components.Pages
             StateHasChanged();
         }
 
-        private async Task GetAiData(string registrationNumber, VehicleLookupType lookupType)
+        private async Task GetAiData(string registrationNumber, VehicleLookupType lookupType, string metaData)
         {
             var aiType = lookupType switch
             {
                 VehicleLookupType.AiOverview => AiType.Overview,
                 VehicleLookupType.AiCommonIssues => AiType.CommonIssues,
                 VehicleLookupType.AiMotHistorySummary => AiType.MotHistorySummary,
+                VehicleLookupType.AiMotSummary => AiType.MotTestSummary,
+                VehicleLookupType.AiMotPriceEstimate => AiType.MotPriceEstimate,
                 VehicleLookupType.AiClarksonOverview => AiType.ClarksonOverview,
                 VehicleLookupType.AiClarksonCommonIssues => AiType.ClarksonCommonIssues,
                 VehicleLookupType.AiClarksonMotHistorySummary => AiType.ClarksonMotHistorySummary,
                 _ => throw new ArgumentOutOfRangeException(nameof(lookupType), lookupType, null)
             };
 
-            var aiData = await VehicleLookupService.GetVehicleAiDataAsync(registrationNumber, aiType);
+            var aiData = await VehicleLookupService.GetVehicleAiDataAsync(registrationNumber, aiType, metaData);
 
             if (aiData == null)
             {
                 // If AI data is not found, clear any existing data for this type
-                _vehicle.AiData.Remove(aiType);
+                _vehicle.AiData.Remove(aiType.ToString() + metaData);
                 return;
             }
 
             // If AI data is found, add or update it in the vehicle model
-            if (!_vehicle.AiData.TryAdd(aiType, aiData))
+            if (!_vehicle.AiData.TryAdd(aiType.ToString() + metaData, aiData))
             {
                 // Update the existing entry
-                _vehicle.AiData[aiType] = aiData;
+                _vehicle.AiData[aiType.ToString() + metaData] = aiData;
             }
         }
 
-        private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber)
+        private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber, string metaData)
         {
             _lookupInProgress = lookupStarted;
             StateHasChanged();

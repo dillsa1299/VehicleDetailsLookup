@@ -26,7 +26,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.RegistrationInput
             await VehicleLookupEventsService.NotifyStartVehicleLookup(_registrationInput.Input, VehicleLookupType.Details);
         }
 
-        private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber)
+        private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber, string metaData)
         {
             // Replace input - Allows input to match registrations passed via URL
             _registrationInput.Input = registrationNumber;

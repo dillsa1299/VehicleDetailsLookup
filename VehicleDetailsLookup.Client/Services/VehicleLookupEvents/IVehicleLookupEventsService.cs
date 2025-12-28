@@ -12,7 +12,8 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookupEvents
         /// </summary>
         /// <param name="registrationNumber">The registration number of the vehicle being looked up.</param>
         /// <param name="lookupType">The type of lookup being performed.</param>
-        public delegate Task VehicleLookupStartEvent(string registrationNumber, VehicleLookupType lookupType);
+        /// <param name="metaData">Optional metadata associated with the lookup.</param>
+        public delegate Task VehicleLookupStartEvent(string registrationNumber, VehicleLookupType lookupType, string metaData);
 
         /// <summary>
         /// Delegate for handling changes in the status of a vehicle lookup operation.
@@ -20,7 +21,8 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookupEvents
         /// <param name="lookupType">The type of lookup whose status changed.</param>
         /// <param name="lookupStarted">Indicates whether the lookup has started (true) or ended (false).</param>
         /// <param name="registrationNumber">The registration number of the vehicle involved in the lookup.</param>
-        public delegate void VehicleLookupEvent(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber);
+        /// <param name="metaData">Optional metadata associated with the lookup.</param>
+        public delegate void VehicleLookupEvent(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber, string metaData);
 
         /// <summary>
         /// Represents a method that handles the activation of an Easter egg.
@@ -54,7 +56,8 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookupEvents
         /// </summary>
         /// <param name="registrationNumber">The registration number of the vehicle being looked up.</param>
         /// <param name="lookupType">The type of lookup being performed.</param>
-        Task NotifyStartVehicleLookup(string registrationNumber, VehicleLookupType lookupType);
+        /// <param name="metaData">Optional metadata associated with the lookup.</param>
+        Task NotifyStartVehicleLookup(string registrationNumber, VehicleLookupType lookupType, string metaData = "");
 
         /// <summary>
         /// Notifies subscribers of a change in the status of a vehicle lookup operation.
@@ -62,7 +65,8 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookupEvents
         /// <param name="lookupType">The type of lookup whose status changed.</param>
         /// <param name="lookupStarted">Indicates whether the lookup has started (true) or ended (false).</param>
         /// <param name="registrationNumber">The registration number of the vehicle involved in the lookup.</param>
-        void NotifyLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber);
+        /// <param name="metaData">Optional metadata associated with the lookup.</param>
+        void NotifyLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber, string metaData);
 
         /// <summary>
         /// Notifies subscribers to clear lookup data.

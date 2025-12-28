@@ -1,6 +1,6 @@
 ﻿@if (Mot != null)
 {
-    <MudExpansionPanel HideIcon="true" Disabled="@(!Mot.Defects.Any())">
+    <MudExpansionPanel HideIcon="true" Disabled="@(!Mot.Defects.Any())" ExpandedChanged="@OnExpandedAsync">
         <TitleContent>
             <div class="d-flex align-center">
                 <MudIcon Icon="@(Mot.Passed? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Cancel)"
@@ -10,7 +10,6 @@
                 <MudText Class="mt-2">
                     @Mot.CompletedDate.ToString("d MMMM yyyy") | @(Mot.OdometerValue == -1 ? "N/A" : $"{Mot.OdometerValue:N0} {Mot.OdometerUnit}")
                 </MudText>
-
                 <div class="d-flex align-items-center ml-auto">
                     @if (DangerousDefects.Any())
                     {
@@ -36,57 +35,123 @@
             </div>
         </TitleContent>
         <ChildContent>
+            <MudText Typo="Typo.h5">AI Summary</MudText>
+            @if (_isSearchingMotSummary)
+            {
+                <MudSkeleton />
+                <MudSkeleton />
+                <MudSkeleton />
+                <MudSkeleton />
+                <MudSkeleton />
+                <MudSkeleton />
+            }
+            else
+            {
+                @if (AiMotSummaryHtml != null)
+                {
+                    <div class="ai-html">
+                        @(AiMotSummaryHtml)
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex align-center">
+                        <MudText>@_aiFailedMessage</MudText>
+                        <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="@(() => StartSummaryLookupAsync())" Class="ml-2" />
+                    </div>
+                }
+            }
             @if (DangerousDefects.Any())
             {
-                <div class="d-flex align-center">
+                <div class="d-flex align-center mt-4">
                     <MudIcon Icon="@Icons.Material.Outlined.Dangerous" Color="Color.Error" />
                     <MudText Class="ml-2" Typo="Typo.h6">Dangerous Defects</MudText>
                 </div>
 
-                <ul>
-                    @foreach (var defect in DangerousDefects)
-                    {
-                        <li class="ml-4">
-                            <MudText Class="ml-4">@defect.Description</MudText>
-                        </li>
-                    }
-                </ul>
-                <br />
+                @foreach (var defect in DangerousDefects)
+                {
+                    <MudCheckBox Class="ml-4"
+                                 Size="Size.Small"
+                                 Dense="true"
+                                 T="bool"
+                                 @bind-Value:get="IsDefectSelected(defect)"
+                                 @bind-Value:set="@(value => OnDefectSelected(defect, value))"
+                                 Label="@defect.Description"
+                                 Color="Color.Error"></MudCheckBox>
+                }
             }
             @if (MajorDefects.Any())
             {
-                <div class="d-flex align-center">
+                <div class="d-flex align-center mt-4">
                     <MudIcon Icon="@Icons.Material.Outlined.WarningAmber" Color="Color.Warning" />
                     <MudText Class="ml-2" Typo="Typo.h6">Major Defects</MudText>
                 </div>
 
-                <ul>
-                    @foreach (var defect in MajorDefects)
-                    {
-                        <li class="ml-4">
-                            <MudText Class="ml-4">@defect.Description</MudText>
-                        </li>
-                    }
-                </ul>
-                <br />
+                @foreach (var defect in MajorDefects)
+                {
+                    <MudCheckBox Class="ml-4"
+                                 CheckedCh
+                                 Size="Size.Small"
+                                 Dense="true"
+                                 T="bool"
+                                 @bind-Value:get="IsDefectSelected(defect)"
+                                 @bind-Value:set="@(value => OnDefectSelected(defect, value))"
+                                 Label="@defect.Description"
+                                 Color="Color.Warning"></MudCheckBox>
+                }
             }
-
             @if (OtherDefects.Any())
             {
-                <div class="d-flex align-center">
+                <div class="d-flex align-center mt-4">
                     <MudIcon Icon="@Icons.Material.Outlined.Info" Color="Color.Primary" />
                     <MudText Class="ml-2" Typo="Typo.h6">Advisories</MudText>
                 </div>
-                
-                <ul>
-                    @foreach (var defect in OtherDefects)
-                    {
-                        <li class="ml-4">
-                            <MudText Class="ml-4">@defect.Description</MudText>
-                        </li>
-                    }
-                </ul>
+
+                @foreach (var defect in OtherDefects)
+                {
+                    <MudCheckBox Class="ml-4"
+                                 Size="Size.Small"
+                                 Dense="true"
+                                 T="bool"
+                                 @bind-Value:get="IsDefectSelected(defect)"
+                                 @bind-Value:set="@(value => OnDefectSelected(defect, value))"
+                                 Label="@defect.Description"
+                                 Color="Color.Primary"></MudCheckBox>
+                }
+            }
+            <MudButton Class="mt-4"
+                       Variant="Variant.Outlined"
+                       StartIcon="@Icons.Material.Filled.CurrencyPound"
+                       Color="Color.Primary"
+                       Disabled="@PriceEstimateDisabled"
+                       OnClick="StartPriceEstimateLookupAsync">
+                Price Estimate
+            </MudButton>
+            @if (_hasSearchedPriceEstimate)
+            {
+                if (_isSearchingPriceEstimate)
+                {
+                    <MudSkeleton />
+                    <MudSkeleton />
+                    <MudSkeleton />
+                    <MudSkeleton />
+                    <MudSkeleton />
+                    <MudSkeleton />
+                }
+                else if (AiPriceEstimateHtml != null)
+                {
+                    <div class="ai-html mt-4">
+                        @(AiPriceEstimateHtml)
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex align-center mt-4">
+                        <MudText>@_aiFailedMessage</MudText>
+                        <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="@(() => StartPriceEstimateLookupAsync())" Class="ml-2" />
+                    </div>
+                }
             }
         </ChildContent>
-        </MudExpansionPanel>
+    </MudExpansionPanel>
 }
