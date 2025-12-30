@@ -25,13 +25,6 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookupEvents
             remove => OnLookupClear -= value;
         }
 
-        private event IVehicleLookupEventsService.EasterEggActivatedEvent? OnEasterEggActivated;
-        event IVehicleLookupEventsService.EasterEggActivatedEvent IVehicleLookupEventsService.OnEasterEggActivated
-        {
-            add => OnEasterEggActivated += value;
-            remove => OnEasterEggActivated -= value;
-        }
-
         public void NotifyLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber, string metaData)
         {
             OnLookupStatusChanged?.Invoke(lookupType, lookupStarted, registrationNumber, metaData);
@@ -58,17 +51,11 @@ namespace VehicleDetailsLookup.Client.Services.VehicleLookupEvents
             OnLookupClear?.Invoke();
         }
 
-        public void NotifyEasterEggActivated(bool activated)
-        {
-            OnEasterEggActivated?.Invoke(activated);
-        }
-
         public void Dispose()
         {
             OnLookupStatusChanged = null;
             OnStartVehicleLookup = null;
             OnLookupClear = null;
-            OnEasterEggActivated = null;
             GC.SuppressFinalize(this);
         }
     }

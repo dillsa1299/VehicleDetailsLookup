@@ -70,7 +70,7 @@
                         </RowTemplate>
                     </MudTable>
 
-                    <MudText Class="mt-4" Typo="Typo.h4">@AiOverviewTitle</MudText>
+                    <MudText Class="mt-4" Typo="Typo.h4">AI Overview</MudText>
                     @if (_isSearchingAiOverview)
                     {
                         <MudSkeleton />
@@ -110,7 +110,7 @@
                 <MudExpansionPanels MultiExpansion="true">
                     <MudExpansionPanel ExpandedChanged="@OnCommonIssuesExpandedAsync">
                         <TitleContent>
-                            <MudText Typo="Typo.h4">@CommonIssuesTitle</MudText>
+                            <MudText Typo="Typo.h4">Common Issues</MudText>
                         </TitleContent>
                         <ChildContent>
                             @if (_isSearchingAiCommonIssues)
@@ -148,7 +148,7 @@
                                 <MudText Typo="Typo.h4">MOT History</MudText>
                             </TitleContent>
                             <ChildContent>
-                                <MudText Typo="Typo.h5">@AiMotHistorySummaryTitle</MudText>
+                                <MudText Typo="Typo.h5">AI Summary</MudText>
 
                                 @if (_isSearchingAiMotHistorySummary)
                                 {

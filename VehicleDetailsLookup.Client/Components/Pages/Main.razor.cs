@@ -67,9 +67,6 @@ namespace VehicleDetailsLookup.Client.Components.Pages
                 case VehicleLookupType.AiMotHistorySummary:
                 case VehicleLookupType.AiMotSummary:
                 case VehicleLookupType.AiMotPriceEstimate:
-                case VehicleLookupType.AiClarksonOverview:
-                case VehicleLookupType.AiClarksonCommonIssues:
-                case VehicleLookupType.AiClarksonMotHistorySummary:
                     await GetAiData(registrationNumber, lookupType, metaData);
                     break;
                 default:
@@ -88,9 +85,6 @@ namespace VehicleDetailsLookup.Client.Components.Pages
                 VehicleLookupType.AiMotHistorySummary => AiType.MotHistorySummary,
                 VehicleLookupType.AiMotSummary => AiType.MotTestSummary,
                 VehicleLookupType.AiMotPriceEstimate => AiType.MotPriceEstimate,
-                VehicleLookupType.AiClarksonOverview => AiType.ClarksonOverview,
-                VehicleLookupType.AiClarksonCommonIssues => AiType.ClarksonCommonIssues,
-                VehicleLookupType.AiClarksonMotHistorySummary => AiType.ClarksonMotHistorySummary,
                 _ => throw new ArgumentOutOfRangeException(nameof(lookupType), lookupType, null)
             };
 
@@ -128,20 +122,9 @@ namespace VehicleDetailsLookup.Client.Components.Pages
             StateHasChanged();
         }
 
-        private void OnEasterEggActivated(bool activated)
-        {
-            if (activated && !string.IsNullOrWhiteSpace(_vehicle?.Details?.RegistrationNumber))
-            {
-                // Start AI lookups for Jeremy Clarkson impersonations
-                _ = VehicleLookupEventsService.NotifyStartVehicleLookup(_vehicle.Details.RegistrationNumber, VehicleLookupType.AiClarksonOverview);
-                _ = VehicleLookupEventsService.NotifyStartVehicleLookup(_vehicle.Details.RegistrationNumber, VehicleLookupType.AiClarksonCommonIssues);
-                _ = VehicleLookupEventsService.NotifyStartVehicleLookup(_vehicle.Details.RegistrationNumber, VehicleLookupType.AiClarksonMotHistorySummary);
-            }
-            
-        }
-
         protected override async Task OnParametersSetAsync()
         {
+            // If there is a registration number in the URL, and it is different from the current vehicle, start a lookup
             if (!string.IsNullOrEmpty(RegistrationNumberUrlInput)
                 && OperatingSystem.IsBrowser()
                 && !RegistrationNumberUrlInput.Replace(" ", "").Equals(_vehicle?.Details?.RegistrationNumber, StringComparison.InvariantCultureIgnoreCase))
@@ -163,7 +146,6 @@ namespace VehicleDetailsLookup.Client.Components.Pages
             VehicleLookupEventsService.OnStartVehicleLookup += StartLookup;
             VehicleLookupEventsService.OnLookupStatusChanged += OnLookupStatusChanged;
             VehicleLookupEventsService.OnLookupClear += OnLookupClear;
-            VehicleLookupEventsService.OnEasterEggActivated += OnEasterEggActivated;
             base.OnInitialized();
         }
 
@@ -172,7 +154,6 @@ namespace VehicleDetailsLookup.Client.Components.Pages
             VehicleLookupEventsService.OnStartVehicleLookup -= StartLookup;
             VehicleLookupEventsService.OnLookupStatusChanged -= OnLookupStatusChanged;
             VehicleLookupEventsService.OnLookupClear -= OnLookupClear;
-            VehicleLookupEventsService.OnEasterEggActivated -= OnEasterEggActivated;
             GC.SuppressFinalize(this);
         }
     }
