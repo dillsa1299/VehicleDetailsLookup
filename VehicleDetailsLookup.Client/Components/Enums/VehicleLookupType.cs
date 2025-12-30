@@ -33,19 +33,6 @@
         /// <summary>
         /// AI MOT price estimate
         /// </summary>
-        AiMotPriceEstimate,
-
-        /// <summary>
-        /// AI Jeremy Clarkson overview
-        /// </summary>
-        AiClarksonOverview,
-        /// <summary>
-        /// AI Jeremy Clarkson common issues
-        /// </summary>
-        AiClarksonCommonIssues,
-        /// <summary>
-        /// AI Jeremy Clarkson MOT history summary
-        /// </summary>
-        AiClarksonMotHistorySummary
+        AiMotPriceEstimate
     }
 }

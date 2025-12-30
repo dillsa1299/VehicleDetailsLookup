@@ -24,20 +24,6 @@
         /// <summary>
         /// AI-generated price estimate for repairs based on selected MOT defects.
         /// </summary>
-        MotPriceEstimate,
-
-
-        /// <summary>
-        /// AI-generated impersonation of Jeremy Clarkson giving an overview of the vehicle, including general information and highlights.
-        /// </summary>
-        ClarksonOverview,
-        /// <summary>
-        /// AI-generated impersonation of Jeremy Clarkson giving a list of common issues or problems associated with the vehicle model.
-        /// </summary>
-        ClarksonCommonIssues,
-        /// <summary>
-        /// AI-generated impersonation of Jeremy Clarkson giving a summary of the vehicle's MOT history.
-        /// </summary>
-        ClarksonMotHistorySummary
+        MotPriceEstimate
     }
 }
