@@ -1,16 +1,20 @@
 ﻿<EditForm Model="@_registrationInput" OnValidSubmit="LookupRegistration">
-    <MudTextField @bind-Value="_registrationInput.Input"
-        For="@(() => _registrationInput.Input)"
-        Error="@_lookupFailed"
-        Placeholder="NE14 ABJ"
-        Adornment="Adornment.End"
-        AdornmentIcon="@Icons.Material.Filled.Search"
-        AdornmentColor="@Color.Primary"
-        IconSize="Size.Large"
-        OnAdornmentClick="LookupRegistration"
-        Variant="Variant.Outlined"
-        Margin="Margin.Dense"
-        Typo="Typo.h2"
-        Class="text-upper flex-auto pa-2 d-flex align-center responsive-registration"
-        Style="max-width:400px;"/>
+    <div class="center-content">
+        <div class="uk-plate">
+            <div class="uk-plate-band">
+                <img src="images/uk-flag.svg" alt="UK" class="uk-plate-flag" />
+                <span class="uk-plate-country">GB</span>
+            </div>
+            <input class="uk-plate-input"
+                   id="Registration.Input"
+                   @bind="_registrationInput.Input"
+                   @bind:event="oninput"
+                   placeholder="AB12 CDE"
+                   autocomplete="off"
+                   spellcheck="false"
+                   maxlength="8" />
+        </div>
+        <MudIconButton Class="registration-search" Icon="@Icons.Material.Filled.Search" Color="Color.Primary" Size="Size.Large" OnClick="@LookupRegistration" />
+    </div>
+    
 </EditForm>

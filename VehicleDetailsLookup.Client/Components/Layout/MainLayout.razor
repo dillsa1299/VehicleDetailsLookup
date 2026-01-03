@@ -6,9 +6,9 @@
 <MudDialogProvider />
 <MudSnackbarProvider />
 <MudLayout>
-    <MudAppBar Elevation="1" Dense="true" WrapContent="false">
-        <MudIconButton Icon="@Icons.Material.Filled.DirectionsCar" Color="Color.Inherit" Size="Size.Large" OnClick="@OnCarIconClick" />
-        <MudText Class="ml-3 text-truncate responsive-title">Vehicle Details Lookup</MudText>
+    <MudAppBar ToolBarClass="appbar" Elevation="1" Dense="true" WrapContent="false">
+        <MudIconButton Class="appbar-logo" Icon="@Icons.Material.Filled.DirectionsCar" Color="Color.Inherit" Size="Size.Large" OnClick="@OnCarIconClick" />
+        <MudText Class="text-truncate responsive-title">Vehicle Details Lookup</MudText>
         <MudSpacer />
         <MudIconButton Icon="@DarkLightModeButtonIcon" Color="Color.Inherit" OnClick="@DarkModeToggle" Edge="Edge.End" />
     </MudAppBar>
