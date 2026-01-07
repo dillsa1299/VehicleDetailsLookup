@@ -1,36 +1,30 @@
 ﻿@if (!IsHidden)
 {
-    <MudGrid>
-        <MudItem md="3" />
-        <MudItem xs="12" md="6">
-            <div class="d-flex flex-column align-center justify-center">
-                @if (_loading)
+    <div class="center-elements">
+        @if (_isLoading)
+        {
+            <MudSkeleton Class="rounded-lg" SkeletonType="SkeletonType.Rectangle" Height="600px" Width="400px"></MudSkeleton>
+        }
+        else
+        {
+            <MudList T="string">
+                @foreach (var lookup in _recentLookups)
                 {
-                    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="450px" Width="400px"></MudSkeleton>
+                    <MudListItem Class="rounded-lg" Icon="@Icons.Material.Filled.Search"
+                                 OnClick="@(async () => await HandleLookupClick(lookup.RegistrationNumber))">
+                        <ChildContent>
+                            <MudText Typo="Typo.body2">
+                                <b>@lookup.RegistrationNumber</b>
+                                <MudText Color="Color.Primary" Inline=true>
+                                    &nbsp;|&nbsp;
+                                </MudText>
+                                @BuildVehicleDetails(lookup)
+                                <MudChip T="string" Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Small">@GetTimeSpan(lookup.DateTime)</MudChip>
+                            </MudText>
+                        </ChildContent>
+                    </MudListItem>
                 }
-                else
-                {
-                    <MudList T="string">
-                        @foreach (var lookup in _recentLookups)
-                        {
-                            <MudListItem Icon="@Icons.Material.Filled.Search"
-                                         OnClick="@(async () => await HandleLookupClick(lookup.RegistrationNumber))">
-                                <ChildContent>
-                                    <MudText Typo="Typo.body2">
-                                        <b>@lookup.RegistrationNumber</b>
-                                        <MudText Color="Color.Primary" Inline=true>
-                                            &nbsp;|&nbsp;
-                                        </MudText>
-                                        @BuildVehicleDetails(lookup)
-                                        <MudChip T="string" Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Small">@GetTimeSpan(lookup.DateTime)</MudChip>
-                                    </MudText>
-                                </ChildContent>
-                            </MudListItem>
-                        }
-                    </MudList>
-                }
-            </div>
-        </MudItem>
-        <MudItem md="3" />
-    </MudGrid>
+            </MudList>
+        }
+    </div>
 }

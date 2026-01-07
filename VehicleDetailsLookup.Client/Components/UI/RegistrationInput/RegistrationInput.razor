@@ -1,20 +1,30 @@
-﻿<EditForm Model="@_registrationInput" OnValidSubmit="LookupRegistration">
-    <div class="center-content">
-        <div class="uk-plate">
-            <div class="uk-plate-band">
-                <img src="images/uk-flag.svg" alt="UK" class="uk-plate-flag" />
-                <span class="uk-plate-country">GB</span>
+﻿@if (_showError)
+{
+    <MudAlert Class="ma-4" Severity="Severity.Error"
+              ContentAlignment="HorizontalAlignment.Center"
+              ShowCloseIcon="true"
+              CloseIconClicked="@HideError">
+        Invalid Registration
+    </MudAlert>
+}
+
+<div class="ma-4">
+    <EditForm Model="@_registrationInput" OnValidSubmit="LookupRegistration">
+        <div class="center-elements">
+            <div class="uk-plate">
+                <div class="uk-plate-band">
+                    <img src="images/uk-flag.svg" alt="UK" class="uk-plate-flag" />
+                    <span class="uk-plate-country">GB</span>
+                </div>
+                <input class="uk-plate-input"
+                       id="Registration.Input"
+                       @bind="_registrationInput.Input"
+                       placeholder="AB12 CDE"
+                       autocomplete="off"
+                       spellcheck="false"
+                       maxlength="8" />
             </div>
-            <input class="uk-plate-input"
-                   id="Registration.Input"
-                   @bind="_registrationInput.Input"
-                   @bind:event="oninput"
-                   placeholder="AB12 CDE"
-                   autocomplete="off"
-                   spellcheck="false"
-                   maxlength="8" />
+            <MudIconButton Icon="@Icons.Material.Filled.Search" Color="Color.Primary" Size="Size.Large" OnClick="@LookupRegistration" />
         </div>
-        <MudIconButton Class="registration-search" Icon="@Icons.Material.Filled.Search" Color="Color.Primary" Size="Size.Large" OnClick="@LookupRegistration" />
-    </div>
-    
-</EditForm>
+    </EditForm>
+</div>

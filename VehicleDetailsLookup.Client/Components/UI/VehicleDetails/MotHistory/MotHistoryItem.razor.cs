@@ -24,6 +24,8 @@ public partial class MotHistoryItem
     [Parameter]
     public MotTestModel Mot { get; set; } = default!;
 
+    private string TestText => $"{Mot.CompletedDate:d MMMM yyyy} | {(Mot.OdometerValue == -1 ? "N/A" : $"{Mot.OdometerValue:N0} {Mot.OdometerUnit}")}";
+
     private IEnumerable<MotDefectModel> DangerousDefects =>
         Mot.Defects.Where(d => d.Type == MotDefectType.Dangerous || d.Dangerous)
             ?? [];

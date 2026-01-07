@@ -1,6 +1,6 @@
 ﻿@if (Vehicle != null && Vehicle.MotTests.Any())
 {
-    <MudExpansionPanels MultiExpansion="true" Class="mt-4">
+    <MudExpansionPanels Class="standard-spacing" MultiExpansion="true">
         @foreach (var test in Vehicle.MotTests)
         {
             <MotHistoryItem Vehicle="@Vehicle" Mot="@test"></MotHistoryItem>

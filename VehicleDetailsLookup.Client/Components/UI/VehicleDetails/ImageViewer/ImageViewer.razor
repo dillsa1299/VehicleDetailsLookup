@@ -1,25 +1,17 @@
 ﻿@if (IsSearching)
 {
-    <div class="d-flex justify-center">
-        <MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="600px" Height="300px" />
+    <div class="center-elements">
+        <MudSkeleton Class="rounded-lg" SkeletonType="SkeletonType.Rectangle" Width="600px" Height="300px" />
     </div>
 }
 else
 {
-    <MudCarousel Style="height:300px;" ShowArrows="true" ShowBullets="false" AutoCycle="false" TData="object">
+    <MudCarousel @ref="carouselRef" Style="height:300px;" ShowArrows="true" ShowBullets="false" AutoCycle="false" TData="object">
         <PreviousButtonTemplate>
-            <div Class="mud-button-root mud-icon-button mud-icon-button-color-inherit mud-ripple mud-ripple-icon">
-                <span class="mud-icon-button-label">
-                    <MudIcon Class="mud-ripple mud-ripple-icon mud-icon-button-size-large" Icon="@Icons.Material.Filled.KeyboardArrowLeft" Color="@Color.Primary" Size="@Size.Large" />
-                </span>
-            </div>
+            <MudIconButton Icon="@Icons.Material.Filled.KeyboardArrowLeft" Color="Color.Primary" Size="Size.Large" OnClick="MovePrevious" />
         </PreviousButtonTemplate>
         <NextButtonTemplate>
-            <div Class="mud-button-root mud-icon-button mud-icon-button-color-inherit mud-ripple mud-ripple-icon">
-                <span class="mud-icon-button-label">
-                    <MudIcon Class="mud-ripple mud-ripple-icon mud-icon-button-size-medium" Icon="@Icons.Material.Filled.KeyboardArrowRight" Color="@Color.Primary" Size="@Size.Large" />
-                </span>
-            </div>
+            <MudIconButton Icon="@Icons.Material.Filled.KeyboardArrowRight" Color="Color.Primary" Size="Size.Large" OnClick="MoveNext" />
         </NextButtonTemplate>
 
         <ChildContent>
@@ -27,13 +19,14 @@ else
             {
                 @foreach (var image in Images)
                 {
+                    
                     <MudCarouselItem Transition="Transition.Fade" Color="@Color.Transparent">
-                        <div class="d-flex justify-center">
+                        <div class="center-elements">
                                 <MudImage Height="300" Style="max-width:100%;" Src="@image.Url" FallbackSrc="@PlaceholderImage" Alt="@image.Title" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" ObjectPosition="ObjectPosition.Center" />
                                 <div style="position:absolute; bottom:4px; left:50%; transform:translateX(-50%); color:white; background:rgba(25,25,25,0.5); padding:4px 8px; border-radius:16px;">
                                     <MudText>@image.Index / @Images.Count()</MudText>
                                 </div>
-                        </div>
+                            </div>
                     </MudCarouselItem>
                 }
             }
@@ -41,7 +34,7 @@ else
             {
                 // Placeholder image if no images are available
                 <MudCarouselItem Transition="Transition.Fade" Color="@Color.Transparent">
-                    <div class="d-flex justify-center">
+                    <div class="center-elements">
                         <MudImage Height="300" Src="@PlaceholderImage" FallbackSrc="@PlaceholderImage" Alt="Placeholder car" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" ObjectPosition="ObjectPosition.Center" />
                     </div>
                 </MudCarouselItem>
