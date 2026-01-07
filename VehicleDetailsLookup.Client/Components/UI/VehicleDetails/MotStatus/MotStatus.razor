@@ -1,10 +1,11 @@
-﻿<MudPaper Style="@_style" Class="pa-4 d-flex flex-column align-center justify-center" Elevation="1" Height="50%">
-    <MudText Align="Align.Center" Typo="Typo.h4"><b>MOT Status</b></MudText>
-    <br />
-    <MudText Align="Align.Center" Typo="Typo.h4">@_statusText</MudText>
+﻿<MudPaper Style="@_style" Class="text-element" Height="50%">
+    <div class="vertically-stack-elements">
+        <MudText Align="Align.Center" Typo="Typo.h4"><b>MOT Status</b></MudText>
+        <MudText Align="Align.Center" Typo="Typo.h4">@_statusText</MudText>
 
-    @if (_dateText != string.Empty)
-    {
-        <MudText Align="Align.Center" Typo="Typo.h6">@_dateText</MudText>
-    }
+        @if (!string.IsNullOrWhiteSpace(_dateText))
+        {
+            <MudText Align="Align.Center" Typo="Typo.h6">@_dateText</MudText>
+        }
+    </div>
 </MudPaper>

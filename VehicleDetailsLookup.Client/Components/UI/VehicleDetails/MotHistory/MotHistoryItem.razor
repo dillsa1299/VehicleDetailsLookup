@@ -1,16 +1,17 @@
-﻿@if (Mot != null)
+﻿@using VehicleDetailsLookup.Client.Components.UI.Infrastructure
+@if (Mot != null)
 {
     <MudExpansionPanel HideIcon="true" Disabled="@(!Mot.Defects.Any())" ExpandedChanged="@OnExpandedAsync">
         <TitleContent>
-            <div class="d-flex align-center">
+            <div class="vertically-align-elements">
                 <MudIcon Icon="@(Mot.Passed? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Cancel)"
                          Color="@(Mot.Passed? Color.Success: Color.Error)"
                          Title="@(Mot.Passed? "Passed": "Failed")"
-                         Size="@_iconSize" Class="mr-2" />
-                <MudText Class="mt-2">
-                    @Mot.CompletedDate.ToString("d MMMM yyyy") | @(Mot.OdometerValue == -1 ? "N/A" : $"{Mot.OdometerValue:N0} {Mot.OdometerUnit}")
-                </MudText>
-                <div class="d-flex align-items-center ml-auto">
+                         Size="@_iconSize"
+                         Class="mr-2" />
+                <MudText>@TestText</MudText>
+
+                <div class="vertically-align-elements ml-auto">
                     @if (DangerousDefects.Any())
                     {
                         <MudBadge Content="@DangerousDefects.Count()" Overlap="true" Class="ml-2" Color="Color.Tertiary" Bordered="true">
@@ -34,16 +35,13 @@
                 </div>
             </div>
         </TitleContent>
+
         <ChildContent>
             <MudText Typo="Typo.h5">AI Summary</MudText>
+
             @if (_isSearchingMotSummary)
             {
-                <MudSkeleton />
-                <MudSkeleton />
-                <MudSkeleton />
-                <MudSkeleton />
-                <MudSkeleton />
-                <MudSkeleton />
+                <TextSkeletonLoader></TextSkeletonLoader>
             }
             else
             {
@@ -55,15 +53,16 @@
                 }
                 else
                 {
-                    <div class="d-flex align-center">
+                    <div class="vertically-align-elements">
                         <MudText>@_aiFailedMessage</MudText>
                         <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="@(() => StartSummaryLookupAsync())" Class="ml-2" />
                     </div>
                 }
             }
+
             @if (DangerousDefects.Any())
             {
-                <div class="d-flex align-center mt-4">
+                <div class="vertically-align-elements">
                     <MudIcon Icon="@Icons.Material.Outlined.Dangerous" Color="Color.Error" />
                     <MudText Class="ml-2" Typo="Typo.h6">Dangerous Defects</MudText>
                 </div>
@@ -80,9 +79,10 @@
                                  Color="Color.Error"></MudCheckBox>
                 }
             }
+
             @if (MajorDefects.Any())
             {
-                <div class="d-flex align-center mt-4">
+                <div class="vertically-align-elements">
                     <MudIcon Icon="@Icons.Material.Outlined.WarningAmber" Color="Color.Warning" />
                     <MudText Class="ml-2" Typo="Typo.h6">Major Defects</MudText>
                 </div>
@@ -100,9 +100,10 @@
                                  Color="Color.Warning"></MudCheckBox>
                 }
             }
+
             @if (OtherDefects.Any())
             {
-                <div class="d-flex align-center mt-4">
+                <div class="vertically-align-elements">
                     <MudIcon Icon="@Icons.Material.Outlined.Info" Color="Color.Primary" />
                     <MudText Class="ml-2" Typo="Typo.h6">Advisories</MudText>
                 </div>
@@ -119,7 +120,8 @@
                                  Color="Color.Primary"></MudCheckBox>
                 }
             }
-            <MudButton Class="mt-4"
+
+            <MudButton Class="standard-spacing"
                        Variant="Variant.Outlined"
                        StartIcon="@Icons.Material.Filled.CurrencyPound"
                        Color="Color.Primary"
@@ -127,26 +129,22 @@
                        OnClick="StartPriceEstimateLookupAsync">
                 Price Estimate
             </MudButton>
+
             @if (_hasSearchedPriceEstimate)
             {
                 if (_isSearchingPriceEstimate)
                 {
-                    <MudSkeleton />
-                    <MudSkeleton />
-                    <MudSkeleton />
-                    <MudSkeleton />
-                    <MudSkeleton />
-                    <MudSkeleton />
+                    <TextSkeletonLoader></TextSkeletonLoader>
                 }
                 else if (AiPriceEstimateHtml != null)
                 {
-                    <div class="ai-html mt-4">
+                    <div class="ai-html">
                         @(AiPriceEstimateHtml)
                     </div>
                 }
                 else
                 {
-                    <div class="d-flex align-center mt-4">
+                    <div class="vertically-align-elements">
                         <MudText>@_aiFailedMessage</MudText>
                         <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="@(() => StartPriceEstimateLookupAsync())" Class="ml-2" />
                     </div>

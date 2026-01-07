@@ -1,12 +1,11 @@
-﻿<MudPaper Style="@_style" Class="pa-4 d-flex flex-column align-center justify-center" Elevation="1" Height="50%">
-    <MudText Align="Align.Center" Typo="Typo.h4"><b>Tax Status</b></MudText>
-    <br />
-    <MudText Align="Align.Center" Typo="Typo.h4">@_statusText</MudText>
+﻿<MudPaper Style="@_style" Class="text-element" Height="50%">
+    <div class="vertically-stack-elements">
+        <MudText Align="Align.Center" Typo="Typo.h4"><b>Tax Status</b></MudText>
+        <MudText Align="Align.Center" Typo="Typo.h4">@_statusText</MudText>
 
-    @if (Details?.TaxDueDate != null)
-    {
-        <MudText Align="Align.Center" Typo="Typo.h6">
-            @(Details?.TaxDueDate.Value < DateOnly.FromDateTime(DateTime.Today) ? "Expired:" : "Expires:") @Details?.TaxDueDate
-        </MudText>
-    }
+        @if (Details?.TaxDueDate != null)
+        {
+            <MudText Align="Align.Center" Typo="Typo.h6">@ExpiryDateText</MudText>
+        }
+    </div>
 </MudPaper>

@@ -1,4 +1,5 @@
 ﻿@using VehicleDetailsLookup.Client.Components.Enums
+@using VehicleDetailsLookup.Client.Components.UI.Infrastructure
 @using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.ImageViewer
 @using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.Lookups.LookupCount
 @using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotHistory
@@ -7,38 +8,38 @@
 
 @if ((Vehicle != null && Vehicle.Details != null) || _isSearchingDetails)
 {
-    <div class="mt-2">
+    <div class="ma-2">
         <ImageViewer Images="@Vehicle?.Images" PlaceholderImage="@_placeholderImage" IsSearching="@(_isSearchingImages || _isSearchingDetails)" />
     </div>
 
     @if (_isSearchingDetails)
     {
-        <MudGrid Class="mt-2">
+        <MudGrid Spacing="2">
             <MudItem xs="12" md="8">
-                <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="400px" Width="100%"></MudSkeleton>
+                <MudSkeleton Class="rounded-lg" SkeletonType="SkeletonType.Rectangle" Height="400px" Width="100%"></MudSkeleton>
             </MudItem>
 
             <MudItem xs="12" md="4">
-                <MudStack Style="height:100%;">
-                    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="100%" Width="100%"></MudSkeleton>
-                    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="100%" Width="100%"></MudSkeleton>
+                <MudStack Spacing="2" Style="height:100%;">
+                    <MudSkeleton Class="rounded-lg" SkeletonType="SkeletonType.Rectangle" Height="100%" Width="100%"></MudSkeleton>
+                    <MudSkeleton Class="rounded-lg" SkeletonType="SkeletonType.Rectangle" Height="100%" Width="100%"></MudSkeleton>
                 </MudStack>
             </MudItem>
             <MudItem xs="12">
-                <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="100px" Width="100%"></MudSkeleton>
+                <MudSkeleton Class="rounded-lg" SkeletonType="SkeletonType.Rectangle" Height="100px" Width="100%"></MudSkeleton>
             </MudItem>
         </MudGrid>
     }
     else
     {
-        <MudGrid Class="mt-2">
+        <MudGrid Spacing="2">
             <MudItem xs="12" md="8">
-                <MudPaper Class="pa-4" Elevation="1">
+                <MudPaper Class="text-element">
                     <div class="d-flex align-items-start" style="width: 100%;">
                         <div style="flex: 1; text-align: center;">
                             <MudText Typo="Typo.h3">@Vehicle?.Details?.YearOfManufacture @Vehicle?.Details?.Make @Vehicle?.Details?.Model</MudText>
                         </div>
-                        <div>
+                        <div class="mr-2">
                             <LookupCount RegistrationNumber="@Vehicle?.Details?.RegistrationNumber"></LookupCount>
                         </div>
                     </div>
@@ -73,12 +74,7 @@
                     <MudText Class="mt-4" Typo="Typo.h4">AI Overview</MudText>
                     @if (_isSearchingAiOverview)
                     {
-                        <MudSkeleton />
-                        <MudSkeleton />
-                        <MudSkeleton />
-                        <MudSkeleton />
-                        <MudSkeleton />
-                        <MudSkeleton />
+                        <TextSkeletonLoader></TextSkeletonLoader>
                     }
                     else
                     {
@@ -90,7 +86,7 @@
                         }
                         else
                         {
-                            <div class="d-flex align-center">
+                            <div class="vertically-align-elements">
                                 <MudText>@_aiFailedMessage</MudText>
                                 <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="@(() => StartLookup(VehicleLookupType.AiOverview))" Class="ml-2" />
                             </div>
@@ -100,87 +96,77 @@
             </MudItem>
 
             <MudItem xs="12" md="4">
-                <MudStack Class="pa-4" Style="height:100%;">
+                <MudStack Spacing="2" Style="height:100%;">
                     <MotStatus Details="@Vehicle?.Details"></MotStatus>
                     <TaxStatus Details="@Vehicle?.Details"></TaxStatus>
                 </MudStack>
             </MudItem>
 
             <MudItem xs="12">
-                <MudExpansionPanels MultiExpansion="true">
-                    <MudExpansionPanel ExpandedChanged="@OnCommonIssuesExpandedAsync">
-                        <TitleContent>
-                            <MudText Typo="Typo.h4">Common Issues</MudText>
-                        </TitleContent>
-                        <ChildContent>
-                            @if (_isSearchingAiCommonIssues)
-                            {
-                                <MudSkeleton />
-                                <MudSkeleton />
-                                <MudSkeleton />
-                                <MudSkeleton />
-                                <MudSkeleton />
-                                <MudSkeleton />
-                            }
-                            else
-                            {
-                                @if (AiCommonIssuesHtml != null)
-                                {
-                                    <div class="ai-html">
-                                        @(AiCommonIssuesHtml)
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="d-flex align-center">
-                                        <MudText>@_aiFailedMessage</MudText>
-                                        <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="@(() => StartLookup(VehicleLookupType.AiCommonIssues))" Class="ml-2" />
-                                    </div>
-                                }
-                            }
-                        </ChildContent>
-                    </MudExpansionPanel>
-
-                    @if (Vehicle != null && Vehicle.MotTests.Any())
-                    {
-                        <MudExpansionPanel ExpandedChanged="@OnMotHistoryExpandedAsync">
+                    <MudExpansionPanels Class="standard-spacing" MultiExpansion="true">
+                        <MudExpansionPanel ExpandedChanged="@OnCommonIssuesExpandedAsync">
                             <TitleContent>
-                                <MudText Typo="Typo.h4">MOT History</MudText>
+                                <MudText Typo="Typo.h4">Common Issues</MudText>
                             </TitleContent>
                             <ChildContent>
-                                <MudText Typo="Typo.h5">AI Summary</MudText>
-
-                                @if (_isSearchingAiMotHistorySummary)
+                                @if (_isSearchingAiCommonIssues)
                                 {
-                                    <MudSkeleton />
-                                    <MudSkeleton />
-                                    <MudSkeleton />
-                                    <MudSkeleton />
-                                    <MudSkeleton />
-                                    <MudSkeleton />
+                                    <TextSkeletonLoader></TextSkeletonLoader>
                                 }
                                 else
                                 {
-                                    @if (AiMotHistorySummaryHtml != null)
+                                    @if (AiCommonIssuesHtml != null)
                                     {
                                         <div class="ai-html">
-                                            @(AiMotHistorySummaryHtml)
+                                            @(AiCommonIssuesHtml)
                                         </div>
                                     }
                                     else
                                     {
-                                        <div class="d-flex align-center">
+                                    <div class="vertically-align-elements">
                                             <MudText>@_aiFailedMessage</MudText>
-                                            <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="@(() => StartLookup(VehicleLookupType.AiMotHistorySummary))" Class="ml-2" />
+                                            <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="@(() => StartLookup(VehicleLookupType.AiCommonIssues))" Class="ml-2" />
                                         </div>
                                     }
                                 }
-
-                                <MotHistory Vehicle="@Vehicle"></MotHistory>
                             </ChildContent>
                         </MudExpansionPanel>
-                    }
-                </MudExpansionPanels>
+
+                        @if (Vehicle != null && Vehicle.MotTests.Any())
+                        {
+                            <MudExpansionPanel ExpandedChanged="@OnMotHistoryExpandedAsync">
+                                <TitleContent>
+                                    <MudText Typo="Typo.h4">MOT History</MudText>
+                                </TitleContent>
+                                <ChildContent>
+                                    <MudText Typo="Typo.h5">AI Summary</MudText>
+
+                                    @if (_isSearchingAiMotHistorySummary)
+                                    {
+                                        <TextSkeletonLoader></TextSkeletonLoader>
+                                    }
+                                    else
+                                    {
+                                        @if (AiMotHistorySummaryHtml != null)
+                                        {
+                                            <div class="ai-html">
+                                                @(AiMotHistorySummaryHtml)
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                        <div class="vertically-align-elements">
+                                                <MudText>@_aiFailedMessage</MudText>
+                                                <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="@(() => StartLookup(VehicleLookupType.AiMotHistorySummary))" Class="ml-2" />
+                                            </div>
+                                        }
+                                    }
+
+                                    <MotHistory Vehicle="@Vehicle"></MotHistory>
+                                </ChildContent>
+                            </MudExpansionPanel>
+                        }
+                    </MudExpansionPanels>
             </MudItem>
         </MudGrid>
     }

@@ -14,15 +14,17 @@ namespace VehicleDetailsLookup.Client.Components.UI.RegistrationInput
         public VehicleModel Vehicle { get; set; } = default!;
 
         private readonly RegistrationInputModel _registrationInput = new();
-        private bool _lookupFailed;
+        private bool _showError;
+
+        private void OnLookupClear() => _registrationInput.Input = string.Empty;
+        private void HideError() => _showError = false;
 
         private async Task LookupRegistration()
         {
+            // Check if the vehicle is already loaded
             if (_registrationInput.Input.Replace(" ", "").Equals(Vehicle?.Details?.RegistrationNumber, StringComparison.InvariantCultureIgnoreCase))
-            {
-                // Vehicle already loaded
                 return;
-            }
+
             await VehicleLookupEventsService.NotifyStartVehicleLookup(_registrationInput.Input, VehicleLookupType.Details);
         }
 
@@ -31,25 +33,18 @@ namespace VehicleDetailsLookup.Client.Components.UI.RegistrationInput
             // Replace input - Allows input to match registrations passed via URL
             _registrationInput.Input = registrationNumber;
 
+            // Only clear error after successful lookup
             if (!lookupStarted)
-            {
-                _lookupFailed = Vehicle?.Details == null;
-            }
+                _showError = !lookupStarted && Vehicle?.Details == null;
 
             StateHasChanged();
         }
 
-        private void OnLookupClear()
-        {
-            _registrationInput.Input = string.Empty;
-        }
-
-        protected override Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
             VehicleLookupEventsService.OnLookupStatusChanged += OnLookupStatusChanged;
             VehicleLookupEventsService.OnLookupClear += OnLookupClear;
-
-            return base.OnInitializedAsync();
+            base.OnInitialized();
         }
 
         public void Dispose()

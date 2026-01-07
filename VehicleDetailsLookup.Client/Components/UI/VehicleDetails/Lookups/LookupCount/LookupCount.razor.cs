@@ -14,10 +14,9 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.Lookups.Looku
         private int _lookupCount;
         private bool _historyVisible;
 
-        private void OnLookupClicked()
-        {
-            _historyVisible = !_historyVisible;
-        }
+        private string LookupCountText => (_lookupCount == 0 ? "" : _lookupCount.ToString());
+
+        private void OnLookupClicked() => _historyVisible = !_historyVisible;
 
         protected override async Task OnParametersSetAsync()
         {

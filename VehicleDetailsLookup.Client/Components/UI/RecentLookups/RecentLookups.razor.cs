@@ -19,7 +19,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.RecentLookups
         public bool IsHidden { get; set; }
 
         private IEnumerable<LookupModel> _recentLookups = [];
-        private bool _loading = true;
+        private bool _isLoading = true;
 
         private async Task HandleLookupClick(string registrationNumber)
         {
@@ -38,9 +38,9 @@ namespace VehicleDetailsLookup.Client.Components.UI.RecentLookups
         {
             if (!IsHidden && OperatingSystem.IsBrowser())
             {
-                _loading = true;
+                _isLoading = true;
                 _recentLookups = await VehicleLookupService.GetRecentVehicleLookupsAsync() ?? [];
-                _loading = false;
+                _isLoading = false;
                 StateHasChanged();
             }
 

@@ -11,6 +11,11 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.TaxStatus
         private string _statusText = string.Empty;
         private string _style = string.Empty;
 
+        private string ExpiryDateText =>
+            Details?.TaxDueDate is DateOnly dueDate
+                ? $"{(dueDate < DateOnly.FromDateTime(DateTime.Today) ? "Expired:" : "Expires:")} {dueDate:dd/MM/yyyy}"
+                : string.Empty;
+
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
