@@ -8,102 +8,103 @@
 
 @if ((Vehicle != null && Vehicle.Details != null) || _isSearchingDetails)
 {
-    <div class="ma-2">
+    <div class="standard-spacing">
         <ImageViewer Images="@Vehicle?.Images" PlaceholderImage="@_placeholderImage" IsSearching="@(_isSearchingImages || _isSearchingDetails)" />
     </div>
 
-    @if (_isSearchingDetails)
-    {
-        <MudGrid Spacing="2">
-            <MudItem xs="12" md="8">
-                <MudSkeleton Class="rounded-lg" SkeletonType="SkeletonType.Rectangle" Height="400px" Width="100%"></MudSkeleton>
-            </MudItem>
+    <div class="standard-spacing">
+        @if (_isSearchingDetails)
+        {
+            <MudGrid Spacing="2">
+                <MudItem xs="12" md="8">
+                    <MudSkeleton Class="rounded-lg" SkeletonType="SkeletonType.Rectangle" Height="400px" Width="100%"></MudSkeleton>
+                </MudItem>
 
-            <MudItem xs="12" md="4">
-                <MudStack Spacing="2" Style="height:100%;">
-                    <MudSkeleton Class="rounded-lg" SkeletonType="SkeletonType.Rectangle" Height="100%" Width="100%"></MudSkeleton>
-                    <MudSkeleton Class="rounded-lg" SkeletonType="SkeletonType.Rectangle" Height="100%" Width="100%"></MudSkeleton>
-                </MudStack>
-            </MudItem>
-            <MudItem xs="12">
-                <MudSkeleton Class="rounded-lg" SkeletonType="SkeletonType.Rectangle" Height="100px" Width="100%"></MudSkeleton>
-            </MudItem>
-        </MudGrid>
-    }
-    else
-    {
-        <MudGrid Spacing="2">
-            <MudItem xs="12" md="8">
-                <MudPaper Class="text-element">
-                    <div class="d-flex align-items-start" style="width: 100%;">
-                        <div style="flex: 1; text-align: center;">
-                            <MudText Typo="Typo.h3">@Vehicle?.Details?.YearOfManufacture @Vehicle?.Details?.Make @Vehicle?.Details?.Model</MudText>
-                        </div>
-                        <div class="mr-2">
-                            <LookupCount RegistrationNumber="@Vehicle?.Details?.RegistrationNumber"></LookupCount>
-                        </div>
-                    </div>
-
-                    <MudText Typo="Typo.h4">Details</MudText>
-
-                    <MudTable Dense="true" Bordered="false" Striped="false" Elevation="0" Class="my-2" Breakpoint="Breakpoint.None" Items="@(new[] { Vehicle })">
-                        <RowTemplate>
-                            <MudTr>
-                                <MudTd>Colour</MudTd>
-                                <MudTd>@context?.Details?.Colour</MudTd>
-                            </MudTr>
-                            <MudTr>
-                                <MudTd>Engine capacity</MudTd>
-                                <MudTd>@context?.Details?.EngineCapacity</MudTd>
-                            </MudTr>
-                            <MudTr>
-                                <MudTd>Fuel</MudTd>
-                                <MudTd>@context?.Details?.FuelType</MudTd>
-                            </MudTr>
-                            <MudTr>
-                                <MudTd>First registered</MudTd>
-                                <MudTd>@context?.Details?.MonthOfFirstRegistration.ToString("MMMM yyyy")</MudTd>
-                            </MudTr>
-                            <MudTr>
-                                <MudTd>Last V5C issued</MudTd>
-                                <MudTd>@context?.Details?.DateOfLastV5CIssued</MudTd>
-                            </MudTr>
-                        </RowTemplate>
-                    </MudTable>
-
-                    <MudText Class="mt-4" Typo="Typo.h4">AI Overview</MudText>
-                    @if (_isSearchingAiOverview)
-                    {
-                        <TextSkeletonLoader></TextSkeletonLoader>
-                    }
-                    else
-                    {
-                        @if (AiOverviewHtml != null)
-                        {
-                            <div class="ai-html">
-                                @(AiOverviewHtml)
+                <MudItem xs="12" md="4">
+                    <MudStack Spacing="2" Style="height:100%;">
+                        <MudSkeleton Class="rounded-lg" SkeletonType="SkeletonType.Rectangle" Height="100%" Width="100%"></MudSkeleton>
+                        <MudSkeleton Class="rounded-lg" SkeletonType="SkeletonType.Rectangle" Height="100%" Width="100%"></MudSkeleton>
+                    </MudStack>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudSkeleton Class="rounded-lg" SkeletonType="SkeletonType.Rectangle" Height="100px" Width="100%"></MudSkeleton>
+                </MudItem>
+            </MudGrid>
+        }
+        else
+        {
+            <MudGrid Spacing="2">
+                <MudItem xs="12" md="8">
+                    <MudPaper Class="text-element">
+                        <div class="d-flex align-items-start" style="width: 100%;">
+                            <div style="flex: 1; text-align: center;">
+                                <MudText Typo="Typo.h3">@Vehicle?.Details?.YearOfManufacture @Vehicle?.Details?.Make @Vehicle?.Details?.Model</MudText>
                             </div>
+                            <div class="mr-2">
+                                <LookupCount RegistrationNumber="@Vehicle?.Details?.RegistrationNumber"></LookupCount>
+                            </div>
+                        </div>
+
+                        <MudText Typo="Typo.h4">Details</MudText>
+
+                        <MudTable Dense="true" Bordered="false" Striped="false" Elevation="0" Class="my-2" Breakpoint="Breakpoint.None" Items="@(new[] { Vehicle })">
+                            <RowTemplate>
+                                <MudTr>
+                                    <MudTd>Colour</MudTd>
+                                    <MudTd>@context?.Details?.Colour</MudTd>
+                                </MudTr>
+                                <MudTr>
+                                    <MudTd>Engine capacity</MudTd>
+                                    <MudTd>@context?.Details?.EngineCapacity</MudTd>
+                                </MudTr>
+                                <MudTr>
+                                    <MudTd>Fuel</MudTd>
+                                    <MudTd>@context?.Details?.FuelType</MudTd>
+                                </MudTr>
+                                <MudTr>
+                                    <MudTd>First registered</MudTd>
+                                    <MudTd>@context?.Details?.MonthOfFirstRegistration.ToString("MMMM yyyy")</MudTd>
+                                </MudTr>
+                                <MudTr>
+                                    <MudTd>Last V5C issued</MudTd>
+                                    <MudTd>@context?.Details?.DateOfLastV5CIssued</MudTd>
+                                </MudTr>
+                            </RowTemplate>
+                        </MudTable>
+
+                        <MudText Class="mt-4" Typo="Typo.h4">AI Overview</MudText>
+                        @if (_isSearchingAiOverview)
+                        {
+                            <TextSkeletonLoader></TextSkeletonLoader>
                         }
                         else
                         {
-                            <div class="vertically-align-elements">
-                                <MudText>@_aiFailedMessage</MudText>
-                                <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="@(() => StartLookup(VehicleLookupType.AiOverview))" Class="ml-2" />
-                            </div>
+                            @if (AiOverviewHtml != null)
+                            {
+                                <div class="ai-html">
+                                    @(AiOverviewHtml)
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="vertically-align-elements">
+                                    <MudText>@_aiFailedMessage</MudText>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="@(() => StartLookup(VehicleLookupType.AiOverview))" Class="ml-2" />
+                                </div>
+                            }
                         }
-                    }
-                </MudPaper>
-            </MudItem>
+                    </MudPaper>
+                </MudItem>
 
-            <MudItem xs="12" md="4">
-                <MudStack Spacing="2" Style="height:100%;">
-                    <MotStatus Details="@Vehicle?.Details"></MotStatus>
-                    <TaxStatus Details="@Vehicle?.Details"></TaxStatus>
-                </MudStack>
-            </MudItem>
+                <MudItem xs="12" md="4">
+                    <MudStack Spacing="2" Style="height:100%;">
+                        <MotStatus Details="@Vehicle?.Details"></MotStatus>
+                        <TaxStatus Details="@Vehicle?.Details"></TaxStatus>
+                    </MudStack>
+                </MudItem>
 
-            <MudItem xs="12">
-                    <MudExpansionPanels Class="standard-spacing" MultiExpansion="true">
+                <MudItem xs="12">
+                    <MudExpansionPanels Class="rounded-lg" MultiExpansion="true">
                         <MudExpansionPanel ExpandedChanged="@OnCommonIssuesExpandedAsync">
                             <TitleContent>
                                 <MudText Typo="Typo.h4">Common Issues</MudText>
@@ -123,7 +124,7 @@
                                     }
                                     else
                                     {
-                                    <div class="vertically-align-elements">
+                                        <div class="vertically-align-elements">
                                             <MudText>@_aiFailedMessage</MudText>
                                             <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="@(() => StartLookup(VehicleLookupType.AiCommonIssues))" Class="ml-2" />
                                         </div>
@@ -155,7 +156,7 @@
                                         }
                                         else
                                         {
-                                        <div class="vertically-align-elements">
+                                            <div class="vertically-align-elements">
                                                 <MudText>@_aiFailedMessage</MudText>
                                                 <MudIconButton Icon="@Icons.Material.Filled.Refresh" Color="Color.Primary" OnClick="@(() => StartLookup(VehicleLookupType.AiMotHistorySummary))" Class="ml-2" />
                                             </div>
@@ -167,7 +168,8 @@
                             </MudExpansionPanel>
                         }
                     </MudExpansionPanels>
-            </MudItem>
-        </MudGrid>
-    }
+                </MudItem>
+            </MudGrid>
+        }
+    </div>
 }
