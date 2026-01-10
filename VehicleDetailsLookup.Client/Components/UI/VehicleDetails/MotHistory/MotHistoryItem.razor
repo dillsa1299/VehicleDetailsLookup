@@ -1,7 +1,7 @@
 ﻿@using VehicleDetailsLookup.Client.Components.UI.Infrastructure
 @if (Mot != null)
 {
-    <MudExpansionPanel Class="px-2" HideIcon="true" Disabled="@(!Mot.Defects.Any())" ExpandedChanged="@OnExpandedAsync">
+    <MudExpansionPanel Class="px-4" HideIcon="true" Disabled="@(!Mot.Defects.Any())" ExpandedChanged="@OnExpandedAsync">
         <TitleContent>
             <div class="vertically-align-elements">
                 <MudIcon Icon="@(Mot.Passed? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Cancel)"
