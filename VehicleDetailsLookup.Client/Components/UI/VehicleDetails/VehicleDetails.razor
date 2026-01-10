@@ -105,7 +105,7 @@
 
                 <MudItem xs="12">
                     <MudExpansionPanels Class="rounded-lg" MultiExpansion="true">
-                        <MudExpansionPanel ExpandedChanged="@OnCommonIssuesExpandedAsync">
+                        <MudExpansionPanel Class="px-2" ExpandedChanged="@OnCommonIssuesExpandedAsync">
                             <TitleContent>
                                 <MudText Typo="Typo.h4">Common Issues</MudText>
                             </TitleContent>
@@ -135,7 +135,7 @@
 
                         @if (Vehicle != null && Vehicle.MotTests.Any())
                         {
-                            <MudExpansionPanel ExpandedChanged="@OnMotHistoryExpandedAsync">
+                            <MudExpansionPanel Class="px-2" ExpandedChanged="@OnMotHistoryExpandedAsync">
                                 <TitleContent>
                                     <MudText Typo="Typo.h4">MOT History</MudText>
                                 </TitleContent>
