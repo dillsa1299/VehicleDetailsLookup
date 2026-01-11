@@ -69,12 +69,15 @@ jobs:
           DOTNET_ROOT: /home/runner/.dotnet
 
   test:
-    name: 🧪 Run Tests + Code Coverage
+    name: 🧪 Run Tests + Diff Coverage
     runs-on: ubuntu-latest
     needs: restore-build
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # IMPORTANT for diff coverage
 
       - name: Setup .NET 10 SDK
         uses: actions/setup-dotnet@v4
@@ -86,7 +89,76 @@ jobs:
           dotnet test VehicleDetailsLookup.sln \
             --no-build \
             --collect:"XPlat Code Coverage" \
-            --logger "console;verbosity=detailed"
+            --logger "console;verbosity=detailed" \
+            --logger "trx;LogFileName=test-results.trx"
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: "**/test-results.trx"
+
+      # Ensure base branch is available for diff
+      - name: Fetch base branch
+        if: github.event_name == 'pull_request'
+        run: git fetch origin main
+
+      - name: Install diff-cover
+        if: github.event_name == 'pull_request'
+        run: pip install diff-cover
+
+      - name: Generate diff coverage (Markdown)
+        if: github.event_name == 'pull_request'
+        run: |
+          diff-cover **/coverage.cobertura.xml \
+            --compare-branch=origin/main \
+            --markdown-report diff-coverage.md
+
+      - name: Comment diff coverage on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            const body = fs.readFileSync('diff-coverage.md', 'utf8');
+
+            const marker = '<!-- diff-coverage-report -->';
+            const commentBody = `${marker}\n## 🔍 Diff Coverage Report\n\n${body}`;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c => c.body.includes(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body: commentBody,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: commentBody,
+              });
+            }
+
+      # OPTIONAL: enforce minimum diff coverage
+      # Uncomment if you want PRs to fail below threshold
+      #
+      # - name: Enforce diff coverage threshold
+      #   if: github.event_name == 'pull_request'
+      #   run: |
+      #     diff-cover **/coverage.cobertura.xml \
+      #       --compare-branch=origin/main \
+      #       --fail-under=80
 
   publish:
     name: 🚀 Publish Blazor App
