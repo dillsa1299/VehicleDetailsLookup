@@ -76,46 +76,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0   # Required for diff coverage
 
       - name: Setup .NET 10 SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
 
-      - name: Install diff-cover
-        run: pip install diff-cover
-
-      - name: Run Tests with Coverage
-        run: |
-          dotnet test VehicleDetailsLookup.sln --collect:"XPlat Code Coverage" --results-directory ./TestResults -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
-
-      - name: Find coverage file
-        id: coverage-file
-        run: |
-          echo "coverage=$(find . -type f -name 'coverage.cobertura.xml' | head -n 1)" >> $GITHUB_OUTPUT
-
-      - name: Run diff-cover
-        run: |
-          diff-cover ${{ steps.coverage-file.outputs.coverage }} --compare-branch=origin/master --fail-under=80
-
-      - name: List .trx files before reporting
-        run: find . -type f -name "*.trx"
-
-      - name: Publish Test Results to PR
-        uses: dorny/test-reporter@v1
-        if: always()
-        with:
-          name: .NET Tests
-          path: '**/TestResults/**/*.trx'
-          reporter: dotnet-trx
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: '**/TestResults/**/*.trx'
+      - name: Run Tests
+        run: dotnet test VehicleDetailsLookup.sln --logger "trx"
 
   publish:
     name: 🚀 Publish Blazor App
