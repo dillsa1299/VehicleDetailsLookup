@@ -88,21 +88,21 @@ jobs:
         run: dotnet test VehicleDetailsLookup.sln --logger "trx"
 
       - name: List .trx files before reporting
-        run: find TestResults -name "*.trx"
+        run: find . -type f -name "*.trx"
 
       - name: Publish Test Results to PR
         uses: dorny/test-reporter@v1
         if: always()
         with:
           name: .NET Tests
-          path: TestResults/**/*.trx
+          path: '**/TestResults/**/*.trx'
           reporter: dotnet-trx
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
           name: test-results
-          path: TestResults/**/*.trx
+          path: '**/TestResults/**/*.trx'
 
   publish:
     name: 🚀 Publish Blazor App
