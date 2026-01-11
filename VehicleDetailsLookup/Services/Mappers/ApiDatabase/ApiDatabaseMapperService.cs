@@ -95,7 +95,7 @@ namespace VehicleDetailsLookup.Services.Mappers.ApiDatabase
             {
                 RegistrationNumber = registrationNumber,
                 Type = type,
-                MetaData = metaData,
+                MetaData = metaData ?? string.Empty,
                 GeneratedText = aiResponse,
                 Updated = DateTime.UtcNow,
                 DataHash = dataHash
