@@ -69,9 +69,9 @@ jobs:
           DOTNET_ROOT: /home/runner/.dotnet
 
   test:
-    name: Run Tests + Diff Coverage
+    name: 🧪 Run Tests
     runs-on: ubuntu-latest
-    needs: restore-build  # remove if you don’t have a build job
+    needs: restore-build
 
     steps:
       - name: Checkout repository
@@ -84,8 +84,21 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Run Tests
-        run: dotnet test VehicleDetailsLookup.sln --logger "trx"
+      - name: Install diff-cover
+        run: pip install diff-cover
+
+      - name: Run Tests with Coverage
+        run: |
+          dotnet test VehicleDetailsLookup.sln --collect:"XPlat Code Coverage" --results-directory ./TestResults -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
+
+      - name: Find coverage file
+        id: coverage-file
+        run: |
+          echo "coverage=$(find . -type f -name 'coverage.cobertura.xml' | head -n 1)" >> $GITHUB_OUTPUT
+
+      - name: Run diff-cover
+        run: |
+          diff-cover ${{ steps.coverage-file.outputs.coverage }} --compare-branch=origin/master --fail-under=80
 
       - name: List .trx files before reporting
         run: find . -type f -name "*.trx"
