@@ -93,12 +93,6 @@ jobs:
             --logger "trx;LogFileName=test-results.trx" \
             --results-directory ./TestResults
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: TestResults/**/*.trx
-
       - name: Publish Test Results to PR
         uses: dorny/test-reporter@v1
         if: always()
@@ -106,6 +100,12 @@ jobs:
           name: .NET Tests
           path: TestResults/**/*.trx
           reporter: dotnet-trx
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults/**/*.trx
 
   publish:
     name: 🚀 Publish Blazor App
