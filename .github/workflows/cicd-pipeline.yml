@@ -84,14 +84,8 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Run Tests + Code Coverage
-        run: |
-          dotnet test VehicleDetailsLookup.sln \
-            --no-build \
-            --collect:"XPlat Code Coverage" \
-            --logger "console;verbosity=detailed" \
-            --logger "trx;LogFileName=test-results.trx" \
-            --results-directory ./TestResults
+      - name: Run Tests
+        run: dotnet test VehicleDetailsLookup.sln --logger "trx"
 
       - name: List .trx files before reporting
         run: find TestResults -name "*.trx"
