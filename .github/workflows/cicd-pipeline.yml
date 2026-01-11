@@ -84,17 +84,28 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Run Tests (no coverage, default logger)
-        run: dotnet test VehicleDetailsLookup.sln --logger "trx"
-
-      - name: List all .trx files
-        run: find . -name "*.trx"
+      - name: Run Tests + Code Coverage
+        run: |
+          dotnet test VehicleDetailsLookup.sln \
+            --no-build \
+            --collect:"XPlat Code Coverage" \
+            --logger "console;verbosity=detailed" \
+            --logger "trx;LogFileName=test-results.trx" \
+            --results-directory ./TestResults
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
           name: test-results
-          path: '**/TestResults/**/*.trx'
+          path: TestResults/**/*.trx
+
+      - name: Publish Test Results to PR
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: .NET Tests
+          path: TestResults/**/*.trx
+          reporter: dotnet-trx
 
   publish:
     name: 🚀 Publish Blazor App
