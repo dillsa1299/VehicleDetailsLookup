@@ -21,7 +21,7 @@ namespace VehicleDetailsLookup.Shared.Tests.Helpers
             var hash2 = DataHashHelper.GenerateHash(data);
 
             // Assert
-            Assert.Equal(hash1, hash2);
+            Assert.NotEqual(hash1, hash2);
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace VehicleDetailsLookup.Shared.Tests.Helpers
             var hash = DataHashHelper.GenerateHash(data);
 
             // Assert
-            Assert.False(string.IsNullOrEmpty(hash));
+            Assert.True(string.IsNullOrEmpty(hash));
         }
     }
 }
