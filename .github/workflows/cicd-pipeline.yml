@@ -101,7 +101,7 @@ jobs:
       # Ensure base branch is available for diff
       - name: Fetch base branch
         if: github.event_name == 'pull_request'
-        run: git fetch origin main
+        run: git fetch origin master
 
       - name: Install diff-cover
         if: github.event_name == 'pull_request'
@@ -111,7 +111,7 @@ jobs:
         if: github.event_name == 'pull_request'
         run: |
           diff-cover **/coverage.cobertura.xml \
-            --compare-branch=origin/main \
+            --compare-branch=origin/master \
             --markdown-report diff-coverage.md
 
       - name: Comment diff coverage on PR
