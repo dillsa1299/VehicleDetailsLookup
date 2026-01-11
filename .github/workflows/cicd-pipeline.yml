@@ -93,6 +93,9 @@ jobs:
             --logger "trx;LogFileName=test-results.trx" \
             --results-directory ./TestResults
 
+      - name: List .trx files before reporting
+        run: find TestResults -name "*.trx"
+
       - name: Publish Test Results to PR
         uses: dorny/test-reporter@v1
         if: always()
