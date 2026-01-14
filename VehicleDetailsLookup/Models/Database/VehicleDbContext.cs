@@ -57,7 +57,8 @@ namespace VehicleDetailsLookup.Models.Database
                 .HasMany(d => d.Lookups)
                 .WithOne(l => l.Details)
                 .HasForeignKey(l => l.RegistrationNumber)
-                .HasPrincipalKey(d => d.RegistrationNumber);
+                .HasPrincipalKey(d => d.RegistrationNumber)
+                .IsRequired(false); // Make Details optional
         }
     }
 }
