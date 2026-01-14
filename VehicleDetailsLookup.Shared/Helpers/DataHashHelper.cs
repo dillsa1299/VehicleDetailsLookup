@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace VehicleDetailsLookup.Shared.Helpers
 {
-    public class DataHash
+    public class DataHashHelper
     {
         public static string GenerateHash<TData>(TData data)
         {

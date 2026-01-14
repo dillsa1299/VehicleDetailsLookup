@@ -159,7 +159,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
             if (additionalData == null)
                 return null;
 
-            if (existingData != null && existingData.DataHash == DataHash.GenerateHash(additionalData))
+            if (existingData != null && existingData.DataHash == DataHashHelper.GenerateHash(additionalData))
             {
                 // Underlying data hasn't changed, update the timestamp and return existing AI data
                 await _aiDataRepository.UpsertAiDataAsync(existingData);
@@ -172,7 +172,7 @@ namespace VehicleDetailsLookup.Services.Vehicle.AiData
             if (aiResponse == null)
                 return null;
 
-            var dbAiData = _apiMapper.MapAiData(registrationNumber, searchType, metaData, aiResponse, DataHash.GenerateHash(additionalData));
+            var dbAiData = _apiMapper.MapAiData(registrationNumber, searchType, metaData, aiResponse, DataHashHelper.GenerateHash(additionalData));
             await _aiDataRepository.UpsertAiDataAsync(dbAiData);
             return _databaseMapper.MapAiData(dbAiData);
         }
