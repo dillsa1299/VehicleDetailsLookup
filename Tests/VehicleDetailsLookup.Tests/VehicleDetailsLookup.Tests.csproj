@@ -24,7 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
+    <Folder Include="Services\Api\Gemini\" />
+    <Folder Include="Services\Api\GoogleImage\" />
+    <Folder Include="Services\Api\Mot\" />
+    <Folder Include="Services\Api\Ves\" />
   </ItemGroup>
 
   <ItemGroup>
