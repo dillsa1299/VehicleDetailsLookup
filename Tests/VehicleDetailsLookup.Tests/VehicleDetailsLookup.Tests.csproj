@@ -24,14 +24,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Api\Gemini\" />
-    <Folder Include="Services\Api\GoogleImage\" />
-    <Folder Include="Services\Api\Mot\" />
-    <Folder Include="Services\Api\Ves\" />
+    <ProjectReference Include="..\..\VehicleDetailsLookup\VehicleDetailsLookup.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\VehicleDetailsLookup\VehicleDetailsLookup.csproj" />
+    <Folder Include="Services\Api\Gemini\MockTypes\" />
   </ItemGroup>
 
 </Project>
