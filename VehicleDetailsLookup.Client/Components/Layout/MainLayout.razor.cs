@@ -10,7 +10,7 @@ namespace VehicleDetailsLookup.Client.Components.Layout
         [Inject]
         private IVehicleLookupEventsService VehicleLookupEventsService { get; set; } = default!;
 
-        private bool _isDarkMode = true;
+        private bool _isDarkMode = false;
 
         public string DarkLightModeButtonIcon =>
             _isDarkMode ? Icons.Material.Rounded.LightMode : Icons.Material.Outlined.DarkMode;
