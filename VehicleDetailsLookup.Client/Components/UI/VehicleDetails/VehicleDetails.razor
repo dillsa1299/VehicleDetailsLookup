@@ -20,8 +20,8 @@
                     <MudSkeleton Class="rounded-lg" SkeletonType="SkeletonType.Rectangle" Height="400px" Width="100%"></MudSkeleton>
                 </MudItem>
 
-                <MudItem xs="12" md="4">
-                    <MudStack Spacing="2" Style="height:100%;">
+                <MudItem xs="12" md="4" Class="sidebar-column">
+                    <MudStack Spacing="2" Class="sidebar-stack">
                         <MudSkeleton Class="rounded-lg" SkeletonType="SkeletonType.Rectangle" Height="100%" Width="100%"></MudSkeleton>
                         <MudSkeleton Class="rounded-lg" SkeletonType="SkeletonType.Rectangle" Height="100%" Width="100%"></MudSkeleton>
                     </MudStack>
@@ -36,11 +36,11 @@
             <MudGrid Spacing="2">
                 <MudItem xs="12" md="8">
                     <MudPaper Class="text-element">
-                        <div class="d-flex align-items-start" style="width: 100%;">
-                            <div style="flex: 1; text-align: center;">
+                        <div class="details-header">
+                            <div class="details-title">
                                 <MudText Typo="Typo.h3">@Vehicle?.Details?.YearOfManufacture @Vehicle?.Details?.Make @Vehicle?.Details?.Model</MudText>
                             </div>
-                            <div class="mr-2">
+                            <div class="details-lookup">
                                 <LookupCount RegistrationNumber="@Vehicle?.Details?.RegistrationNumber"></LookupCount>
                             </div>
                         </div>
@@ -96,8 +96,8 @@
                     </MudPaper>
                 </MudItem>
 
-                <MudItem xs="12" md="4">
-                    <MudStack Spacing="2" Style="height:100%;">
+                <MudItem xs="12" md="4" Class="sidebar-column">
+                    <MudStack Spacing="2" Class="sidebar-stack">
                         <MotStatus Details="@Vehicle?.Details"></MotStatus>
                         <TaxStatus Details="@Vehicle?.Details"></TaxStatus>
                     </MudStack>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using VehicleDetailsLookup.Client.Styling;
 using VehicleDetailsLookup.Shared.Models.Details;
 
 namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotStatus
@@ -10,7 +11,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotStatus
 
         private string _statusText = string.Empty;
         private string _dateText = string.Empty;
-        private string _style = string.Empty;
+        private string _statusClass = StatusCardCss.Combine(StatusCardCss.Base, StatusCardCss.Neutral);
 
         protected override void OnParametersSet()
         {
@@ -21,17 +22,17 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotStatus
                 case Shared.Models.Enums.MotStatus.Valid:
                     _statusText = "Valid";
                     _dateText = "Expires: " + Details?.MotExpiryDate;
-                    _style = "background-color: var(--mud-palette-success);";
+                    _statusClass = StatusCardCss.Combine(StatusCardCss.Base, StatusCardCss.Success);
                     break;
                 case Shared.Models.Enums.MotStatus.Invalid:
                     _statusText = "Invalid";
                     _dateText = "Expired: " + Details?.MotExpiryDate;
-                    _style = "background-color: var(--mud-palette-error);";
+                    _statusClass = StatusCardCss.Combine(StatusCardCss.Base, StatusCardCss.Error);
                     break;
                 case Shared.Models.Enums.MotStatus.NoResults:
                     _statusText = "No results found";
                     _dateText = string.Empty;
-                    _style = "background-color: var(--mud-palette-gray-default);";
+                    _statusClass = StatusCardCss.Combine(StatusCardCss.Base, StatusCardCss.Neutral);
                     break;
                 case Shared.Models.Enums.MotStatus.NoDetails:
 
@@ -46,7 +47,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotStatus
                         _dateText = string.Empty;
                     }
 
-                    _style = "background-color: var(--mud-palette-gray-default);";
+                    _statusClass = StatusCardCss.Combine(StatusCardCss.Base, StatusCardCss.Neutral);
                     break;
             }
         }

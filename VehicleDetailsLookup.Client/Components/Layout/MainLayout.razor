@@ -1,28 +1,31 @@
 ﻿@using VehicleDetailsLookup.Client.Components.Layout
 @inherits LayoutComponentBase
 
-<MudThemeProvider Theme="@Theme.theme" IsDarkMode="_isDarkMode" />
-<MudPopoverProvider />
-<MudDialogProvider />
-<MudSnackbarProvider />
-<MudLayout>
-    <MudAppBar ToolBarClass="appbar" Elevation="1" Dense="true" WrapContent="false">
-        <MudIconButton Class="appbar-logo" Icon="@Icons.Material.Filled.DirectionsCar" Color="Color.Inherit" Size="Size.Large" OnClick="@OnCarIconClick" />
-        <MudText Class="text-truncate responsive-title">Vehicle Details Lookup</MudText>
-        <MudSpacer />
-        <MudIconButton Icon="@DarkLightModeButtonIcon" Color="Color.Inherit" OnClick="@DarkModeToggle" Edge="Edge.End" />
-    </MudAppBar>
-    <MudMainContent>
-        @Body
-    </MudMainContent>
-    <footer class="mt-4 mb-2 center-elements">
-        <MudText Typo="Typo.body2">
-            <a class="app-link" href="https://forms.gle/LacFPfTuAA3ZD5ae6" target="_blank" rel="noopener noreferrer">Report an Issue</a>
-            &nbsp;|&nbsp;
-            <a class="app-link" href="https://github.com/dillsa1299/VehicleDetailsLookup" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
-        </MudText>
-    </footer>
-</MudLayout>
+@if (_themePreferenceLoaded)
+{
+    <MudThemeProvider Theme="@Theme.theme" IsDarkMode="_isDarkMode" />
+    <MudPopoverProvider />
+    <MudDialogProvider />
+    <MudSnackbarProvider />
+    <MudLayout>
+        <MudAppBar ToolBarClass="appbar" Elevation="1" Dense="true" WrapContent="false">
+            <MudIconButton Class="appbar-logo" Icon="@Icons.Material.Filled.DirectionsCar" Color="Color.Inherit" Size="Size.Large" OnClick="@OnCarIconClick" />
+            <MudText Class="text-truncate responsive-title">Vehicle Details Lookup</MudText>
+            <MudSpacer />
+            <MudIconButton Icon="@DarkLightModeButtonIcon" Color="Color.Inherit" OnClick="@DarkModeToggle" Edge="Edge.End" />
+        </MudAppBar>
+        <MudMainContent>
+            @Body
+        </MudMainContent>
+        <footer class="mt-4 mb-2 center-elements">
+            <MudText Typo="Typo.body2">
+                <a class="app-link" href="https://forms.gle/LacFPfTuAA3ZD5ae6" target="_blank" rel="noopener noreferrer">Report an Issue</a>
+                &nbsp;|&nbsp;
+                <a class="app-link" href="https://github.com/dillsa1299/VehicleDetailsLookup" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+            </MudText>
+        </footer>
+    </MudLayout>
+}
 
 <div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.

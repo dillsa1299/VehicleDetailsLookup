@@ -38,4 +38,36 @@ public class AppPaletteTests
     {
         Assert.Equal(AppPalette.Brand, Theme.theme.PaletteDark.Primary);
     }
+
+    [Fact]
+    public void Tokens_css_brand_variable_matches_app_palette()
+    {
+        var tokensPath = Path.Combine(
+            FindRepoRoot(),
+            "VehicleDetailsLookup",
+            "wwwroot",
+            "css",
+            "tokens.css");
+
+        var tokensCss = File.ReadAllText(tokensPath);
+
+        Assert.Contains($"--app-color-brand: {AppPalette.Brand}", tokensCss);
+    }
+
+    private static string FindRepoRoot()
+    {
+        var directory = new DirectoryInfo(AppContext.BaseDirectory);
+
+        while (directory is not null)
+        {
+            if (File.Exists(Path.Combine(directory.FullName, "VehicleDetailsLookup.sln")))
+            {
+                return directory.FullName;
+            }
+
+            directory = directory.Parent;
+        }
+
+        throw new InvalidOperationException("Could not locate repository root from test output path.");
+    }
 }

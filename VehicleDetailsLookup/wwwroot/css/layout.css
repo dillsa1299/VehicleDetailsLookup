@@ -1,0 +1,67 @@
+/* Layout helpers and shell spacing used across multiple components. */
+
+.vertically-align-elements {
+    display: flex;
+    align-items: center;
+}
+
+.center-elements {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.vertically-stack-elements {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 100%;
+}
+
+.appbar {
+    padding: 8px;
+}
+
+.appbar-logo {
+    padding: 2px 8px 2px 2px;
+}
+
+.standard-spacing {
+    margin: 8px;
+    border-radius: 8px;
+}
+
+.details-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    width: 100%;
+}
+
+.details-title {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    text-align: center;
+    padding-inline: 3rem;
+}
+
+.details-lookup {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    z-index: 1;
+}
+
+/* Applied via Class on MudStack; must be global because MudBlazor roots are not scope-isolated. */
+.sidebar-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-stack {
+    flex: 1;
+    height: 100%;
+}

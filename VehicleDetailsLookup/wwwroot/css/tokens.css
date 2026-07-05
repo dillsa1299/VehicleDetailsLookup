@@ -1,0 +1,30 @@
+/* Design tokens aligned with AppPalette.cs for use in global stylesheets. */
+
+:root {
+    --app-color-brand: #1d70b8;
+    --app-color-brand-darken: #16548a;
+    --app-color-brand-lighten: #5694ca;
+
+    --app-color-text: #0b0c0c;
+    --app-color-secondary-text: #484949;
+
+    --app-color-template-background: #f4f8fb;
+    --app-color-body-background: #ffffff;
+    --app-color-dark-background: #1a1d20;
+
+    --app-color-border: #cecece;
+
+    --app-color-success: #0f7a52;
+    --app-color-error: #ca3535;
+    --app-color-warning: #f47738;
+
+    --app-color-focus: #ffdd00;
+
+    --app-color-link: #1a65a6;
+    --app-color-link-hover: #0f385c;
+
+    --app-color-gray-lighter: #f3f3f3;
+
+    --app-overlay-dark: rgba(11, 12, 12, 0.45);
+    --app-overlay-image-counter: rgba(11, 12, 12, 0.6);
+}

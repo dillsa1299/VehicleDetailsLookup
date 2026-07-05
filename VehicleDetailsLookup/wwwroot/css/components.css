@@ -1,0 +1,62 @@
+/* Shared component patterns: cards, links, and status indicators. */
+
+.text-element {
+    border-radius: 8px;
+    padding: 16px;
+    border: 1px solid var(--mud-palette-lines-default, var(--app-color-border));
+}
+
+.app-link {
+    color: var(--app-color-link);
+    text-decoration: none;
+}
+
+.app-link:hover {
+    color: var(--app-color-link-hover);
+    text-decoration: underline;
+}
+
+.status-card--success {
+    background-color: var(--mud-palette-success);
+}
+
+.status-card--error {
+    background-color: var(--mud-palette-error);
+}
+
+.status-card--warning {
+    background-color: var(--mud-palette-warning);
+}
+
+.status-card--info {
+    background-color: var(--mud-palette-info);
+}
+
+.status-card--neutral {
+    background-color: var(--mud-palette-gray-default);
+}
+
+/* Applied via Class on MudCarousel/MudImage; must be global because MudBlazor roots are not scope-isolated. */
+.carousel {
+    height: 300px;
+}
+
+.carousel-image {
+    max-width: 100%;
+}
+
+.carousel-slide {
+    position: relative;
+    width: 100%;
+}
+
+.image-counter {
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    background: var(--app-overlay-image-counter);
+    padding: 4px 8px;
+    border-radius: 16px;
+}

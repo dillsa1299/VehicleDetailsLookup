@@ -3,7 +3,7 @@
 
 @if (_lookups.Any())
 {
-    <div style="max-height: 384px; overflow-y: auto;">
+    <div class="lookup-list">
         <MudList T="LookupModel" Dense="true">
             @foreach(var lookup in _lookups)
             {

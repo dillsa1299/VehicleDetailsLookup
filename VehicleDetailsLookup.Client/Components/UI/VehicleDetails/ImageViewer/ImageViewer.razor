@@ -6,7 +6,7 @@
 }
 else
 {
-    <MudCarousel @ref="carouselRef" Style="height:300px;" ShowArrows="true" ShowBullets="false" AutoCycle="false" TData="object">
+    <MudCarousel @ref="carouselRef" Class="carousel" ShowArrows="true" ShowBullets="false" AutoCycle="false" TData="object">
         <PreviousButtonTemplate>
             <MudIconButton Icon="@Icons.Material.Filled.KeyboardArrowLeft" Color="Color.Primary" Size="Size.Large" OnClick="MovePrevious" />
         </PreviousButtonTemplate>
@@ -21,9 +21,9 @@ else
                 {
                     
                     <MudCarouselItem Transition="Transition.Fade" Color="@Color.Transparent">
-                        <div class="center-elements">
-                                <MudImage Height="300" Style="max-width:100%;" Src="@image.Url" FallbackSrc="@PlaceholderImage" Alt="@image.Title" Class="rounded-lg" ObjectFit="ObjectFit.ScaleDown" ObjectPosition="ObjectPosition.Center" />
-                                <div style="position:absolute; bottom:4px; left:50%; transform:translateX(-50%); color:white; background:rgba(11,12,12,0.6); padding:4px 8px; border-radius:16px;">
+                        <div class="center-elements carousel-slide">
+                                <MudImage Height="300" Class="rounded-lg carousel-image" Src="@image.Url" FallbackSrc="@PlaceholderImage" Alt="@image.Title" ObjectFit="ObjectFit.ScaleDown" ObjectPosition="ObjectPosition.Center" />
+                                <div class="image-counter">
                                     <MudText>@image.Index / @Images.Count()</MudText>
                                 </div>
                             </div>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using VehicleDetailsLookup.Client.Styling;
 using VehicleDetailsLookup.Shared.Models.Details;
 
 namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.TaxStatus
@@ -9,7 +10,7 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.TaxStatus
         public DetailsModel? Details { get; set; }
 
         private string _statusText = string.Empty;
-        private string _style = string.Empty;
+        private string _statusClass = StatusCardCss.Combine(StatusCardCss.Base, StatusCardCss.Neutral);
 
         private string ExpiryDateText =>
             Details?.TaxDueDate is DateOnly dueDate
@@ -24,19 +25,19 @@ namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.TaxStatus
             {
                 case Shared.Models.Enums.TaxStatus.Taxed:
                     _statusText = "Taxed";
-                    _style = "background-color: var(--mud-palette-info);";
+                    _statusClass = StatusCardCss.Combine(StatusCardCss.Base, StatusCardCss.Info);
                     break;
                 case Shared.Models.Enums.TaxStatus.Untaxed:
                     _statusText = "Untaxed";
-                    _style = "background-color: var(--mud-palette-error);";
+                    _statusClass = StatusCardCss.Combine(StatusCardCss.Base, StatusCardCss.Error);
                     break;
                 case Shared.Models.Enums.TaxStatus.Sorn:
                     _statusText = "SORN";
-                    _style = "background-color: var(--mud-palette-warning);";
+                    _statusClass = StatusCardCss.Combine(StatusCardCss.Base, StatusCardCss.Warning);
                     break;
                 default:
                     _statusText = "Unknown";
-                    _style = "background-color: var(--mud-palette-gray-default);";
+                    _statusClass = StatusCardCss.Combine(StatusCardCss.Base, StatusCardCss.Neutral);
                     break;
             }
         }

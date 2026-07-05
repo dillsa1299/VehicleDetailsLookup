@@ -1,0 +1,4 @@
+.lookup-list {
+    max-height: 384px;
+    overflow-y: auto;
+}
