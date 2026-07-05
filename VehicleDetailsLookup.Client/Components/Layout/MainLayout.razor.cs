@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
-using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
+using VehicleDetailsLookup.Client.State;
 using VehicleDetailsLookup.Client.Styling;
 
 namespace VehicleDetailsLookup.Client.Components.Layout
@@ -9,7 +9,7 @@ namespace VehicleDetailsLookup.Client.Components.Layout
     public partial class MainLayout
     {
         [Inject]
-        private IVehicleLookupEventsService VehicleLookupEventsService { get; set; } = default!;
+        private VehicleLookupState LookupState { get; set; } = default!;
 
         [Inject]
         private IJSRuntime JsRuntime { get; set; } = default!;
@@ -62,7 +62,7 @@ namespace VehicleDetailsLookup.Client.Components.Layout
             }
         }
 
-        private void OnCarIconClick() =>
-            VehicleLookupEventsService.NotifyLookupClear();
+        private async Task OnCarIconClick() =>
+            await LookupState.ClearAsync();
     }
 }

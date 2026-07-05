@@ -1,61 +1,54 @@
 ﻿using Microsoft.AspNetCore.Components;
 using VehicleDetailsLookup.Client.Components.Enums;
-using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
-using VehicleDetailsLookup.Shared.Models.Vehicle;
+using VehicleDetailsLookup.Client.State;
 
-namespace VehicleDetailsLookup.Client.Components.UI.RegistrationInput
+namespace VehicleDetailsLookup.Client.Components.UI.RegistrationInput;
+
+public partial class RegistrationInput
 {
-    public partial class RegistrationInput
+    private readonly RegistrationInputModel _registrationInput = new();
+    private bool _showError;
+
+    protected override void OnParametersSet()
     {
-        [Inject]
-        private IVehicleLookupEventsService VehicleLookupEventsService { get; set; } = default!;
-
-        [Parameter]
-        public VehicleModel Vehicle { get; set; } = default!;
-
-        private readonly RegistrationInputModel _registrationInput = new();
-        private bool _showError;
-
-        private void OnLookupClear() => _registrationInput.Input = string.Empty;
-        private void HideError() => _showError = false;
-
-        private async Task LookupRegistration()
+        if (!string.IsNullOrEmpty(LookupState.LastLookupRegistrationNumber))
         {
-            // Check if the vehicle is already loaded
-            if (_registrationInput.Input.Replace(" ", "").Equals(Vehicle?.Details?.RegistrationNumber, StringComparison.InvariantCultureIgnoreCase))
-                return;
-
-            await VehicleLookupEventsService.NotifyStartVehicleLookup(_registrationInput.Input, VehicleLookupType.Details);
+            _registrationInput.Input = LookupState.LastLookupRegistrationNumber;
         }
 
-        private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber, string metaData)
+        if (LookupState.Vehicle.Details == null &&
+            !LookupState.IsSearching(VehicleLookupType.Details) &&
+            string.IsNullOrEmpty(LookupState.LastLookupRegistrationNumber))
         {
-            // Replace input - Allows input to match registrations passed via URL
-            _registrationInput.Input = registrationNumber;
+            _registrationInput.Input = string.Empty;
+        }
+    }
 
-            // Only clear error after successful lookup
-            if (!lookupStarted)
-                _showError = !lookupStarted && Vehicle?.Details == null;
+    protected override void OnLookupStateChanged() => OnParametersSet();
 
-            StateHasChanged();
+    private void HideError() => _showError = false;
+
+    private async Task LookupRegistration()
+    {
+        if (_registrationInput.Input.Replace(" ", "").Equals(
+                LookupState.Vehicle.Details?.RegistrationNumber,
+                StringComparison.InvariantCultureIgnoreCase))
+        {
+            return;
         }
 
-        protected override void OnInitialized()
-        {
-            VehicleLookupEventsService.OnLookupStatusChanged += OnLookupStatusChanged;
-            VehicleLookupEventsService.OnLookupClear += OnLookupClear;
-            base.OnInitialized();
-        }
+        _showError = false;
+        await LookupState.StartLookupAsync(_registrationInput.Input, VehicleLookupType.Details);
 
-        public void Dispose()
+        if (!LookupState.IsSearching(VehicleLookupType.Details) &&
+            LookupState.Vehicle.Details == null)
         {
-            VehicleLookupEventsService.OnLookupStatusChanged -= OnLookupStatusChanged;
-            VehicleLookupEventsService.OnLookupClear -= OnLookupClear;
+            _showError = true;
         }
+    }
 
-        private class RegistrationInputModel
-        {
-            public string Input { get; set; } = string.Empty;
-        }
+    private class RegistrationInputModel
+    {
+        public string Input { get; set; } = string.Empty;
     }
 }

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using VehicleDetailsLookup.Client.Services.VehicleLookup;
-using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
+using VehicleDetailsLookup.Client.State;
 using VehicleDetailsLookup.Components;
 using VehicleDetailsLookup.Models.Database;
 using VehicleDetailsLookup.Services.Api.Gemini;
@@ -53,8 +53,8 @@ builder.Services.AddScoped<IVehicleImageService, VehicleImageService>();
 builder.Services.AddScoped<IVehicleAiDataService, VehicleAiDataService>();
 builder.Services.AddScoped<IVehicleLookupHistoryService, VehicleLookupHistoryService>();
 
+builder.Services.AddScoped<VehicleLookupState>();
 builder.Services.AddScoped<IVehicleLookupService, VehicleLookupService>();
-builder.Services.AddScoped<IVehicleLookupEventsService, VehicleLookupEventsService>();
 
 // Register repositories
 builder.Services.AddScoped<IDetailsRepository, DetailsRepository>();

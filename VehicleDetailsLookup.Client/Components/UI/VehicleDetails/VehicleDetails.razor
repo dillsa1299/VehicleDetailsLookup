@@ -1,4 +1,5 @@
-﻿@using VehicleDetailsLookup.Client.Components.Enums
+﻿@inherits VehicleLookupStateComponentBase
+@using VehicleDetailsLookup.Client.Components.Enums
 @using VehicleDetailsLookup.Client.Components.UI.Infrastructure
 @using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.ImageViewer
 @using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.Lookups.LookupCount
@@ -6,14 +7,14 @@
 @using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotStatus
 @using VehicleDetailsLookup.Client.Components.UI.VehicleDetails.TaxStatus
 
-@if ((Vehicle != null && Vehicle.Details != null) || _isSearchingDetails)
+@if ((Vehicle != null && Vehicle.Details != null) || IsSearchingDetails)
 {
     <div class="standard-spacing">
-        <ImageViewer Images="@Vehicle?.Images" PlaceholderImage="@_placeholderImage" IsSearching="@(_isSearchingImages || _isSearchingDetails)" />
+        <ImageViewer Images="@Vehicle?.Images" PlaceholderImage="@_placeholderImage" IsSearching="@(IsSearchingImages || IsSearchingDetails)" />
     </div>
 
     <div class="standard-spacing">
-        @if (_isSearchingDetails)
+        @if (IsSearchingDetails)
         {
             <MudGrid Spacing="2">
                 <MudItem xs="12" md="8">
@@ -73,7 +74,7 @@
                         </MudTable>
 
                         <MudText Class="mt-4" Typo="Typo.h4">AI Overview</MudText>
-                        @if (_isSearchingAiOverview)
+                        @if (IsSearchingAiOverview)
                         {
                             <TextSkeletonLoader></TextSkeletonLoader>
                         }
@@ -110,7 +111,7 @@
                                 <MudText Typo="Typo.h4">Common Issues</MudText>
                             </TitleContent>
                             <ChildContent>
-                                @if (_isSearchingAiCommonIssues)
+                                @if (IsSearchingAiCommonIssues)
                                 {
                                     <TextSkeletonLoader></TextSkeletonLoader>
                                 }
@@ -142,7 +143,7 @@
                                 <ChildContent>
                                     <MudText Typo="Typo.h5">AI Summary</MudText>
 
-                                    @if (_isSearchingAiMotHistorySummary)
+                                    @if (IsSearchingAiMotHistorySummary)
                                     {
                                         <TextSkeletonLoader></TextSkeletonLoader>
                                     }
@@ -163,7 +164,7 @@
                                         }
                                     }
 
-                                    <MotHistory Vehicle="@Vehicle"></MotHistory>
+                                    <MotHistory></MotHistory>
                                 </ChildContent>
                             </MudExpansionPanel>
                         }

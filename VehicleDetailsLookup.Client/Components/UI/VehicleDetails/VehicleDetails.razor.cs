@@ -1,124 +1,91 @@
 ﻿using Microsoft.AspNetCore.Components;
 using VehicleDetailsLookup.Client.Components.Enums;
-using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
+using VehicleDetailsLookup.Client.State;
 using VehicleDetailsLookup.Shared.Models.Enums;
 using VehicleDetailsLookup.Shared.Models.Vehicle;
 
-namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails
+namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails;
+
+public partial class VehicleDetails
 {
-    public partial class VehicleDetails
+    private VehicleModel? Vehicle => LookupState.Vehicle;
+
+    private bool IsSearchingDetails => LookupState.IsSearching(VehicleLookupType.Details);
+    private bool IsSearchingMotHistory => LookupState.IsSearching(VehicleLookupType.MotHistory);
+    private bool IsSearchingImages => LookupState.IsSearching(VehicleLookupType.Images);
+    private bool IsSearchingAiOverview => LookupState.IsSearching(VehicleLookupType.AiOverview);
+    private bool IsSearchingAiCommonIssues => LookupState.IsSearching(VehicleLookupType.AiCommonIssues);
+    private bool IsSearchingAiMotHistorySummary => LookupState.IsSearching(VehicleLookupType.AiMotHistorySummary);
+
+    private const string _placeholderImage = "images/placeholder-car.svg";
+    private const string _aiFailedMessage = "Unable to generate AI response. Please try again.";
+
+    private string? AiOverviewText =>
+        Vehicle?.AiData.TryGetValue(AiType.Overview.ToString(), out var aiDataModel) == true
+            ? aiDataModel.Content
+            : string.Empty;
+
+    private string? AiCommonIssuesText =>
+        Vehicle?.AiData.TryGetValue(AiType.CommonIssues.ToString(), out var aiDataModel) == true
+            ? aiDataModel.Content
+            : string.Empty;
+
+    private string? AiMotHistorySummaryText =>
+        Vehicle?.AiData.TryGetValue(AiType.MotHistorySummary.ToString(), out var aiDataModel) == true
+            ? aiDataModel.Content
+            : string.Empty;
+
+    private MarkupString? AiOverviewHtml =>
+        string.IsNullOrWhiteSpace(AiOverviewText)
+            ? null
+            : (MarkupString)Markdig.Markdown.ToHtml(AiOverviewText);
+
+    private MarkupString? AiCommonIssuesHtml =>
+        string.IsNullOrWhiteSpace(AiCommonIssuesText)
+            ? null
+            : (MarkupString)Markdig.Markdown.ToHtml(AiCommonIssuesText);
+
+    private MarkupString? AiMotHistorySummaryHtml =>
+        string.IsNullOrWhiteSpace(AiMotHistorySummaryText)
+            ? null
+            : (MarkupString)Markdig.Markdown.ToHtml(AiMotHistorySummaryText);
+
+    private async Task StartLookup(VehicleLookupType lookupType)
     {
-        [Inject]
-        private IVehicleLookupEventsService VehicleLookupEventsService { get; set; } = default!;
-
-        [Parameter]
-        public VehicleModel? Vehicle { get; set; }
-
-        private const string _placeholderImage = "images/placeholder-car.svg";
-        private const string _aiFailedMessage = "Unable to generate AI response. Please try again.";
-        private bool _isSearchingDetails;
-        private bool _isSearchingMotHistory;
-        private bool _isSearchingImages;
-        private bool _isSearchingAiOverview;
-        private bool _isSearchingAiCommonIssues;
-        private bool _isSearchingAiMotHistorySummary;
-
-        private string? AiOverviewText =>
-            (Vehicle?.AiData.TryGetValue(AiType.Overview.ToString(), out var aiDataModel) == true
-                ? aiDataModel.Content
-                : string.Empty);
-
-        private string? AiCommonIssuesText =>
-            (Vehicle?.AiData.TryGetValue(AiType.CommonIssues.ToString(), out var aiDataModel) == true)
-                ? aiDataModel.Content
-                : string.Empty;
-
-        private string? AiMotHistorySummaryText =>
-            (Vehicle?.AiData.TryGetValue(AiType.MotHistorySummary.ToString(), out var aiDataModel) == true)
-                ? aiDataModel.Content
-                : string.Empty;
-
-        private MarkupString? AiOverviewHtml =>
-            string.IsNullOrWhiteSpace(AiOverviewText)
-                ? null
-                : (MarkupString)Markdig.Markdown.ToHtml(AiOverviewText);
-
-        private MarkupString? AiCommonIssuesHtml =>
-            string.IsNullOrWhiteSpace(AiCommonIssuesText)
-                ? null
-                : (MarkupString)Markdig.Markdown.ToHtml(AiCommonIssuesText);
-
-        private MarkupString? AiMotHistorySummaryHtml =>
-            string.IsNullOrWhiteSpace(AiMotHistorySummaryText)
-                ? null
-                : (MarkupString)Markdig.Markdown.ToHtml(AiMotHistorySummaryText);
-
-        private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber, string metaData)
+        if (Vehicle?.Details?.RegistrationNumber != null)
         {
-            switch (lookupType)
-            {
-                case VehicleLookupType.Details:
-                    _isSearchingDetails = lookupStarted;
-                    break;
-                case VehicleLookupType.MotHistory:
-                    _isSearchingMotHistory = lookupStarted;
-                    break;
-                case VehicleLookupType.Images:
-                    _isSearchingImages = lookupStarted;
-                    break;
-                case VehicleLookupType.AiOverview:
-                    _isSearchingAiOverview = lookupStarted;
-                    break;
-                case VehicleLookupType.AiCommonIssues:
-                    _isSearchingAiCommonIssues = lookupStarted;
-                    break;
-                case VehicleLookupType.AiMotHistorySummary:
-                    _isSearchingAiMotHistorySummary = lookupStarted;
-                    break;
-            }
+            await LookupState.StartLookupAsync(Vehicle.Details.RegistrationNumber, lookupType);
+        }
+    }
 
-            StateHasChanged();
+    private async Task OnCommonIssuesExpandedAsync(bool expanded)
+    {
+        if (Vehicle == null)
+        {
+            return;
         }
 
-        private async Task StartLookup(VehicleLookupType lookupType)
+        if (!IsSearchingAiCommonIssues && !Vehicle.AiData.ContainsKey(AiType.CommonIssues.ToString()))
         {
-            if (Vehicle?.Details?.RegistrationNumber != null)
-                await VehicleLookupEventsService.NotifyStartVehicleLookup(Vehicle.Details.RegistrationNumber, lookupType);
+            await StartLookup(VehicleLookupType.AiCommonIssues);
+        }
+    }
+
+    private async Task OnMotHistoryExpandedAsync(bool expanded)
+    {
+        if (Vehicle == null)
+        {
+            return;
         }
 
-        private async Task OnCommonIssuesExpandedAsync(bool expanded)
+        if (!IsSearchingMotHistory && !Vehicle.MotTests.Any())
         {
-            if (Vehicle == null)
-                return;
-
-            // Start lookup for AI Common Issues if not already searching and no data already loaded
-            if (!_isSearchingAiCommonIssues && !Vehicle.AiData.ContainsKey(AiType.CommonIssues.ToString()))
-                await StartLookup(VehicleLookupType.AiCommonIssues);
+            await StartLookup(VehicleLookupType.MotHistory);
         }
 
-        private async Task OnMotHistoryExpandedAsync(bool expanded)
+        if (!IsSearchingAiMotHistorySummary && !Vehicle.AiData.ContainsKey(AiType.MotHistorySummary.ToString()))
         {
-            if (Vehicle == null)
-                return;
-
-            // Start lookup for MOT History if not already searching and no data already loaded
-            if (!_isSearchingMotHistory && !Vehicle.MotTests.Any())
-                await StartLookup(VehicleLookupType.MotHistory);
-
-            // Start lookup for AI MOT History Summary if not already searching and no data already loaded
-            if (!_isSearchingAiMotHistorySummary && !Vehicle.AiData.ContainsKey(AiType.MotHistorySummary.ToString()))
-                await StartLookup(VehicleLookupType.AiMotHistorySummary);
-        }
-
-        protected override void OnInitialized()
-        {
-            VehicleLookupEventsService.OnLookupStatusChanged += OnLookupStatusChanged;
-            base.OnInitialized();
-        }
-
-        public void Dispose()
-        {
-            VehicleLookupEventsService.OnLookupStatusChanged -= OnLookupStatusChanged;
+            await StartLookup(VehicleLookupType.AiMotHistorySummary);
         }
     }
 }

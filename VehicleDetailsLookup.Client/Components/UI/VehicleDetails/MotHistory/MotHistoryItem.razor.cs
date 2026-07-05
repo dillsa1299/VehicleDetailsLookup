@@ -3,26 +3,23 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using System.Text.Json;
 using VehicleDetailsLookup.Client.Components.Enums;
-using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
+using VehicleDetailsLookup.Client.State;
 using VehicleDetailsLookup.Shared.Models.Ai;
 using VehicleDetailsLookup.Shared.Models.Enums;
 using VehicleDetailsLookup.Shared.Models.Mot;
 using VehicleDetailsLookup.Shared.Models.Vehicle;
 
 namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotHistory;
+
 public partial class MotHistoryItem
 {
     [Inject]
     private IJSRuntime? JsRuntime { get; set; }
 
-    [Inject]
-    private IVehicleLookupEventsService VehicleLookupEventsService { get; set; } = default!;
-
-    [Parameter]
-    public VehicleModel Vehicle { get; set; } = default!;
-
     [Parameter]
     public MotTestModel Mot { get; set; } = default!;
+
+    private VehicleModel Vehicle => LookupState.Vehicle;
 
     private string TestText => $"{Mot.CompletedDate:d MMMM yyyy} | {(Mot.OdometerValue == -1 ? "N/A" : $"{Mot.OdometerValue:N0} {Mot.OdometerUnit}")}";
 
@@ -50,12 +47,12 @@ public partial class MotHistoryItem
     });
 
     private string? AiMotSummaryText =>
-        Vehicle?.AiData.TryGetValue(AiType.MotTestSummary.ToString() + SummaryLookupMetaData, out var aiDataModel) == true
+        Vehicle.AiData.TryGetValue(AiType.MotTestSummary.ToString() + SummaryLookupMetaData, out var aiDataModel)
             ? aiDataModel.Content
             : string.Empty;
 
     private string? AiPriceEstimateText =>
-        Vehicle?.AiData.TryGetValue(AiType.MotPriceEstimate.ToString() + PriceEstimateLookupMetaData, out var aiDataModel) == true
+        Vehicle.AiData.TryGetValue(AiType.MotPriceEstimate.ToString() + PriceEstimateLookupMetaData, out var aiDataModel)
             ? aiDataModel.Content
             : string.Empty;
 
@@ -69,13 +66,17 @@ public partial class MotHistoryItem
             ? null
             : (MarkupString)Markdig.Markdown.ToHtml(AiPriceEstimateText);
 
+    private bool IsSearchingMotSummary =>
+        LookupState.IsSearching(VehicleLookupType.AiMotSummary, SummaryLookupMetaData);
+
+    private bool IsSearchingPriceEstimate =>
+        LookupState.IsSearching(VehicleLookupType.AiMotPriceEstimate, PriceEstimateLookupMetaData);
+
     private bool PriceEstimateDisabled =>
-        !_selectedDefectIds.Any() || _isSearchingPriceEstimate;
+        !_selectedDefectIds.Any() || IsSearchingPriceEstimate;
 
     private const string _aiFailedMessage = "Unable to generate AI response. Please try again.";
     private Size _iconSize = Size.Large;
-    private bool _isSearchingMotSummary;
-    private bool _isSearchingPriceEstimate;
     private bool _hasSearchedPriceEstimate;
     private IEnumerable<Guid> _selectedDefectIds = [];
 
@@ -93,8 +94,10 @@ public partial class MotHistoryItem
 
     private async Task OnExpandedAsync(bool expanded)
     {
-        if (_isSearchingMotSummary || !string.IsNullOrWhiteSpace(AiMotSummaryText))
+        if (IsSearchingMotSummary || !string.IsNullOrWhiteSpace(AiMotSummaryText))
+        {
             return;
+        }
 
         await StartSummaryLookupAsync();
     }
@@ -102,44 +105,29 @@ public partial class MotHistoryItem
     private async Task StartSummaryLookupAsync()
     {
         if (Vehicle.Details is null)
+        {
             return;
+        }
 
-        await VehicleLookupEventsService.NotifyStartVehicleLookup(
+        await LookupState.StartLookupAsync(
             Vehicle.Details.RegistrationNumber,
             VehicleLookupType.AiMotSummary,
-            SummaryLookupMetaData
-        );
+            SummaryLookupMetaData);
     }
 
     private async Task StartPriceEstimateLookupAsync()
     {
         if (Vehicle.Details is null)
+        {
             return;
+        }
 
         _hasSearchedPriceEstimate = true;
 
-        await VehicleLookupEventsService.NotifyStartVehicleLookup(
+        await LookupState.StartLookupAsync(
             Vehicle.Details.RegistrationNumber,
             VehicleLookupType.AiMotPriceEstimate,
-            PriceEstimateLookupMetaData
-        );
-    }
-
-    private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber, string metaData)
-    {
-        if (lookupType == VehicleLookupType.AiMotSummary && string.Equals(metaData,SummaryLookupMetaData))
-        {
-            _isSearchingMotSummary = lookupStarted;
-            StateHasChanged();
-            return;
-        }
-
-        if (lookupType == VehicleLookupType.AiMotPriceEstimate && string.Equals(metaData, PriceEstimateLookupMetaData))
-        {
-            _isSearchingPriceEstimate = lookupStarted;
-            StateHasChanged();
-            return;
-        }
+            PriceEstimateLookupMetaData);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -158,16 +146,5 @@ public partial class MotHistoryItem
             };
             StateHasChanged();
         }
-    }
-
-    protected override void OnInitialized()
-    {
-        VehicleLookupEventsService.OnLookupStatusChanged += OnLookupStatusChanged;
-        base.OnInitialized();
-    }
-
-    public void Dispose()
-    {
-        VehicleLookupEventsService.OnLookupStatusChanged -= OnLookupStatusChanged;
     }
 }

@@ -1,9 +1,11 @@
-﻿@if (Vehicle != null && Vehicle.MotTests.Any())
+﻿@inherits VehicleLookupStateComponentBase
+@using VehicleDetailsLookup.Client.State
+@if (LookupState.Vehicle.MotTests.Any())
 {
     <MudExpansionPanels MultiExpansion="true">
-        @foreach (var test in Vehicle.MotTests)
+        @foreach (var test in LookupState.Vehicle.MotTests)
         {
-            <MotHistoryItem Vehicle="@Vehicle" Mot="@test"></MotHistoryItem>
+            <MotHistoryItem Mot="@test"></MotHistoryItem>
         }
     </MudExpansionPanels>
 }

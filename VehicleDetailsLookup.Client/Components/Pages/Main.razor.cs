@@ -1,160 +1,56 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using VehicleDetailsLookup.Client.Components.Enums;
-using VehicleDetailsLookup.Client.Services.VehicleLookup;
-using VehicleDetailsLookup.Client.Services.VehicleLookupEvents;
-using VehicleDetailsLookup.Shared.Models.Enums;
-using VehicleDetailsLookup.Shared.Models.Vehicle;
+using VehicleDetailsLookup.Client.State;
 
-namespace VehicleDetailsLookup.Client.Components.Pages
+namespace VehicleDetailsLookup.Client.Components.Pages;
+
+public partial class Main : IDisposable
 {
-    public partial class Main : IDisposable
+    [Inject]
+    private VehicleLookupState LookupState { get; set; } = default!;
+
+    [Inject]
+    private IJSRuntime JS { get; set; } = default!;
+
+    [Parameter]
+    public string? RegistrationNumberUrlInput { get; set; }
+
+    private string PageTitle => string.IsNullOrEmpty(LookupState.Vehicle.Details?.RegistrationNumber)
+        ? "Vehicle Details Lookup"
+        : $"{LookupState.Vehicle.Details?.YearOfManufacture} {LookupState.Vehicle.Details?.Make} {LookupState.Vehicle.Details?.Model} | VDL";
+
+    protected override void OnInitialized()
     {
-        [Inject]
-        private IVehicleLookupService VehicleLookupService { get; set; } = default!;
+        LookupState.Changed += OnLookupStateChanged;
+    }
 
-        [Inject]
-        private IVehicleLookupEventsService VehicleLookupEventsService { get; set; } = default!;
-
-        [Inject]
-        private NavigationManager NavigationManager { get; set; } = default!;
-
-        [Inject]
-        private IJSRuntime JS { get; set; } = default!;
-
-        [Parameter]
-        public string? RegistrationNumberUrlInput { get; set; }
-
-        private string PageTitle => string.IsNullOrEmpty(_vehicle?.Details?.RegistrationNumber) ? "Vehicle Details Lookup"
-            : $"{_vehicle?.Details?.YearOfManufacture} {_vehicle?.Details?.Make} {_vehicle?.Details?.Model} | VDL";
-
-        private bool IsRecentLookupsHidden
-            => _lookupInProgress || !string.IsNullOrEmpty(_vehicle.Details?.RegistrationNumber);
-
-        private VehicleModel _vehicle = new();
-        private bool _lookupInProgress;
-
-        private async Task StartLookup(string registrationNumber, VehicleLookupType lookupType, string metaData)
+    protected override async Task OnParametersSetAsync()
+    {
+        if (!string.IsNullOrEmpty(RegistrationNumberUrlInput) &&
+            OperatingSystem.IsBrowser() &&
+            !RegistrationNumberUrlInput.Replace(" ", "").Equals(
+                LookupState.Vehicle.Details?.RegistrationNumber,
+                StringComparison.InvariantCultureIgnoreCase))
         {
-            switch (lookupType)
-            {
-                case VehicleLookupType.Details:
-                    _vehicle.Details = await VehicleLookupService.GetVehicleDetailsAsync(registrationNumber);
-
-                    // Update URL
-                    var url = _vehicle.Details == null
-                        ? "/"
-                        : $"/{_vehicle.Details.RegistrationNumber}";
-                    NavigationManager.NavigateTo(url, forceLoad: false);
-
-                    // Dont waste further API calls on failed lookup
-                    if (_vehicle.Details == null) return;
-
-                    _vehicle.MotTests = await VehicleLookupService.GetMotTestsAsync(registrationNumber) ?? [];
-
-                    // Perform parallel lookups for images and AI overview, but do not await them
-                    _ = VehicleLookupEventsService.NotifyStartVehicleLookup(registrationNumber, VehicleLookupType.Images);
-                    _ = VehicleLookupEventsService.NotifyStartVehicleLookup(registrationNumber, VehicleLookupType.AiOverview);
-                    break;
-                case VehicleLookupType.MotHistory:
-                    _vehicle.MotTests = await VehicleLookupService.GetMotTestsAsync(registrationNumber) ?? [];
-                    break;
-                case VehicleLookupType.Images:
-                    _vehicle.Images = await VehicleLookupService.GetVehicleImagesAsync(registrationNumber) ?? [];
-                    break;
-                case VehicleLookupType.AiOverview:
-                case VehicleLookupType.AiCommonIssues:
-                case VehicleLookupType.AiMotHistorySummary:
-                case VehicleLookupType.AiMotSummary:
-                case VehicleLookupType.AiMotPriceEstimate:
-                    await GetAiData(registrationNumber, lookupType, metaData);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(lookupType), lookupType, null);
-            }
-
-            StateHasChanged();
+            await LookupState.StartLookupAsync(RegistrationNumberUrlInput, VehicleLookupType.Details);
         }
 
-        private async Task GetAiData(string registrationNumber, VehicleLookupType lookupType, string metaData)
+        await base.OnParametersSetAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
         {
-            var aiType = lookupType switch
-            {
-                VehicleLookupType.AiOverview => AiType.Overview,
-                VehicleLookupType.AiCommonIssues => AiType.CommonIssues,
-                VehicleLookupType.AiMotHistorySummary => AiType.MotHistorySummary,
-                VehicleLookupType.AiMotSummary => AiType.MotTestSummary,
-                VehicleLookupType.AiMotPriceEstimate => AiType.MotPriceEstimate,
-                _ => throw new ArgumentOutOfRangeException(nameof(lookupType), lookupType, null)
-            };
-
-            var aiData = await VehicleLookupService.GetVehicleAiDataAsync(registrationNumber, aiType, metaData);
-
-            if (aiData == null)
-            {
-                // If AI data is not found, clear any existing data for this type
-                _vehicle.AiData.Remove(aiType.ToString() + metaData);
-                return;
-            }
-
-            // If AI data is found, add or update it in the vehicle model
-            if (!_vehicle.AiData.TryAdd(aiType.ToString() + metaData, aiData))
-            {
-                // Update the existing entry
-                _vehicle.AiData[aiType.ToString() + metaData] = aiData;
-            }
+            await JS.InvokeVoidAsync("hideLoader");
         }
+    }
 
-        private void OnLookupStatusChanged(VehicleLookupType lookupType, bool lookupStarted, string registrationNumber, string metaData)
-        {
-            _lookupInProgress = lookupStarted;
-            StateHasChanged();
-        }
+    private void OnLookupStateChanged() => InvokeAsync(StateHasChanged);
 
-        private void OnLookupClear()
-        {
-            // Clear lookup
-            _vehicle = new VehicleModel();
-
-            // Reset URL
-            NavigationManager.NavigateTo("/", forceLoad: false);
-
-            StateHasChanged();
-        }
-
-        protected override async Task OnParametersSetAsync()
-        {
-            // If there is a registration number in the URL, and it is different from the current vehicle, start a lookup
-            if (!string.IsNullOrEmpty(RegistrationNumberUrlInput)
-                && OperatingSystem.IsBrowser()
-                && !RegistrationNumberUrlInput.Replace(" ", "").Equals(_vehicle?.Details?.RegistrationNumber, StringComparison.InvariantCultureIgnoreCase))
-                await VehicleLookupEventsService.NotifyStartVehicleLookup(RegistrationNumberUrlInput, VehicleLookupType.Details);
-
-            await base.OnParametersSetAsync();
-        }
-
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            if (firstRender)
-            {
-                await JS.InvokeVoidAsync("hideLoader");
-            }
-        }
-
-        protected override void OnInitialized()
-        {
-            VehicleLookupEventsService.OnStartVehicleLookup += StartLookup;
-            VehicleLookupEventsService.OnLookupStatusChanged += OnLookupStatusChanged;
-            VehicleLookupEventsService.OnLookupClear += OnLookupClear;
-            base.OnInitialized();
-        }
-
-        public void Dispose()
-        {
-            VehicleLookupEventsService.OnStartVehicleLookup -= StartLookup;
-            VehicleLookupEventsService.OnLookupStatusChanged -= OnLookupStatusChanged;
-            VehicleLookupEventsService.OnLookupClear -= OnLookupClear;
-            GC.SuppressFinalize(this);
-        }
+    public void Dispose()
+    {
+        LookupState.Changed -= OnLookupStateChanged;
     }
 }

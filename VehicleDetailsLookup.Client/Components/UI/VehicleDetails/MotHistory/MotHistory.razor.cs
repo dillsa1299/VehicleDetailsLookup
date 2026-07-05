@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Components;
-using VehicleDetailsLookup.Shared.Models.Mot;
-using VehicleDetailsLookup.Shared.Models.Vehicle;
+﻿using VehicleDetailsLookup.Client.State;
 
-namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotHistory
+namespace VehicleDetailsLookup.Client.Components.UI.VehicleDetails.MotHistory;
+
+public partial class MotHistory
 {
-    public partial class MotHistory
-    {
-        [Parameter]
-        public VehicleModel Vehicle { get; set; } = default!;
-    }
 }
